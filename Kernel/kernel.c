@@ -74,7 +74,7 @@ void * initializeKernelBinary()
 	ncPrintHex((uint64_t)&bss);
 	ncNewline();
 
-	ncPrint("[Done]");
+	ncPrint("[Donely done]");
 	ncNewline();
 	ncNewline();
 	return getStackBase();
