@@ -82,6 +82,8 @@ void * initializeKernelBinary()
 
 int main()
 {	
+	load_idt();
+	
 	ncPrint("[Kernel Main]");
 	ncNewline();
 	ncPrint("  Sample code module at 0x");
@@ -100,5 +102,9 @@ int main()
 	ncNewline();
 
 	ncPrint("[Finished]");
+	
+	while(1)
+	{
+	}
 	return 0;
 }
