@@ -3,6 +3,7 @@
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
+#include <keyboard.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -103,8 +104,13 @@ int main()
 
 	ncPrint("[Finished]");
 	
+	ncClear();
+	
 	while(1)
 	{
+		char c;
+		readPrintables(&c, 1);
+		ncPrintChar(c);
 	}
 	return 0;
 }
