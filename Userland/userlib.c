@@ -34,4 +34,9 @@ char strPrefix(const char*prefix, const char*str){
     }
     return !prefix[i];
 }
-
+int strCmp(const char* str1,const char* str2){
+	int i;
+	for(i=0;*str1 && *str1 == *str2;str1++,str2++){
+	}
+	return *(const unsigned char *)str1-*(const unsignes char*) s2;
+}
