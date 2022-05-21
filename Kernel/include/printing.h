@@ -20,5 +20,7 @@ uint8_t printChar(char character, const struct format_t* format);
 uint8_t print(const char * string, const struct format_t* format);
 uint8_t newLine(color_t backgroundColor);
 void clearScreen(color_t backgroundColor);
+void getCursor(struct point_t* cursor);
+void setCursor(const struct point_t* cursor);
 
 #endif

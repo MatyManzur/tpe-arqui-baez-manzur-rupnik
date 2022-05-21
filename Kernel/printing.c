@@ -107,5 +107,20 @@ void clearScreen(color_t backgroundColor)
 	taskStates[taskId].cursor = taskStates[taskId].topLeft;
 }
 
+void getCursor(struct point_t* cursor)
+{
+	uint8_t taskId = getCurrentTaskId();
+	cursor->row = taskStates[taskId].cursor.row;
+	cursor->column = taskStates[taskId].cursor.column;
+}
+
+void setCursor(const struct point_t* cursor)
+{
+	uint8_t taskId = getCurrentTaskId();
+	taskStates[taskId].cursor.row = cursor->row;
+	taskStates[taskId].cursor.column = cursor->column;
+}
+
+
 
 
