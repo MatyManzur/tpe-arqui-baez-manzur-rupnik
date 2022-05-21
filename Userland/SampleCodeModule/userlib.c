@@ -1,7 +1,7 @@
 
 #include <userlib.h>
 
-int strToNum(const char* str){
+int strToNum(const unsigned char* str){
     int i = 0;
     int neg = 0;
     if(str[i]=='-'){
@@ -19,13 +19,13 @@ int strToNum(const char* str){
     return ans;
 }
 
-char strLength(const char * str){
+char strLength(const unsigned char * str){
     int i=0;
     while(str[i++]);
     return i;
 }
 
-char strPrefix(const char*prefix, const char*str){
+char strPrefix(const unsigned char*prefix, const unsigned char*str){
     int i;
     for(i=0;prefix[i] && str[i];i++){
         if(prefix[i]!=str[i]){
@@ -34,9 +34,11 @@ char strPrefix(const char*prefix, const char*str){
     }
     return !prefix[i];
 }
-int strCmp(const char* str1,const char* str2){
-	int i;
-	for(i=0;*str1 && *str1 == *str2;str1++,str2++){
+int strCmp(const unsigned char* str1,const unsigned char* str2){
+	while(*str1 != 0 && *str1 == *str2)
+	{
+		str1++;
+		str2++;
 	}
-	return *(const unsigned char *)str1-*(const unsignes char*) s2;
+	return (*str1) - (*str2);
 }

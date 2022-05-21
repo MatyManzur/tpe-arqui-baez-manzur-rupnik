@@ -46,7 +46,7 @@ void addTaskState(uint8_t taskId, uint8_t topLeftRow, uint8_t topLeftColumn, uin
 	
 }
 
-uint8_t printChar(char character, format_t format)
+uint8_t printChar(char character, const struct format_t* format)
 {
 	uint8_t taskId = getCurrentTaskId(); //ver si se rompe justo cuando se interrumpio para cambiar
 	if(taskStates[taskId].cursor.column > taskStates[taskId].bottomRight.column)
@@ -60,12 +60,12 @@ uint8_t printChar(char character, format_t format)
 	}
 	uint8_t * cursorPointer = pointToCursor(taskStates[taskId].cursor);
 	*cursorPointer = character;
-	*(cursorPointer+1) = format.backgroundColor << 4 | format.characterColor;
+	*(cursorPointer+1) = format->backgroundColor << 4 | format->characterColor;
 	taskStates[taskId].cursor.column++;
 	return 0;
 }
 
-uint8_t print(const char * string, format_t format)
+uint8_t print(const char * string, const struct format_t* format)
 {
 	int i;
 	for (i = 0; string[i] != 0; i++)
@@ -84,7 +84,7 @@ uint8_t newLine(color_t backgroundColor)
 	format_t format = { .backgroundColor = backgroundColor, .characterColor = 0};
 	while(taskStates[taskId].cursor.row == currentRow)
 	{
-		int error = printChar(' ', format);
+		int error = printChar(' ', &format);
 		if(error)
 			return 1;
 	}

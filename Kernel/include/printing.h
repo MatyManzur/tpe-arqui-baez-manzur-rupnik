@@ -16,8 +16,8 @@ typedef struct format_t
 void addTaskState(uint8_t taskId, uint8_t topLeftRow, uint8_t topLeftColumn, uint8_t bottomRightRow, uint8_t bottomRightColumn);
 
 //syscalls
-uint8_t printChar(char character, format_t format);
-uint8_t print(const char * string, format_t format);
+uint8_t printChar(char character, const struct format_t* format);
+uint8_t print(const char * string, const struct format_t* format);
 uint8_t newLine(color_t backgroundColor);
 void clearScreen(color_t backgroundColor);
 

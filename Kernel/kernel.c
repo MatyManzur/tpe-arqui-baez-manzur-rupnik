@@ -87,6 +87,8 @@ int main()
 {	
 	load_idt();
 	
+	initializePrinting(); ////BORARRRR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	
 	ncPrint("[Kernel Main]");
 	ncNewline();
 	ncPrint("  Sample code module at 0x");
@@ -108,13 +110,5 @@ int main()
 	
 	ncClear();
 	
-	initializePrinting();
-	
-	while(1)
-	{
-		char c;
-		readPrintables(&c, 1);
-		printChar(c, (format_t){0,7});
-	}
 	return 0;
 }

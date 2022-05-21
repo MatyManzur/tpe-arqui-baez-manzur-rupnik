@@ -1,27 +1,26 @@
+#include <bizcocho.h>
 
 #define LASTCOLUMN 80
 #define LASTLINE 25
 #define CANTPROGRAMAS 10
-#define COLOROPTIONS
+#define COLOROPTIONS 3
 
-int addMessage(signed char x, signed char y, char*message, unsigned char screen[][80]);
-void changeColor(const char * buffer, const char * colors[], unsigned char colorValues[]);
-int strToNum(const char* str);
-char strLength(const char * str);
-char strPrefix(const char*prefix, const char*str);
+#define BUFFER_DIM 50
+
+int addMessage(unsigned char x, unsigned char y, const char*message, unsigned char screen[][80]);
+int changeColor(const unsigned char * buffer, const unsigned char * colors[], color_t colorValues[]);
 
 int bizcocho(){
     //Podemos usar un solo puntero y hacer %80 y %25 para acceder a la matriz
     static unsigned char screen[25][80];
     static unsigned char column=0;
     static unsigned char line=24;
-    static unsigned char colorValues[COLOROPTIONS] = {0x02,0x00,0x04};
-    static char * colors[COLOROPTIONS] = {"letter", "background","user"};
-    unsigned char buffer[50]={0};
+    static color_t colorValues[COLOROPTIONS] = {L_GRAY, BLACK, MAGENTA};
+    static const unsigned char * colors[COLOROPTIONS] = {(const unsigned char *)"letter",(const unsigned char *) "background",(const unsigned char *)"user"};
+    unsigned char buffer[BUFFER_DIM]={0};
     //set cursor al inicio de todo
     while(1){
 
-        //print("UsuarioN1: ~ ",color,color);
         column += addMessage(line,0,"Usuario N1: ~ ",screen);
         
         //Se puede eficientizar un poco, pero no conviene porque quizás hay cosas escritas arriba
@@ -33,36 +32,35 @@ int bizcocho(){
         }
         
         unsigned char key;
-        int counter =0;
+        int counter = 0;
     
         do{
-            //key=getLastKey();
+            //sys_read(&key, 1);
             if(key!='\b'){
                 buffer[counter++] = key;
                 //printChar(key,color,color); Hay que poner también dónde queremos que lo imprime con line y column
                 screen[line][column++]=key;
             }else if(counter>0){
-                buffer[counter-1] ='\0';
+                buffer[--counter] ='\0';
                 //cambiar el puntero a uno con un x menos
                 //printChar(algo,black,black);
                 screen[line][--column] = '\0';
             }
-        } while(key!='\n' && counter < 50); 
-        line--;
+        } while(key!='\n' && counter < BUFFER_DIM); 
+        line--; //line = 23
         column=0;
-        buffer[counter-1]='\0'; //en lugar de la n
+        buffer[counter-1]='\0'; //en lugar de la \n
         unsigned char foundFlag=0;
         int index;
-        for(index=0; i<CANTPROGRAMAS && foundFlag;index++){
+        for(index=0; index<CANTPROGRAMAS && foundFlag ; index++){
     /*      if(strcompare(buffer,programas[index])){
                 programsPointers[index](); Algo como esto tiene que ser con punteros a funciones
-                foundFlag = foundFlag | 0x01; Joda re al pedo
                 foundFlag++;
             }
     */
         }
         if(!foundFlag){
-            changeColor(buffer, colors, colorValues);
+            foundFlag = changeColor(buffer, colors, colorValues);
         }
         for(int i=2; i<LASTLINE;i++){
             for(int j=2; j<LASTCOLUMN;j++){ //podemos fijarnos si es distinto de 0 el elemento del vector y cambiar los colores si lo es
@@ -71,11 +69,10 @@ int bizcocho(){
             }
         }
         if(foundFlag){
-            addMessage(line++,0,programas[index],screen);
+           // addMessage(line++,0,programas[index],screen); //lo agrego en la 23
         }else{
             addMessage(line++,0,"Hey! That's not a valid command!",screen);
-        }
-        foundFlag=0;
+        } //line = 24
         
         for(int i=0; i<counter; i++){
             buffer[i]='\0';
@@ -84,10 +81,11 @@ int bizcocho(){
 }
 
 
-int addMessage(signed char x, signed char y,char * message, unsigned char screen[][80]){
+int addMessage(unsigned char x, unsigned char y, const char * message, unsigned char screen[][80]){
     //la programación defensiva sirve!
     int i;
-    for(i=0; message[i];i++,y++){
+    for(i=0; message[i];i++,y++)
+    {
         screen[x][y] = message[i];
         x=(y>=80)? x+1:x;
         y=y%80;
@@ -96,49 +94,22 @@ int addMessage(signed char x, signed char y,char * message, unsigned char screen
 }
 
 
-void changeColor(const char * buffer, const char * colors[], unsigned char colorValues[]){
-    int found=0;
-    for(int i=0; i<COLOROPTIONS && !found;i++){
-        if(strPrefix(colors[i],buffer)){
-            found=1;
+int changeColor(const unsigned char * buffer, const unsigned char * colors[], color_t colorValues[]){
+    for(int i=0; i<COLOROPTIONS;i++)
+    {
+        if(strPrefix(colors[i],buffer))
+        {
             unsigned char aux=0x00;
-            if((aux=strToNum(buffer+strLength(colors[i])+1))<15 && aux>=0){
+            if((aux=strToNum(buffer+strLength(colors[i])+1))<15 && aux>=0)
+            {
                 colorValues[i] = aux;
+                return 1;
+            }
+            else
+            {
+            	return 0;
             }
         }
     }
-}
-
-int strToNum(const char* str){
-    int i = 0;
-    int neg = 0;
-    if(str[i]=='-'){
-         neg=1;
-         i++;
-    }
-    int ans = 0;
-    for(;str[i]!='\0';i++){
-        if(str[i]<'0' || str[i]>'9'){
-            return -1;
-        }
-        ans = ans*10 + (str[i]-'0');
-    }
-    if(neg) ans*=-1;
-    return ans;
-}
-
-char strLength(const char * str){
-    int i=0;
-    while(str[i++]);
-    return i;
-}
-
-char strPrefix(const char*prefix, const char*str){
-    int i;
-    for(i=0;prefix[i] && str[i];i++){
-        if(prefix[i]!=str[i]){
-            return 0;
-        }
-    }
-    return !prefix[i];
+    return 0;
 }

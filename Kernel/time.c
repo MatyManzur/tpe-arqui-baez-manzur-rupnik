@@ -2,6 +2,7 @@
 
 static unsigned long ticks = 0;
 static struct timezone_t timezone={0,0};
+
 void timer_handler() {
 	ticks++;
 }
@@ -14,7 +15,7 @@ int seconds_elapsed() {
 	return ticks / 18;
 }
 
-void getCurrentDateTime(struct datetime_t* datetime,struct timezone_t* tzone){///Falta testing
+void getCurrentDateTime(struct datetime_t* datetime, struct timezone_t* tzone){///Falta testing
 	tzone->hours=timezone.hours;
 	tzone->minutes=timezone.minutes;
 	uint8_t h=getHours()+timezone.hours;
