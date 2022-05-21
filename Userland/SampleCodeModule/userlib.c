@@ -1,4 +1,3 @@
-
 #include <userlib.h>
 
 int strToNum(const unsigned char* str){
@@ -34,6 +33,7 @@ char strPrefix(const unsigned char*prefix, const unsigned char*str){
     }
     return !prefix[i];
 }
+
 int strCmp(const unsigned char* str1,const unsigned char* str2){
 	while(*str1 != 0 && *str1 == *str2)
 	{

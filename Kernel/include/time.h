@@ -17,8 +17,8 @@ struct timezone_t{
 };
 
 void timer_handler();
-int ticks_elapsed();
-int seconds_elapsed();
+unsigned long ticks_elapsed();
+unsigned long seconds_elapsed();
 
 
 
@@ -30,6 +30,6 @@ uint8_t getMonth();
 uint8_t getYear();
 uint8_t getCentury();
 
-void getCurrentDateTime(struct datetime_t* datetime,struct timezone_t* tzone);
+void getCurrentDateTime(struct datetime_t* datetime, struct timezone_t* tzone);
 void setTimeZone(const struct timezone_t * tzone);
 #endif

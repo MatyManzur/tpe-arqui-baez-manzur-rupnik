@@ -7,11 +7,11 @@ void timer_handler() {
 	ticks++;
 }
 
-int ticks_elapsed() {
+unsigned long ticks_elapsed() {
 	return ticks;
 }
 
-int seconds_elapsed() {
+unsigned long seconds_elapsed() {
 	return ticks / 18;
 }
 
