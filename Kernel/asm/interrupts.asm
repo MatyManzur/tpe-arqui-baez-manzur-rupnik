@@ -12,11 +12,18 @@ GLOBAL _irq02Handler
 GLOBAL _irq03Handler
 GLOBAL _irq04Handler
 GLOBAL _irq05Handler
+GLOBAL _syscallHandler
 
 GLOBAL _exception0Handler
 
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
+
+EXTERN readPrintables
+EXTERN getNextKey
+EXTERN cleanBuffer
+EXTERN getCurrentDateTime
+EXTERN setTimeZone
 
 SECTION .text
 
@@ -142,6 +149,51 @@ _irq05Handler:
 ;Zero Division Exception
 _exception0Handler:
 	exceptionHandler 0
+
+
+;syscallHandler calls the function in c with its respective arguments
+;The arguments already come in its respective registers in order from C
+_syscallHandler:
+	push rbp
+	mov rbp,rsp
+
+.C20:
+	cmp rax,20
+	jne .C21
+	call readPrintables
+	jmp .end
+	
+.C21:
+	cmp rax,21
+	jne .C22
+	call getNextKey
+	jmp .end
+	
+.C22:
+	cmp rax,22
+	jne .C30
+	call cleanBuffer
+	jmp .end
+.C30:
+	cmp rax,30
+	jne .C31
+	call getCurrentDateTime
+	jmp .end
+.C31:
+	cmp rax,31
+	jne .default
+	call setTimeZone
+	jmp .end
+.default:
+	jmp .end
+	
+	
+	
+.end
+	mov rsp,rbp
+	pop rbp
+	iretq
+
 
 haltcpu:
 	cli
