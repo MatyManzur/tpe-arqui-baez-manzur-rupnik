@@ -86,19 +86,19 @@ void printWithFormat(char* format,...)
                             i = -i;
                             putChar('-'); 
                         } 
-                        puts(convert(i,10));
+                        printNormal(convert(i,10));
                         break; 
 
             case 'o': i = va_arg(arg,unsigned int); //Fetch Octal representation
-                        puts(convert(i,8));
+                        printNormal(convert(i,8));
                         break; 
 
             case 's': s = va_arg(arg,char *);       //Fetch string
-                        puts(s); 
+                        printNormal(s); 
                         break; 
 
             case 'x': i = va_arg(arg,unsigned int); //Fetch Hexadecimal representation
-                        puts(convert(i,16));
+                        printNormal(convert(i,16));
                         break; 
         }   
     } 
