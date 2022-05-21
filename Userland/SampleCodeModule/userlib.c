@@ -42,3 +42,85 @@ int strCmp(const unsigned char* str1,const unsigned char* str2){
 	}
 	return (*str1) - (*str2);
 }
+
+void printNormal(char * str){
+    sys_write(str,strLength(str)); //Podríamos hacer un for para no recorrer dos veces
+}
+
+int putChar(char c){
+    return sys_write(&c,1);
+}     
+
+// código sacado de:
+// https://stackoverflow.com/questions/1735236/how-to-write-my-own-printf-in-c 
+void printWithFormat(char* format,...) 
+{ 
+    char *traverse; 
+    unsigned int i; 
+    char *s; 
+
+    //Initializing arguments 
+    va_list arg; 
+    va_start(arg, format); 
+
+    for(traverse = format; *traverse != '\0'; traverse++) 
+    { 
+        while( *traverse != '%' ) 
+        { 
+            putChar(*traverse);
+            traverse++; 
+        } 
+
+        traverse++; 
+
+        //Fetching and executing arguments
+        switch(*traverse) 
+        { 
+            case 'c' : i = va_arg(arg,int);     //Fetch char argument
+                        putChar(i);
+                        break; 
+
+            case 'd' : i = va_arg(arg,int);         //Fetch Decimal/Integer argument
+                        if(i<0) 
+                        { 
+                            i = -i;
+                            putChar('-'); 
+                        } 
+                        puts(convert(i,10));
+                        break; 
+
+            case 'o': i = va_arg(arg,unsigned int); //Fetch Octal representation
+                        puts(convert(i,8));
+                        break; 
+
+            case 's': s = va_arg(arg,char *);       //Fetch string
+                        puts(s); 
+                        break; 
+
+            case 'x': i = va_arg(arg,unsigned int); //Fetch Hexadecimal representation
+                        puts(convert(i,16));
+                        break; 
+        }   
+    } 
+
+    //Closing argument list to necessary clean-up
+    va_end(arg); 
+} 
+
+char *convert(unsigned int num, int base) 
+{ 
+    static char Representation[]= "0123456789ABCDEF";
+    static char buffer[50]; 
+    char *ptr; 
+
+    ptr = &buffer[49]; 
+    *ptr = '\0'; 
+
+    do 
+    { 
+        *--ptr = Representation[num%base]; 
+        num /= base; 
+    }while(num != 0); 
+
+    return(ptr); 
+}
