@@ -5,6 +5,7 @@
 #include <naiveConsole.h>
 #include <printing.h>
 #include <keyboard.h>
+#include <scheduler.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -106,6 +107,8 @@ int main()
 	ncPrint("[Finished]");
 	
 	ncClear();
+	
+	initializePrinting();
 	
 	while(1)
 	{

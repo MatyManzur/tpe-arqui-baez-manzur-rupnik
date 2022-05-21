@@ -6,5 +6,6 @@
 #define MAX_TASK_COUNT 16
 
 uint8_t getCurrentTaskId();
+void initializePrinting();
 
 #endif
