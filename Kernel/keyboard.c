@@ -51,18 +51,19 @@ void readPrintables(char* bufferString, uint8_t count)
 			kbEvent_t kbEvent = buffer[(readingIndex++)%BUFFER_DIM];
 			if(kbEvent.key==VK_LSHIFT || kbEvent.key==VK_RSHIFT)
 			{
-				if(kbEvent.action==PRESSED)
+				shifted= !shifted;
+				/*if(kbEvent.action==PRESSED)
 					shifted = 1;
 				else
 					shifted = 0;
+				*/
 			}
 			else if(kbEvent.key==VK_CAPITAL && kbEvent.action==PRESSED)
 			{
 				shifted = !shifted;
 			}
 			else if(kbEvent.key > 0 && kbEvent.action==PRESSED)
-			{
-				
+			{	
 				char printableChar = printableKeys[shifted][kbEvent.key];
 				if(printableChar!=0)
 					bufferString[i++] = printableChar;
