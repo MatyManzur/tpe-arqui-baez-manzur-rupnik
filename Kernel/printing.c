@@ -4,18 +4,6 @@ static uint8_t * const video = (uint8_t*)0xB8000;
 static const uint32_t width = 80;
 static const uint32_t height = 25;
 
-typedef struct point_t
-{
-	uint8_t row;
-	uint8_t column;
-} point_t;
-
-typedef struct taskState_t
-{
-	point_t topLeft;
-	point_t bottomRight;
-	point_t cursor;
-} taskState_t;
 
 static taskState_t taskStates[MAX_TASK_COUNT];
 

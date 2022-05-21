@@ -19,11 +19,21 @@ GLOBAL _exception0Handler
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 
+EXTERN printChar
+EXTERN print
+EXTERN newLine
+EXTERN clearScreen
+EXTERN getCursor
+EXTERN setCursor
+
 EXTERN readPrintables
 EXTERN getNextKey
 EXTERN cleanBuffer
+
 EXTERN getCurrentDateTime
 EXTERN setTimeZone
+EXTERN ticks_elapsed
+EXTERN seconds_elapsed
 
 SECTION .text
 
@@ -156,7 +166,36 @@ _exception0Handler:
 _syscallHandler:
 	push rbp
 	mov rbp,rsp
-
+.C10:
+	cmp rax,10
+	jne .C11
+	call printChar
+	jmp .end
+.C11:
+	cmp rax,11
+	jne .C12
+	call print
+	jmp .end
+.C12:
+	cmp rax,12
+	jne .C13
+	call newLine
+	jmp .end
+.C13:
+	cmp rax,13
+	jne .C14
+	call clearScreen
+	jmp .end
+.C14:
+	cmp rax,14
+	jne .C15
+	call getCursor
+	jmp .end
+.C15:
+	cmp rax,15
+	jne .C20
+	call setCursor
+	jmp .end
 .C20:
 	cmp rax,20
 	jne .C21
@@ -181,13 +220,22 @@ _syscallHandler:
 	jmp .end
 .C31:
 	cmp rax,31
-	jne .default
+	jne .C32
 	call setTimeZone
 	jmp .end
-.default:
+.C32:
+	cmp rax,32
+	jne .C33
+	call ticks_elapsed
+	jmp .end
+.C33
+	cmp rax,33
+	jne .default
+	call seconds_elapsed
 	jmp .end
 	
-	
+.default:
+	jmp .end
 	
 .end
 	mov rsp,rbp

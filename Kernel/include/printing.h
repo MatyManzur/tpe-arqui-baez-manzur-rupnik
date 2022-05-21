@@ -11,6 +11,18 @@ typedef struct format_t
 	color_t backgroundColor;
 	color_t characterColor;
 } format_t;
+typedef struct point_t
+{
+	uint8_t row;
+	uint8_t column;
+} point_t;
+
+typedef struct taskState_t
+{
+	point_t topLeft;
+	point_t bottomRight;
+	point_t cursor;
+} taskState_t;
 
 //Para ser llamada desde el scheduler
 void addTaskState(uint8_t taskId, uint8_t topLeftRow, uint8_t topLeftColumn, uint8_t bottomRightRow, uint8_t bottomRightColumn);
