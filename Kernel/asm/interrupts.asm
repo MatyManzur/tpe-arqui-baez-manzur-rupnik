@@ -99,7 +99,10 @@ SECTION .text
 	iretq
 %endmacro
 
-
+%macro caseSyscall 2
+cmp rax, %1
+je %2
+%endmacro
 _hlt:
 	sti
 	hlt
@@ -166,61 +169,54 @@ _exception0Handler:
 _syscallHandler:
 	push rbp
 	mov rbp,rsp
+	caseSyscall 10, .C10
+	caseSyscall 11, .C11
+	caseSyscall 12, .C12
+	caseSyscall 13, .C13
+	caseSyscall 14, .C14
+	caseSyscall 15, .C15
+	caseSyscall 20, .C20
+	caseSyscall 21, .C21
+	caseSyscall 22, .C22
+	caseSyscall 30, .C30
+	caseSyscall 31, .C31
+	caseSyscall 32, .C32
+	caseSyscall 33, .C33
+	jmp .end	;default: it does nothing
+	
 .C10:
-	cmp rax,10
-	jne .C11
 	call printChar
 	jmp .end
 .C11:
-	cmp rax,11
-	jne .C12
 	call print
 	jmp .end
 .C12:
-	cmp rax,12
-	jne .C13
 	call newLine
 	jmp .end
 .C13:
-	cmp rax,13
-	jne .C14
 	call clearScreen
 	jmp .end
 .C14:
-	cmp rax,14
-	jne .C15
 	call getCursor
 	jmp .end
 .C15:
-	cmp rax,15
-	jne .C20
 	call setCursor
 	jmp .end
 .C20:
-	cmp rax,20
-	jne .C21
 	call readPrintables
 	jmp .end
 	
 .C21:
-	cmp rax,21
-	jne .C22
 	call getNextKey
 	jmp .end
 	
 .C22:
-	cmp rax,22
-	jne .C30
 	call cleanBuffer
 	jmp .end
 .C30:
-	cmp rax,30
-	jne .C31
 	call getCurrentDateTime
 	jmp .end
 .C31:
-	cmp rax,31
-	jne .C32
 	call setTimeZone
 	jmp .end
 .C32:
@@ -229,12 +225,7 @@ _syscallHandler:
 	call ticks_elapsed
 	jmp .end
 .C33
-	cmp rax,33
-	jne .default
 	call seconds_elapsed
-	jmp .end
-	
-.default:
 	jmp .end
 	
 .end
