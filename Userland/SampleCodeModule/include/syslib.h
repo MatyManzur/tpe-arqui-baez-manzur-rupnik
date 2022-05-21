@@ -27,6 +27,20 @@ typedef struct point_t
 	uint8_t column;
 } point_t;
 
+struct datetime_t{
+	uint8_t hours;
+	uint8_t mins;
+	uint8_t segs;
+
+	uint8_t day;
+	uint8_t month;
+	uint16_t year; 
+};
+struct timezone_t{
+	int8_t hours;
+	int8_t minutes;
+};
+
 uint8_t sys_print_char(char character, const struct format_t* format);
 uint8_t sys_print(const char * string, const struct format_t* format);
 uint8_t sys_new_line(color_t backgroundColor);

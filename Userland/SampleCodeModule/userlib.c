@@ -1,5 +1,7 @@
 #include <userlib.h>
 
+static struct format_t format = { BLACK, L_GRAY };
+
 int strToNum(const unsigned char* str){
     int i = 0;
     int neg = 0;
@@ -43,12 +45,32 @@ int strCmp(const unsigned char* str1,const unsigned char* str2){
 	return (*str1) - (*str2);
 }
 
-void printNormal(char * str){
-    sys_write(str,strLength(str)); //Podríamos hacer un for para no recorrer dos veces
+void setColor(color_t backgroundColor, color_t characterColor)
+{
+	format.backgroundColor = backgroundColor;
+	format.characterColor = characterColor;
 }
 
-int putChar(char c){
-    return sys_write(&c,1);
+void printString(char * str)
+{
+	sys_print(str, &format);
+}
+
+void putChar(char c)
+{
+	sys_print_char(c, &format);
+}
+
+void printStringColor(char * str, color_t backgroundColor, color_t characterColor)
+{
+	struct format_t format = {.backgroundColor = backgroundColor % 16, .characterColor = characterColor % 16};
+    	sys_print(str, &format);
+}
+
+void putCharColor(char c, color_t backgroundColor, color_t characterColor)
+{
+    	struct format_t format = {.backgroundColor = backgroundColor % 16, .characterColor = characterColor % 16};
+    	sys_print_char(c, &format);
 }     
 
 // código sacado de:
@@ -86,19 +108,19 @@ void printWithFormat(char* format,...)
                             i = -i;
                             putChar('-'); 
                         } 
-                        printNormal(convert(i,10));
+                        printString(convert(i,10));
                         break; 
 
             case 'o': i = va_arg(arg,unsigned int); //Fetch Octal representation
-                        printNormal(convert(i,8));
+                        printString(convert(i,8));
                         break; 
 
             case 's': s = va_arg(arg,char *);       //Fetch string
-                        printNormal(s); 
+                        printString(s); 
                         break; 
 
             case 'x': i = va_arg(arg,unsigned int); //Fetch Hexadecimal representation
-                        printNormal(convert(i,16));
+                        printString(convert(i,16));
                         break; 
         }   
     } 

@@ -27,7 +27,7 @@ int bizcocho(){
         for(int i=0; i<LASTLINE;i++){
             for(int j=0; j<LASTCOLUMN;j++){ //podemos fijarnos si es distinto de 0 el elemento del vector y cambiar los colores si lo es
                                             // si es 0, habria que imprimir en negro sobre negro
-                //printKey(screen[i][j],color1,color2);
+                putChar(screen[i][j]);
             }
         }
         
@@ -35,15 +35,20 @@ int bizcocho(){
         int counter = 0;
     
         do{
-            //sys_read(&key, 1);
+            sys_read_printables(&key, 1);
             if(key!='\b'){
                 buffer[counter++] = key;
-                //printChar(key,color,color); Hay que poner también dónde queremos que lo imprime con line y column
+                putChar(key); // Hay que poner también dónde queremos que lo imprime con line y column
                 screen[line][column++]=key;
             }else if(counter>0){
                 buffer[--counter] ='\0';
                 //cambiar el puntero a uno con un x menos
-                //printChar(algo,black,black);
+                point_t point;
+                sys_get_cursor(&point);
+                point.column--;
+                sys_set_cursor(&point);
+                
+                putChar(' ');
                 screen[line][--column] = '\0';
             }
         } while(key!='\n' && counter < BUFFER_DIM); 
