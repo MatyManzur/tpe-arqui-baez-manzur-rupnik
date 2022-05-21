@@ -169,6 +169,9 @@ _exception0Handler:
 _syscallHandler:
 	push rbp
 	mov rbp,rsp
+	
+	cli
+	
 	caseSyscall 10, .C10
 	caseSyscall 11, .C11
 	caseSyscall 12, .C12

@@ -69,6 +69,10 @@ void readPrintables(char* bufferString, uint8_t count)
 					bufferString[i++] = printableChar;
 			}
 		}
+		else
+		{
+			_hlt();
+		}
 	}
 }
 
