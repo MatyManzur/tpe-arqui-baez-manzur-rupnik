@@ -1,18 +1,19 @@
 #ifndef _TIME_H_
 #define _TIME_H_
 #include <lib.h>
-struct datetime_t{
-uint8_t hours;
-uint8_t mins;
-uint8_t segs;
 
-uint8_t day;
-uint8_t month;
-uint16_t year; 
+struct datetime_t{
+	uint8_t hours;
+	uint8_t mins;
+	uint8_t segs;
+
+	uint8_t day;
+	uint8_t month;
+	uint16_t year; 
 };
 struct timezone_t{
-int8_t hours;
-int8_t minutes;
+	int8_t hours;
+	int8_t minutes;
 };
 
 void timer_handler();

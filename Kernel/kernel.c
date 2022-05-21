@@ -3,6 +3,7 @@
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
+#include <printing.h>
 #include <keyboard.h>
 
 extern uint8_t text;
@@ -110,7 +111,7 @@ int main()
 	{
 		char c;
 		readPrintables(&c, 1);
-		ncPrintChar(c);
+		printChar(c, (format_t){0,7});
 	}
 	return 0;
 }
