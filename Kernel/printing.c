@@ -110,15 +110,18 @@ void setCursor(const struct point_t* cursor)
 	screenStates[screenId].cursor.column = cursor->column;
 }
 
-void scrollUp(){
+void scrollUp(uint8_t rows){
+	if(rows>24){
+		return;
+	}
 	uint8_t screenId = getCurrentScreenId();
-	for(int i = screenStates[screenId].topLeft.row +1 ; i<= screenStates[screenId].bottomRight.row ; i++)
+	for(int i = screenStates[screenId].topLeft.row +rows ; i<= screenStates[screenId].bottomRight.row ; i++)
 	{
 		for(int j = screenStates[screenId].topLeft.column ; j<= screenStates[screenId].bottomRight.column ; j++)
 		{
 			point_t currentPoint = {.row = i, .column = j}; //quizás sea mejor sacarlo afuera de los for por estilo?
 			uint8_t * cursorPointer = pointToCursor(currentPoint);
-			uint8_t * cursorPointerRowUp = cursorPointer-160;
+			uint8_t * cursorPointerRowUp = cursorPointer-160*rows;
 			*(cursorPointerRowUp) = *(cursorPointer);
 		}
 	}

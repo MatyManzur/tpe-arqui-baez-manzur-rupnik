@@ -233,7 +233,7 @@ _syscallHandler:
 .C15:
 	call setCursor
 	jmp .end
-.C16
+.C16:
 	call scrollUp
 	jmp .end
 .C20:
