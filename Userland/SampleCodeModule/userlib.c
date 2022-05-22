@@ -64,13 +64,13 @@ void putChar(char c)
 void printStringColor(char * str, color_t backgroundColor, color_t characterColor)
 {
 	struct format_t format = {.backgroundColor = backgroundColor % 16, .characterColor = characterColor % 16};
-    	sys_print(str, &format);
+    sys_print(str, &format);
 }
 
 void putCharColor(char c, color_t backgroundColor, color_t characterColor)
 {
-    	struct format_t format = {.backgroundColor = backgroundColor % 16, .characterColor = characterColor % 16};
-    	sys_print_char(c, &format);
+    struct format_t format = {.backgroundColor = backgroundColor % 16, .characterColor = characterColor % 16};
+    sys_print_char(c, &format);
 }     
 
 // código sacado de:

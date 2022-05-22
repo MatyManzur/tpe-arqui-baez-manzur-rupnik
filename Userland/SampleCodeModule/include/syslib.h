@@ -47,7 +47,7 @@ uint8_t sys_new_line(color_t backgroundColor);
 void sys_clear_(color_t backgroundColor);
 void sys_get_cursor(struct point_t* cursor);
 void sys_set_cursor(const struct point_t* cursor);
-void sys_read_printables(char* bufferString, uint8_t count);
+void sys_read_printables(unsigned char* bufferString, uint8_t count);
 void sys_get_next_key(struct kbEvent_t* kbEvent);
 void sys_clean_buffer();
 void sys_get_current_date_time(struct datetime_t* datetime, struct timezone_t* tzone);
