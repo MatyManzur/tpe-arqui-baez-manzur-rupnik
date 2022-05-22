@@ -59,28 +59,25 @@ void followingTask() //llamada por el timer_tick para que pase a la sgte task
 	
 	//taskArray[currentTaskIndex] es la proxima task a ejecutar
 	
+	saveStackPointer(&taskArray[lastTaskIndex].stackPointer) //deja en el puntero del argumento el rsp viejo
+	
 	if(taskArray[currentTaskIndex].stackPointer == 0) //si nunca se inicio esta task
 	{
 		initializeTask(taskArray[currentTaskIndex].initTask, TASKS_STACK_BASE - (i+1) * TASK_STACK_SIZE);
 		//mueve el rsp a donde indica el 2do parametro, hace el EOI para el pic, y llama la funcion del primer parametro
 		return;
 	}
-	swapTasks(taskArray[currentTaskIndex].stackPointer, &taskArray[lastTaskIndex].stackPointer); //deja en el puntero del segundo argumento el rsp viejo, y cambia el rsp al que le paso en el primer parametro
+	swapTasks(taskArray[currentTaskIndex].stackPointer); //cambia el rsp al que le paso en el parametro
 }
 
 uint8_t getCurrentScreenId()
 {
-	return 0; //para que ande el printeo
+	return taskArray[currentTaskIndex].screenId;
 }
 
 uint8_t getCurrentTaskId()
 {
-	return 0;
-}
-
-void initializePrinting() //borrar cuando se haga el scheduler posta
-{
-	addScreenState(0, 0, 24, 79);
+	return taskArray[currentTaskIndex].taskId;
 }
 
 static int16_t addTaskToArray(const void (*initTask) (), const uint8_t screenId, const uint8_t homeTask)

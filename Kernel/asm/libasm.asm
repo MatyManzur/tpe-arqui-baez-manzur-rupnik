@@ -47,9 +47,14 @@ cpuVendor:
 	pop rbp
 	ret
 	
+saveStackPointer:
+	push rbp
+	mov [rdi], rsp
+	pop rbp
+	ret
+	
 swapTasks:
 	push rbp
-	mov [rsi],rsp
 	mov rsp, rdi
 	pop rbp
 	ret

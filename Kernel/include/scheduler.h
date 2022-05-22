@@ -8,12 +8,12 @@
 #define TASKS_STACK_BASE 0x300000
 
 //en asm
-void swapTasks(const uint64_t newStackPointer, uint64_t* oldStackPointer);
+void swapTasks(const uint64_t newStackPointer);
 void initializeTask(const void (*newTaskFunction)(void), const uint64_t newStackPointer);
+void saveStackPointer(uint64_t* oldStackPointer);
 
 uint8_t getCurrentScreenId();
 uint8_t getCurrentTaskId();
-void initializePrinting();
 void followingTask();
 
 //syscalls

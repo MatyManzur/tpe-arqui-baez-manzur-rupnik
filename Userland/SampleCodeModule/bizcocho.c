@@ -13,7 +13,7 @@
 int addMessage(unsigned char x, unsigned char y, const char*message, unsigned char screen[][80]);
 int changeColor(const unsigned char * buffer, const unsigned char * colors[], color_t colorValues[]);
 
-int bizcocho(){
+void bizcocho(){
     //Podemos usar un solo puntero y hacer %80 y %25 para acceder a la matriz
     //static unsigned char screen[HEIGHT][WIDTH]; No hace falta
     static unsigned char column=0;
@@ -68,7 +68,7 @@ int bizcocho(){
             if(key!='\b'){ //si no es un backspace
                 readingBuffer[counter++] = key; //la ponemos en el readingBuffer
                 putChar(key); // printeamos la key, porq sino no va a aparecer hasta que apretemos enter
-                screen[line][column++]=key; //la ponemos en la pantalla para que despues lo levante dos rengloones
+             //   screen[line][column++]=key; //la ponemos en la pantalla para que despues lo levante dos rengloones
             }else if(counter>0){ //si se apreto backspace y no habia nada para borrar no hace nada
                 readingBuffer[--counter] ='\0'; //borramos del buffer
                 //atrasamos uno el cursor
@@ -123,7 +123,7 @@ int bizcocho(){
 
         if(foundFlag){ //printea en la anteultima linea
             //addMessage(line,0,programas[index],screen);
-            printString(programas[index]);
+           // printString(programas[index]);
         }else{
             //addMessage(line,0,"Hey! That's not a valid command!",screen);
             printString("Hey! That's not a valid command!");

@@ -51,23 +51,23 @@ void setColor(color_t backgroundColor, color_t characterColor)
 	format.characterColor = characterColor;
 }
 
-void printString(char * str)
+void printString(unsigned char * str)
 {
 	sys_print(str, &format);
 }
 
-void putChar(char c)
+void putChar(unsigned char c)
 {
 	sys_print_char(c, &format);
 }
 
-void printStringColor(char * str, color_t backgroundColor, color_t characterColor)
+void printStringColor(unsigned char * str, color_t backgroundColor, color_t characterColor)
 {
 	struct format_t format = {.backgroundColor = backgroundColor % 16, .characterColor = characterColor % 16};
     sys_print(str, &format);
 }
 
-void putCharColor(char c, color_t backgroundColor, color_t characterColor)
+void putCharColor(unsigned char c, color_t backgroundColor, color_t characterColor)
 {
     struct format_t format = {.backgroundColor = backgroundColor % 16, .characterColor = characterColor % 16};
     sys_print_char(c, &format);

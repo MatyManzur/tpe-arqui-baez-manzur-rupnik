@@ -4,6 +4,6 @@
 #include <userlib.h>
 #include <syslib.h>
 
-int bizcocho(void);
+void bizcocho(void);
 
 #endif
