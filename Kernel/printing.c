@@ -4,18 +4,19 @@ static uint8_t * const video = (uint8_t*)0xB8000;
 static const uint32_t width = 80;
 static const uint32_t height = 25;
 
-
-static taskState_t taskStates[MAX_TASK_COUNT];
+static screenState_t screenStates[MAX_SCREEN_COUNT];
+static uint8_t currentScreenCount;
 
 static uint8_t* pointToCursor(point_t point)
 {
 	return (uint8_t*)(video + 2*(point.row * width + point.column));
 }
 
-void addTaskState(uint8_t taskId, uint8_t topLeftRow, uint8_t topLeftColumn, uint8_t bottomRightRow, uint8_t bottomRightColumn)
+int8_t addScreenState(uint8_t topLeftRow, uint8_t topLeftColumn, uint8_t bottomRightRow, uint8_t bottomRightColumn)
 {
-	if(taskId >= MAX_TASK_COUNT)
-		return;
+	int8_t screenId = currentScreenCount++;
+	if(screenId >= MAX_TASK_COUNT)
+		return -1;
 	
 	if(topLeftRow >= height)
 		topLeftRow = height - 1;
@@ -30,26 +31,26 @@ void addTaskState(uint8_t taskId, uint8_t topLeftRow, uint8_t topLeftColumn, uin
 	point_t topLeft = { .row = topLeftRow, .column = topLeftColumn};
 	point_t bottomRight = { .row = bottomRightRow, .column = bottomRightColumn};
 	
-	taskStates[taskId] = (taskState_t){ .topLeft = topLeft, .bottomRight = bottomRight, .cursor = topLeft};
-	
+	screenStates[screenId] = (screenState_t){ .topLeft = topLeft, .bottomRight = bottomRight, .cursor = topLeft};
+	return screenId;
 }
 
 uint8_t printChar(char character, const struct format_t* format)
 {
-	uint8_t taskId = getCurrentTaskId(); //ver si se rompe justo cuando se interrumpio para cambiar
-	if(taskStates[taskId].cursor.column > taskStates[taskId].bottomRight.column)
+	uint8_t screenId = getCurrentScreenId(); //ver si se rompe justo cuando se interrumpio para cambiar
+	if(screenStates[screenId].cursor.column > screenStates[screenId].bottomRight.column)
 	{
-		taskStates[taskId].cursor.column = taskStates[taskId].topLeft.column;
-		taskStates[taskId].cursor.row++;
+		screenStates[screenId].cursor.column = screenStates[screenId].topLeft.column;
+		screenStates[screenId].cursor.row++;
 	}
-	if(taskStates[taskId].cursor.row > taskStates[taskId].bottomRight.row)
+	if(screenStates[screenId].cursor.row > screenStates[screenId].bottomRight.row)
 	{
 		return 1; //se paso de su pantalla
 	}
-	uint8_t * cursorPointer = pointToCursor(taskStates[taskId].cursor);
+	uint8_t * cursorPointer = pointToCursor(screenStates[screenId].cursor);
 	*cursorPointer = character;
 	*(cursorPointer+1) = format->backgroundColor << 4 | format->characterColor;
-	taskStates[taskId].cursor.column++;
+	screenStates[screenId].cursor.column++;
 	return 0;
 }
 
@@ -67,10 +68,10 @@ uint8_t print(const char * string, const struct format_t* format)
 
 uint8_t newLine(color_t backgroundColor)
 {
-	uint8_t taskId = getCurrentTaskId();
-	uint8_t currentRow = taskStates[taskId].cursor.row;
+	uint8_t screenId = getCurrentScreenId();
+	uint8_t currentRow = screenStates[screenId].cursor.row;
 	format_t format = { .backgroundColor = backgroundColor, .characterColor = 0};
-	while(taskStates[taskId].cursor.row == currentRow)
+	while(screenStates[screenId].cursor.row == currentRow)
 	{
 		int error = printChar(' ', &format);
 		if(error)
@@ -81,10 +82,10 @@ uint8_t newLine(color_t backgroundColor)
 
 void clearScreen(color_t backgroundColor)
 {
-	uint8_t taskId = getCurrentTaskId();
-	for(int i = taskStates[taskId].topLeft.row ; i<= taskStates[taskId].bottomRight.row ; i++)
+	uint8_t screenId = getCurrentScreenId();
+	for(int i = screenStates[screenId].topLeft.row ; i<= screenStates[screenId].bottomRight.row ; i++)
 	{
-		for(int j = taskStates[taskId].topLeft.column ; j<= taskStates[taskId].bottomRight.column ; j++)
+		for(int j = screenStates[screenId].topLeft.column ; j<= screenStates[screenId].bottomRight.column ; j++)
 		{
 			point_t currentPoint = {.row = i, .column = j};
 			uint8_t * cursorPointer = pointToCursor(currentPoint);
@@ -92,23 +93,35 @@ void clearScreen(color_t backgroundColor)
 			*(cursorPointer+1) = backgroundColor << 4;
 		}
 	}
-	taskStates[taskId].cursor = taskStates[taskId].topLeft;
+	screenStates[screenId].cursor = screenStates[screenId].topLeft;
 }
 
 void getCursor(struct point_t* cursor)
 {
-	uint8_t taskId = getCurrentTaskId();
-	cursor->row = taskStates[taskId].cursor.row;
-	cursor->column = taskStates[taskId].cursor.column;
+	uint8_t screenId = getCurrentScreenId();
+	cursor->row = screenStates[screenId].cursor.row;
+	cursor->column = screenStates[screenId].cursor.column;
 }
 
 void setCursor(const struct point_t* cursor)
 {
-	uint8_t taskId = getCurrentTaskId();
-	taskStates[taskId].cursor.row = cursor->row;
-	taskStates[taskId].cursor.column = cursor->column;
+	uint8_t screenId = getCurrentScreenId();
+	screenStates[screenId].cursor.row = cursor->row;
+	screenStates[screenId].cursor.column = cursor->column;
 }
 
-
+void scrollUp(){
+	uint8_t screenId = getCurrentScreenId();
+	for(int i = screenStates[screenId].topLeft.row +1 ; i<= screenStates[screenId].bottomRight.row ; i++)
+	{
+		for(int j = screenStates[screenId].topLeft.column ; j<= screenStates[screenId].bottomRight.column ; j++)
+		{
+			point_t currentPoint = {.row = i, .column = j}; //quizás sea mejor sacarlo afuera de los for por estilo?
+			uint8_t * cursorPointer = pointToCursor(currentPoint);
+			uint8_t * cursorPointerRowUp = cursorPointer-160;
+			*(cursorPointerRowUp) = *(cursorPointer);
+		}
+	}
+}
 
 

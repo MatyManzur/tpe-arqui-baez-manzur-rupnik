@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <scheduler.h>
 
+#define MAX_SCREEN_COUNT 16
+
 typedef enum color_t {BLACK=0,BLUE,GREEN,CYAN,RED,MAGENTA,BROWN,L_GRAY,D_GRAY,L_BLUE,L_GREEN,L_CYAN,L_RED,PINK,YELLOW,WHITE} color_t;
 
 typedef struct format_t
@@ -17,15 +19,15 @@ typedef struct point_t
 	uint8_t column;
 } point_t;
 
-typedef struct taskState_t
+typedef struct screenState_t
 {
 	point_t topLeft;
 	point_t bottomRight;
 	point_t cursor;
-} taskState_t;
+} screenState_t;
 
 //Para ser llamada desde el scheduler
-void addTaskState(uint8_t taskId, uint8_t topLeftRow, uint8_t topLeftColumn, uint8_t bottomRightRow, uint8_t bottomRightColumn);
+int8_t addscreenState(uint8_t topLeftRow, uint8_t topLeftColumn, uint8_t bottomRightRow, uint8_t bottomRightColumn);
 
 //syscalls
 uint8_t printChar(char character, const struct format_t* format);
@@ -34,5 +36,6 @@ uint8_t newLine(color_t backgroundColor);
 void clearScreen(color_t backgroundColor);
 void getCursor(struct point_t* cursor);
 void setCursor(const struct point_t* cursor);
+void scrollUp();
 
 #endif
