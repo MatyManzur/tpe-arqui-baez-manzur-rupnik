@@ -19,12 +19,20 @@ GLOBAL _exception0Handler
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 
+
+EXTERN killTask
+EXTERN addTask
+EXTERN addTaskWithSharedScreen
+EXTERN activateTask
+EXTERN deactivateTask
+
 EXTERN printChar
 EXTERN print
 EXTERN newLine
 EXTERN clearScreen
 EXTERN getCursor
 EXTERN setCursor
+EXTERN scrollUp
 
 EXTERN readPrintables
 EXTERN getNextKey
@@ -80,7 +88,7 @@ SECTION .text
 	call irqDispatcher
 
 	; signal pic EOI (End of Interrupt)
-	mov al, 20h
+	mov al, 20h			
 	out 20h, al
 
 	popState
@@ -171,13 +179,18 @@ _syscallHandler:
 	mov rbp,rsp
 	
 	cli
-	
+	caseSyscall 0,	.C0
+	caseSyscall 1,	.C1
+	caseSyscall 2, 	.C2
+	caseSyscall 3,  .C3
+	caseSyscall 4,	.C4
 	caseSyscall 10, .C10
 	caseSyscall 11, .C11
 	caseSyscall 12, .C12
 	caseSyscall 13, .C13
 	caseSyscall 14, .C14
 	caseSyscall 15, .C15
+	caseSyscall 16, .C16
 	caseSyscall 20, .C20
 	caseSyscall 21, .C21
 	caseSyscall 22, .C22
@@ -186,7 +199,21 @@ _syscallHandler:
 	caseSyscall 32, .C32
 	caseSyscall 33, .C33
 	jmp .end	;default: it does nothing
-	
+.C0:
+	call killTask
+	jmp .end
+.C1:
+	call addTask
+	jmp .end
+.C2:
+	call addTaskWithSharedScreen
+	jmp .end
+.C3:
+	call activateTask
+	jmp .end
+.C4:
+	call deactivateTask
+	jmp .end
 .C10:
 	call printChar
 	jmp .end
@@ -204,6 +231,9 @@ _syscallHandler:
 	jmp .end
 .C15:
 	call setCursor
+	jmp .end
+.C16
+	call scrollUp
 	jmp .end
 .C20:
 	call readPrintables
@@ -223,15 +253,18 @@ _syscallHandler:
 	call setTimeZone
 	jmp .end
 .C32:
-	cmp rax,32
-	jne .C33
 	call ticks_elapsed
 	jmp .end
-.C33
+.C33:
 	call seconds_elapsed
 	jmp .end
 	
-.end
+.end:
+	push rax ;; asi no pierdo la salida de rax
+	; signal pic EOI (End of Interrupt)
+	mov al, 20h			
+	out 20h, al
+	pop rax
 	mov rsp,rbp
 	pop rbp
 	iretq
