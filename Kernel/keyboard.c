@@ -40,7 +40,7 @@ void keyboard_handler()
 	buffer[(writingIndex++)%BUFFER_DIM] = kbEvent;
 }
 
-void readPrintables(char* bufferString, uint8_t count)
+void readPrintables(unsigned char* bufferString, uint8_t count)
 {
 	cleanBuffer();
 	int i=0;

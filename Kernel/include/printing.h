@@ -27,7 +27,7 @@ typedef struct screenState_t
 } screenState_t;
 
 //Para ser llamada desde el scheduler
-int8_t addscreenState(uint8_t topLeftRow, uint8_t topLeftColumn, uint8_t bottomRightRow, uint8_t bottomRightColumn);
+int8_t addScreenState(uint8_t topLeftRow, uint8_t topLeftColumn, uint8_t bottomRightRow, uint8_t bottomRightColumn);
 
 //syscalls
 uint8_t printChar(char character, const struct format_t* format);

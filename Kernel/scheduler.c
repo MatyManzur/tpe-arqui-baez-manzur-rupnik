@@ -7,7 +7,7 @@ typedef struct task_t
 	uint8_t active;
 	uint8_t homeTask;
 	uint64_t stackPointer;
-	void (*initTask)(void);
+	const void (*initTask)(void);
 } task_t;
 
 static task_t taskArray[MAX_TASK_COUNT];
@@ -27,9 +27,16 @@ static int8_t getTaskArrayIndex(uint16_t taskId) //recibe el taskId y devuelve d
 	return -1;
 }
 
-static void activateHomeTasks()
+static void activateHomeTasks() 
 {
-	
+	for(int i = 0; i<MAX_TASK_COUNT ; i++)
+	{
+		if(taskArray[i].homeTask)
+		{
+			taskArray[i].active = 1;
+			currentTaskIndex = i;
+		}
+	}
 }
 
 void followingTask() //llamada por el timer_tick para que pase a la sgte task
@@ -47,7 +54,7 @@ void followingTask() //llamada por el timer_tick para que pase a la sgte task
 	}
 	if(i>=MAX_TASK_COUNT) //si no hay nada activo
 	{
-		activateHomeTasks(); //activa todos los hometask y mueve el currentTaskIndex al primer homeTask
+		activateHomeTasks(); //activa todos los hometask y mueve el currentTaskIndex a un homeTask
 	}
 	
 	//taskArray[currentTaskIndex] es la proxima task a ejecutar

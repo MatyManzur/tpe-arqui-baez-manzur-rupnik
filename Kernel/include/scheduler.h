@@ -18,8 +18,8 @@ void nextTask();
 
 //syscalls
 void killTask(const uint16_t taskId);
-int16_t addTask(const uint8_t (*initTask) (), const uint8_t topLeft_x, const uint8_t topLeft_y, const uint8_t bottomRight_x, const uint8_t bottomRight_y, const uint8_t homeTask);
-int16_t addTaskWithSharedScreen(const uint8_t (*initTask) (), const uint16_t otherTaskId, const uint8_t homeTask);
+int16_t addTask(const void (*initTask) (), const uint8_t topLeft_x, const uint8_t topLeft_y, const uint8_t bottomRight_x, const uint8_t bottomRight_y, const uint8_t homeTask);
+int16_t addTaskWithSharedScreen(const void (*initTask) (), const uint16_t otherTaskId, const uint8_t homeTask);
 void activateTask(const uint16_t taskId);
 void deactivateTask(const uint16_t taskId);
 

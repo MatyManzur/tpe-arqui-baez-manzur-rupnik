@@ -37,7 +37,7 @@ static char printableKeys [2][128] =
 
 void keyboard_handler();
 
-void readPrintables(char* bufferString, uint8_t count);
+void readPrintables(unsigned char* bufferString, uint8_t count);
 void getNextKey(struct kbEvent_t* kbEvent);
 void cleanBuffer();
 
