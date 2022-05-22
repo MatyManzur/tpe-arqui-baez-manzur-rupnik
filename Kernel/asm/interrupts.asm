@@ -43,6 +43,7 @@ EXTERN setTimeZone
 EXTERN ticks_elapsed
 EXTERN seconds_elapsed
 
+EXTERN swapTasks
 SECTION .text
 
 %macro pushState 0
@@ -268,6 +269,15 @@ _syscallHandler:
 	mov rsp,rbp
 	pop rbp
 	iretq
+
+swapTasks:
+push rbp
+mov [rsi],rsp
+mov rsp, rdi
+pop rbp
+ret
+
+
 
 
 haltcpu:
