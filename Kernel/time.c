@@ -3,8 +3,10 @@
 static unsigned long ticks = 0;
 static struct timezone_t timezone={0,0};
 
-void timer_handler() {
+void timer_handler() 
+{
 	ticks++;
+	followingTask();
 }
 
 unsigned long ticks_elapsed() {

@@ -181,7 +181,7 @@ _syscallHandler:
 	cli
 	caseSyscall 0,	.C0
 	caseSyscall 1,	.C1
-	caseSyscall 2, 	.C2
+	caseSyscall 2,  .C2
 	caseSyscall 3,  .C3
 	caseSyscall 4,	.C4
 	caseSyscall 10, .C10

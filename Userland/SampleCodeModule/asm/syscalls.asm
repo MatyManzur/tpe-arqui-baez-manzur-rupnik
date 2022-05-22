@@ -1,9 +1,15 @@
+GLOBAL sys_kill_task
+GLOBAL sys_add_task
+GLOBAL sys_add_task_with_shared_screen
+GLOBAL sys_activate_task
+GLOBAL sys_deactivate_task
 GLOBAL sys_print_char
 GLOBAL sys_print
 GLOBAL sys_new_line
 GLOBAL sys_clear_screen
 GLOBAL sys_get_cursor
 GLOBAL sys_set_cursor
+GLOBAL sys_scroll_up
 GLOBAL sys_read_printables
 GLOBAL sys_get_next_key
 GLOBAL sys_clean_buffer
@@ -26,6 +32,21 @@ SECTION .text
 	ret
 %endmacro
 
+sys_kill_task:
+	make_syscall 0
+
+sys_add_task:
+	make_syscall 1
+
+sys_add_task_with_shared_screen:
+	make_syscall 2
+	
+sys_activate_task:
+	make_syscall 3
+	
+sys_deactivate_task:
+	make_syscall 4
+
 sys_print_char:
 	make_syscall 10
 	
@@ -43,6 +64,9 @@ sys_get_cursor:
 	
 sys_set_cursor:
 	make_syscall 15
+	
+sys_scroll_up:
+	make_syscall 16
 
 sys_read_printables:
 	make_syscall 20

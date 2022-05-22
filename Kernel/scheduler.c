@@ -96,9 +96,9 @@ static int16_t addTaskToArray(const void (*initTask) (), const uint8_t screenId,
 	return nextTaskId++;
 }
 
-int16_t addTask(const void (*initTask) (), const uint8_t topLeft_x, const uint8_t topLeft_y, const uint8_t bottomRight_x, const uint8_t bottomRight_y, const uint8_t homeTask) //devuelve -1 si no se pudo agregar
+int16_t addTask(const void (*initTask) (), const uint8_t topLeft_row, const uint8_t topLeft_column, const uint8_t bottomRight_row, const uint8_t bottomRight_column, const uint8_t homeTask) //devuelve -1 si no se pudo agregar
 {
-	int8_t screenId = addScreenState(topLeft_x, topLeft_y, bottomRight_x, bottomRight_y);
+	int8_t screenId = addScreenState(topLeft_row, topLeft_column, bottomRight_row, bottomRight_column);
 	if(screenId<0) //no hay mas screens disponibles
 		return -1;
 	return addTaskToArray(initTask, screenId, homeTask);
