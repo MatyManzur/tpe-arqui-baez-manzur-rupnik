@@ -1,5 +1,7 @@
 GLOBAL cpuVendor
 GLOBAL getScanCode
+GLOBAL swapTasks
+GLOBAL initializeTask
 
 section .text
 
@@ -43,4 +45,22 @@ cpuVendor:
 
 	mov rsp, rbp
 	pop rbp
+	ret
+	
+swapTasks:
+	push rbp
+	mov [rsi],rsp
+	mov rsp, rdi
+	pop rbp
+	ret
+
+initializeTask:
+	mov rsp, rsi
+	
+	push rax
+	mov al, 20h			
+	out 20h, al
+	pop rax
+	
+	call rdi
 	ret

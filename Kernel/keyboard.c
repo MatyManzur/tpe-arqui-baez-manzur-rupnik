@@ -71,7 +71,7 @@ void readPrintables(char* bufferString, uint8_t count)
 		}
 		else
 		{
-			_hlt();
+			haltcpu();
 		}
 	}
 }
