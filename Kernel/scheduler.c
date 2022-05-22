@@ -15,6 +15,8 @@ static uint8_t currentTaskCount = 0;
 
 static uint16_t nextTaskId = 1;
 
+static uint8_t currentTaskIndex = 0; //index es la posicion del array, id es el numero que se le da al usuario
+
 static int8_t getTaskArrayIndex(uint16_t taskId) //recibe el taskId y devuelve donde esta en el array de tasks, si no lo encuentra devuelve -1
 {
 	for(int i = 0; i<MAX_TASK_COUNT ; i++)
@@ -25,9 +27,28 @@ static int8_t getTaskArrayIndex(uint16_t taskId) //recibe el taskId y devuelve d
 	return -1;
 }
 
-void nextTask() //llamada por el timer_tick para que pase a la sgte task
+void followingTask() //llamada por el timer_tick para que pase a la sgte task
 {
-	
+	if(currentTaskCount==0)
+		return;
+	uint8_t lastTaskIndex = currentTaskIndex;
+	int i=0; //para ver si se dio una vuelta y no encontro nada activo
+	while(i<MAX_TASK_COUNT && (taskArray[currentTaskIndex].taskId == 0 || taskArray[currentTaskIndex].active == 0))
+	{
+		i++;
+		currentTaskIndex++;
+		if(currentTaskIndex >= MAX_TASK_COUNT)
+			currentTaskIndex = 0;
+	}
+	if(i>=MAX_TASK_COUNT) //si no hay nada activo
+	{
+		activateHomeTasks(); //activa todos los hometask y mueve el currentTaskIndex al primer homeTask
+	}
+	if(taskArray[currentTaskIndex].stackPointer==0)
+	{
+		//el task nunca inicio, lo llamamos
+	}
+	swapTasks(taskArray[currentTaskIndex].stackPointer, &taskArray[lastTaskIndex].stackPointer); //deja en el puntero del segundo argumento el rsp viejo, y cambia el rsp al que le paso en el primer parametro
 }
 
 uint8_t getCurrentScreenId()
