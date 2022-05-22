@@ -44,9 +44,13 @@ void followingTask() //llamada por el timer_tick para que pase a la sgte task
 	{
 		activateHomeTasks(); //activa todos los hometask y mueve el currentTaskIndex al primer homeTask
 	}
-	if(taskArray[currentTaskIndex].stackPointer==0)
+	if(taskArray[currentTaskIndex].stackPointer==0) //me puse a inicializarlo como un boludo, no tenía sentido
 	{
-		//el task nunca inicio, lo llamamos
+		taskArray[currentTaskIndex].stackPointer=OFFSET+(i+1)*1024; // la idea es que OFFSET sea el lugar bajo del stack disponible y ponerlo
+																	// en uno de los 16 espacios no usados
+		// habría que cambiar el rsp a OFFSET+(i+1)*1024 pero me da dudas, si lo hacemos en una función aparte,
+		// habría que copiar el valor de return a la posición OFFSET+(i+1)*1024, retornar acá y allí hacer le llamado a la función
+		taskArray[currentTaskIndex].initTask();
 	}
 	swapTasks(taskArray[currentTaskIndex].stackPointer, &taskArray[lastTaskIndex].stackPointer); //deja en el puntero del segundo argumento el rsp viejo, y cambia el rsp al que le paso en el primer parametro
 }
