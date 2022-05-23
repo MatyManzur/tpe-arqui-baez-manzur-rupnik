@@ -37,7 +37,9 @@ int8_t addScreenState(uint8_t topLeftRow, uint8_t topLeftColumn, uint8_t bottomR
 
 uint8_t printChar(char character, const struct format_t* format)
 {
-	uint8_t screenId = getCurrentScreenId(); //ver si se rompe justo cuando se interrumpio para cambiar
+	int8_t screenId = getCurrentScreenId(); //ver si se rompe justo cuando se interrumpio para cambiar
+	if(screenId<0)
+		return 2; //no hay tasks ejecutandose
 	if(screenStates[screenId].cursor.column > screenStates[screenId].bottomRight.column)
 	{
 		screenStates[screenId].cursor.column = screenStates[screenId].topLeft.column;
@@ -69,6 +71,8 @@ uint8_t print(const char * string, const struct format_t* format)
 uint8_t newLine(color_t backgroundColor)
 {
 	uint8_t screenId = getCurrentScreenId();
+	if(screenId<0)
+		return 2; //no hay tasks ejecutandose
 	uint8_t currentRow = screenStates[screenId].cursor.row;
 	format_t format = { .backgroundColor = backgroundColor, .characterColor = 0};
 	while(screenStates[screenId].cursor.row == currentRow)
@@ -83,6 +87,8 @@ uint8_t newLine(color_t backgroundColor)
 void clearScreen(color_t backgroundColor)
 {
 	uint8_t screenId = getCurrentScreenId();
+	if(screenId<0)
+		return 2; //no hay tasks ejecutandose
 	for(int i = screenStates[screenId].topLeft.row ; i<= screenStates[screenId].bottomRight.row ; i++)
 	{
 		for(int j = screenStates[screenId].topLeft.column ; j<= screenStates[screenId].bottomRight.column ; j++)
@@ -99,6 +105,8 @@ void clearScreen(color_t backgroundColor)
 void getCursor(struct point_t* cursor)
 {
 	uint8_t screenId = getCurrentScreenId();
+	if(screenId<0)
+		return 2; //no hay tasks ejecutandose
 	cursor->row = screenStates[screenId].cursor.row;
 	cursor->column = screenStates[screenId].cursor.column;
 }
@@ -106,6 +114,8 @@ void getCursor(struct point_t* cursor)
 void setCursor(const struct point_t* cursor)
 {
 	uint8_t screenId = getCurrentScreenId();
+	if(screenId<0)
+		return 2; //no hay tasks ejecutandose
 	screenStates[screenId].cursor.row = cursor->row;
 	screenStates[screenId].cursor.column = cursor->column;
 }
@@ -115,6 +125,8 @@ void scrollUp(uint8_t rows){
 		return;
 	}
 	uint8_t screenId = getCurrentScreenId();
+	if(screenId<0)
+		return 2; //no hay tasks ejecutandose
 	for(int i = screenStates[screenId].topLeft.row +rows ; i<= screenStates[screenId].bottomRight.row ; i++)
 	{
 		for(int j = screenStates[screenId].topLeft.column ; j<= screenStates[screenId].bottomRight.column ; j++)

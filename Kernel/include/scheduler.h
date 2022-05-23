@@ -12,8 +12,8 @@ void swapTasks(const uint64_t newStackPointer);
 void initializeTask(const void (*newTaskFunction)(void), const uint64_t newStackPointer);
 void saveStackPointer(uint64_t* oldStackPointer);
 
-uint8_t getCurrentScreenId();
-uint8_t getCurrentTaskId();
+int8_t getCurrentScreenId();
+int8_t getCurrentTaskId();
 void followingTask();
 
 //syscalls
