@@ -10,16 +10,18 @@
 #define WIDTH 80
 #define HEIGHT 25
 
-int addMessage(unsigned char x, unsigned char y, const char*message, unsigned char screen[][80]);
+void addMessage(const char * message);
 int changeColor(const unsigned char * buffer, const unsigned char * colors[], color_t colorValues[]);
+
+static point_t promptCursor = {HEIGHT-1, 0};
+static point_t printingCursor = {0,0};
 
 void bizcocho()
 {
-    point_t promptCursor = {HEIGHT-1, 0};
-    point_t printingCursor = {0,0};
+    
     unsigned char promptBuffer[BUFFER_DIM]={0};
     
-    sys_clear_screen();
+    sys_clear_screen(BLACK);
     
     /* COLORES
     static color_t colorValues[COLOROPTIONS] = {L_GRAY, BLACK, MAGENTA};
@@ -38,14 +40,30 @@ void bizcocho()
         }
 
         sys_set_cursor(&promptCursor);
-        printStringColor("Usuario N1 >§", BLACK, MAGENTA);
+        printStringColor((unsigned char*)"Usuario N1 ", BLACK, MAGENTA);
+        putCharColor(2, BLACK, MAGENTA); 
+        putCharColor(' ', BLACK, MAGENTA); 
+        putCharColor(16, BLACK, MAGENTA); //para el chirimbolito
+        
+        /*		BORRAR DPS, ES PARA VER LOS ASCIIS Q HAY 
+        sys_set_cursor(&printingCursor);
+       for(int k=0;k<255;k++)
+       {
+       	printWithFormat("%d", k);
+       	putChar('=');
+       	putChar(k);
+       	printStringColor(" | ", WHITE, RED);
+       }
+    	sys_new_line(BLACK);
+    	sys_get_cursor(&printingCursor);
+    	*/
 
         unsigned char key;
         int counter = 0; //cuantas letras van en este mensaje
     
         do{ //repite hasta un enter o que hayan BUFFER_DIM letras
             sys_read_printables(&key, 1); //leemos la letra y la dejamos en key
-            if(key=='\n') //si es un enter, no printeamos nada y va a salir del while
+            if(key!='\n') //si es un enter, no printeamos nada y va a salir del while
             {
             	if(key!='\b')
             	{ //si no es un backspace
@@ -58,21 +76,20 @@ void bizcocho()
 		       
 		        point_t point;
 		        
-		        sys_get_cursor(&point);	//se mueve uno para atras para borrarlo
-		        point.column--;
-		        sys_set_cursor(&point);
+		        sys_move_cursor(0,-1);	//se mueve uno para atras para borrarlo
 		        
 		        //y printeamos un vacio
 		        putChar(' ');
 		        
-		        
-		        sys_get_cursor(&point);	//se mueve uno para atras para reemplazar lo que se borro
-		        point.column--;
-		        sys_set_cursor(&point);
+		        sys_move_cursor(0,-1);	//se mueve uno para atras para reemplazar lo que se borro
             	}
             }
             
-        } while(key!='\n' && counter < BUFFER_DIM);  
+        } while(key!='\n' && counter < BUFFER_DIM);
+        
+        promptBuffer[counter] = '\0';
+        
+        addMessage(promptBuffer);
         
         
         unsigned char foundFlag=0; //si reconocio algun comando
@@ -133,9 +150,11 @@ void bizcocho()
 
 void addMessage(const char * message)
 {
+    if(printingCursor.row==HEIGHT-2)
+    	sys_scroll_up(1);
     sys_set_cursor(&printingCursor);
     printStringColor(message, BLACK, L_GRAY);
-    sys_new_line();
+    sys_new_line(BLACK);
     sys_get_cursor(&printingCursor);
 }
 

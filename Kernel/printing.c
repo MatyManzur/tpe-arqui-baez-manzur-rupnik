@@ -35,7 +35,7 @@ int8_t addScreenState(uint8_t topLeftRow, uint8_t topLeftColumn, uint8_t bottomR
 	return screenId;
 }
 
-uint8_t printChar(char character, const struct format_t* format)
+uint8_t printChar(unsigned char character, const struct format_t* format)
 {
 	int8_t screenId = getCurrentScreenId(); //ver si se rompe justo cuando se interrumpio para cambiar
 	if(screenId<0)
@@ -56,7 +56,7 @@ uint8_t printChar(char character, const struct format_t* format)
 	return 0;
 }
 
-uint8_t print(const char * string, const struct format_t* format)
+uint8_t print(const unsigned char * string, const struct format_t* format)
 {
 	int i;
 	for (i = 0; string[i] != 0; i++)
@@ -73,9 +73,8 @@ uint8_t newLine(color_t backgroundColor)
 	uint8_t screenId = getCurrentScreenId();
 	if(screenId<0)
 		return 2; //no hay tasks ejecutandose
-	uint8_t currentRow = screenStates[screenId].cursor.row;
 	format_t format = { .backgroundColor = backgroundColor, .characterColor = 0};
-	while(screenStates[screenId].cursor.row == currentRow)
+	while(screenStates[screenId].cursor.column <= screenStates[screenId].bottomRight.column)
 	{
 		int error = printChar(' ', &format);
 		if(error)
