@@ -33,6 +33,7 @@ EXTERN clearScreen
 EXTERN getCursor
 EXTERN setCursor
 EXTERN scrollUp
+EXTERN moveCursor
 
 EXTERN readPrintables
 EXTERN getNextKey
@@ -191,6 +192,7 @@ _syscallHandler:
 	caseSyscall 14, .C14
 	caseSyscall 15, .C15
 	caseSyscall 16, .C16
+	caseSyscall 17, .C17
 	caseSyscall 20, .C20
 	caseSyscall 21, .C21
 	caseSyscall 22, .C22
@@ -235,6 +237,9 @@ _syscallHandler:
 .C16:
 	call scrollUp
 	jmp .end
+.C17:
+	call moveCursor
+	jmp .end
 .C20:
 	call readPrintables
 	jmp .end
@@ -242,7 +247,6 @@ _syscallHandler:
 .C21:
 	call getNextKey
 	jmp .end
-	
 .C22:
 	call cleanBuffer
 	jmp .end

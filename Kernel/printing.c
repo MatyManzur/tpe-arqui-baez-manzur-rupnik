@@ -106,7 +106,7 @@ void getCursor(struct point_t* cursor)
 {
 	uint8_t screenId = getCurrentScreenId();
 	if(screenId<0)
-		return 2; //no hay tasks ejecutandose
+		return; //no hay tasks ejecutandose
 	cursor->row = screenStates[screenId].cursor.row;
 	cursor->column = screenStates[screenId].cursor.column;
 }
@@ -115,7 +115,7 @@ void setCursor(const struct point_t* cursor)
 {
 	uint8_t screenId = getCurrentScreenId();
 	if(screenId<0)
-		return 2; //no hay tasks ejecutandose
+		return; //no hay tasks ejecutandose
 	screenStates[screenId].cursor.row = cursor->row;
 	screenStates[screenId].cursor.column = cursor->column;
 }
@@ -137,6 +137,26 @@ void scrollUp(uint8_t rows){
 			*(cursorPointerRowUp) = *(cursorPointer);
 		}
 	}
+}
+void moveCursor(int rows,int columns){
+	uint8_t screenId=getCurrentScreenId();
+	if(screenId<0)return;
+	int finalRow= ((int)screenStates[screenId].cursor.row) + rows;
+	int finalColumn= ((int)screenStates[screenId].cursor.column)+columns;
+	
+	if(finalRow > screenStates[screenId].bottomRight.row){
+		finalRow=screenStates[screenId].bottomRight.row;
+	}else if(finalRow < screenStates[screenId].topLeft.row){
+		finalRow=screenStates[screenId].topLeft.row;
+	}
+	
+	if(finalColumn > screenStates[screenId].bottomRight.column){
+		finalColumn =screenStates[screenId].bottomRight.column;
+	}else if(finalColumn < screenStates[screenId].topLeft.column){
+		finalColumn =screenStates[screenId].topLeft.column;
+	}
+	screenStates[screenId].cursor.row=finalRow;
+	screenStates[screenId].cursor.column=finalColumn;
 }
 
 

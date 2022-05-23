@@ -10,6 +10,7 @@ GLOBAL sys_clear_screen
 GLOBAL sys_get_cursor
 GLOBAL sys_set_cursor
 GLOBAL sys_scroll_up
+GLOBAL sys_move_cursor
 GLOBAL sys_read_printables
 GLOBAL sys_get_next_key
 GLOBAL sys_clean_buffer
@@ -67,6 +68,9 @@ sys_set_cursor:
 	
 sys_scroll_up:
 	make_syscall 16
+	
+sys_move_cursor:
+	make_syscall 17
 
 sys_read_printables:
 	make_syscall 20

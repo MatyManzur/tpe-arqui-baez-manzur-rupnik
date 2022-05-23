@@ -37,5 +37,6 @@ void clearScreen(color_t backgroundColor);
 void getCursor(struct point_t* cursor);
 void setCursor(const struct point_t* cursor);
 void scrollUp(uint8_t rows);
+void moveCursor(int row,int columns);
 
 #endif
