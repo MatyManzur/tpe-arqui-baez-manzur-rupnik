@@ -59,7 +59,7 @@ void followingTask() //llamada por el timer_tick para que pase a la sgte task
 	
 	//taskArray[currentTaskIndex] es la proxima task a ejecutar
 	
-	saveStackPointer(&taskArray[lastTaskIndex].stackPointer) //deja en el puntero del argumento el rsp viejo
+	saveStackPointer(&taskArray[lastTaskIndex].stackPointer); //deja en el puntero del argumento el rsp viejo
 	
 	if(taskArray[currentTaskIndex].stackPointer == 0) //si nunca se inicio esta task
 	{

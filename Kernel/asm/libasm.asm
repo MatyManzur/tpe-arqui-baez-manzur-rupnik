@@ -2,6 +2,7 @@ GLOBAL cpuVendor
 GLOBAL getScanCode
 GLOBAL swapTasks
 GLOBAL initializeTask
+GLOBAL saveStackPointer
 
 section .text
 
