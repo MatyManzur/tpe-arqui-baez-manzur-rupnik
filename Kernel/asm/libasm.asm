@@ -48,14 +48,12 @@ cpuVendor:
 	ret
 	
 saveStackPointer:
-	push rbp
-	mov [rdi], rsp
-	pop rbp
+	mov [rdi], rbp
 	ret
 	
 swapTasks:
-	push rbp
-	mov rsp, rdi
+	mov rsp, rdi;; Por como usamos saveStackPointer en rdi apunta al rbp de TimerHandler entonces lo popeamos para no perderlo 
+				;;y volvemos a timer handler es como hacer un desarmado de stack a mano
 	pop rbp
 	ret
 
