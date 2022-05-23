@@ -13,77 +13,66 @@
 int addMessage(unsigned char x, unsigned char y, const char*message, unsigned char screen[][80]);
 int changeColor(const unsigned char * buffer, const unsigned char * colors[], color_t colorValues[]);
 
-void bizcocho(){
-    //Podemos usar un solo puntero y hacer %80 y %25 para acceder a la matriz
-    //static unsigned char screen[HEIGHT][WIDTH]; No hace falta
-    static unsigned char column=0;
-    static unsigned char line=0;
-    static unsigned char printColumn=0;
-    static unsigned char printRow=0;
+void bizcocho()
+{
+    point_t promptCursor = {HEIGHT-1, 0};
+    point_t printingCursor = {0,0};
+    unsigned char promptBuffer[BUFFER_DIM]={0};
+    
+    sys_clear_screen();
     
     /* COLORES
     static color_t colorValues[COLOROPTIONS] = {L_GRAY, BLACK, MAGENTA};
     static const unsigned char * colors[COLOROPTIONS] = {(const unsigned char *)"letter",(const unsigned char *) "background",(const unsigned char *)"user"};
     */
     
-    unsigned char readingBuffer[BUFFER_DIM]={0};
+    
     //set cursor al inicio de todo
     while(1){
-    
-        //column += addMessage(line,0,"Usuario N1: ~ ",screen);
+   
         
-        //REFRESCO DE TODA LA PANTALLA
-        struct point_t cursor = {HEIGHT-1, 0}; //Imprimimos abajo
+        sys_set_cursor(&promptCursor);//Reseteamos la linea del prompt
         
-        sys_set_cursor(&cursor);
-        
-        for(int i = 0; i<80;i++){
-            putChar(' '); // esto va a dejarlo todo con el color de la letra en lugar del color del background :/
+        for(int i = 0; i<WIDTH;i++){
+            putChar(' ');
         }
 
-        sys_set_cursor(&cursor);
-        printStringColor("Usuario N1: ~> ", BLACK, MAGENTA);
-        
-
-        //Se puede eficientizar un poco, pero no conviene porque quizás hay cosas escritas arriba
-      /*  for(int i=0; i<LASTLINE;i++){
-            for(int j=0; j<LASTCOLUMN;j++){ //podemos fijarnos si es distinto de 0 el elemento del vector y cambiar los colores si lo es
-                                            // si es 0, habria que imprimir en negro sobre negro
-                putChar(screen[i][j]);
-            }
-        }
-        */
-        
-        /*
-        cursor = (struct point_t){line, column};
-        
-        sys_set_cursor(&cursor);
-        */
+        sys_set_cursor(&promptCursor);
+        printStringColor("Usuario N1 >§", BLACK, MAGENTA);
 
         unsigned char key;
         int counter = 0; //cuantas letras van en este mensaje
     
         do{ //repite hasta un enter o que hayan BUFFER_DIM letras
             sys_read_printables(&key, 1); //leemos la letra y la dejamos en key
-            if(key!='\b'){ //si no es un backspace
-                readingBuffer[counter++] = key; //la ponemos en el readingBuffer
-                putChar(key); // printeamos la key, porq sino no va a aparecer hasta que apretemos enter
-             //   screen[line][column++]=key; //la ponemos en la pantalla para que despues lo levante dos rengloones
-            }else if(counter>0){ //si se apreto backspace y no habia nada para borrar no hace nada
-                readingBuffer[--counter] ='\0'; //borramos del buffer
-                //atrasamos uno el cursor
-                point_t point; //Esto es un asco, habría que reemplazar por sys_reduce_cursor_by_one();
-                sys_get_cursor(&point);
-                point.column--;
-                sys_set_cursor(&point);
-                //y printeamos un vacio
-                putChar(' ');
-                //screen[line][--column] = '\0'; //lo borramos para que no aparezca despues
+            if(key=='\n') //si es un enter, no printeamos nada y va a salir del while
+            {
+            	if(key!='\b')
+            	{ //si no es un backspace
+		        promptBuffer[counter++] = key; //la ponemos en el promptBuffer
+		        putChar(key); // printeamos la key, porq sino no va a aparecer hasta que apretemos enter
+            	}
+            	else if(counter>0)
+            	{ //si se apreto backspace y no habia nada para borrar no hace nada
+		        promptBuffer[--counter] ='\0'; //borramos del buffer
+		       
+		        point_t point;
+		        
+		        sys_get_cursor(&point);	//se mueve uno para atras para borrarlo
+		        point.column--;
+		        sys_set_cursor(&point);
+		        
+		        //y printeamos un vacio
+		        putChar(' ');
+		        
+		        
+		        sys_get_cursor(&point);	//se mueve uno para atras para reemplazar lo que se borro
+		        point.column--;
+		        sys_set_cursor(&point);
+            	}
             }
+            
         } while(key!='\n' && counter < BUFFER_DIM);  
-        
-
-        readingBuffer[counter-1]='\0'; //borramos el \n que nos quedo al final
         
         
         unsigned char foundFlag=0; //si reconocio algun comando
@@ -111,6 +100,7 @@ void bizcocho(){
         }
         */
 
+/*						BORRAR?
         column = 0;
         
         printStringColor("Usuario N1: ~> ", BLACK, MAGENTA);
@@ -120,43 +110,33 @@ void bizcocho(){
         sys_get_cursor(&point);
         point.row++;
         sys_set_cursor(&point);
+*/
 
-        if(foundFlag){ //printea en la anteultima linea
-            //addMessage(line,0,programas[index],screen);
-           // printString(programas[index]);
-        }else{
-            //addMessage(line,0,"Hey! That's not a valid command!",screen);
-            printString("Hey! That's not a valid command!");
-        }
-        
-        line++;
-        
-        for(int i=0; i<counter; i++){ //limpia el buffer
-            readingBuffer[i]='\0';
-        }
-        
 
-        //Esto lo hacemos arriba
-        /*for(int j=0 ; j< WIDTH -1 ; j++) //limpia la ultima linea
+        if(foundFlag)
         {
-        	screen[HEIGHT-1][j] = '\0';
+            
         }
-        */
+        else
+        {
+            addMessage("Hey! That's not a valid command!");
+        }
+        
+        for(int i=0; i<counter; i++)	 //limpia el buffer
+        {
+            promptBuffer[i]='\0';
+        }
         
     }
 }
 
 
-int addMessage(unsigned char x, unsigned char y, const char * message, unsigned char screen[][80]){
-    //la programación defensiva sirve!
-    int i;
-    for(i=0; message[i];i++,y++)
-    {
-        screen[x][y] = message[i];
-        x=(y>=80)? x+1:x;
-        y=y%80;
-    }
-    return i; // Para saber cuánto se movió hacia la derecha
+void addMessage(const char * message)
+{
+    sys_set_cursor(&printingCursor);
+    printStringColor(message, BLACK, L_GRAY);
+    sys_new_line();
+    sys_get_cursor(&printingCursor);
 }
 
 

@@ -88,7 +88,7 @@ void clearScreen(color_t backgroundColor)
 {
 	uint8_t screenId = getCurrentScreenId();
 	if(screenId<0)
-		return 2; //no hay tasks ejecutandose
+		return; //no hay tasks ejecutandose
 	for(int i = screenStates[screenId].topLeft.row ; i<= screenStates[screenId].bottomRight.row ; i++)
 	{
 		for(int j = screenStates[screenId].topLeft.column ; j<= screenStates[screenId].bottomRight.column ; j++)
