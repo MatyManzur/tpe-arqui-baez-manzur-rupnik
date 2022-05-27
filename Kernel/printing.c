@@ -80,6 +80,8 @@ uint8_t newLine(color_t backgroundColor)
 		if(error)
 			return 1;
 	}
+	screenStates[screenId].cursor.column = screenStates[screenId].topLeft.column;
+	screenStates[screenId].cursor.row++;
 	return 0;
 }
 
@@ -119,21 +121,19 @@ void setCursor(const struct point_t* cursor)
 	screenStates[screenId].cursor.column = cursor->column;
 }
 
-void scrollUp(uint8_t rows){
-	if(rows>24){
-		return;
-	}
+void scrollUp(uint8_t rows)
+{
 	uint8_t screenId = getCurrentScreenId();
 	if(screenId<0)
-		return 2; //no hay tasks ejecutandose
-	for(int i = screenStates[screenId].topLeft.row +rows ; i<= screenStates[screenId].bottomRight.row ; i++)
+		return; //no hay tasks ejecutandose
+	for(int i = screenStates[screenId].topLeft.row ; i<= screenStates[screenId].bottomRight.row - rows; i++)
 	{
 		for(int j = screenStates[screenId].topLeft.column ; j<= screenStates[screenId].bottomRight.column ; j++)
 		{
-			point_t currentPoint = {.row = i, .column = j}; //quizás sea mejor sacarlo afuera de los for por estilo?
-			uint8_t * cursorPointer = pointToCursor(currentPoint);
-			uint8_t * cursorPointerRowUp = cursorPointer-160*rows;
-			*(cursorPointerRowUp) = *(cursorPointer);
+			point_t currentPoint = {.row = i+rows, .column = j};
+			point_t newPoint = {.row = i, .column = j};
+			*(pointToCursor(newPoint)) = *(pointToCursor(currentPoint));
+			*(pointToCursor(newPoint)+1) = *(pointToCursor(currentPoint)+1);
 		}
 	}
 }
