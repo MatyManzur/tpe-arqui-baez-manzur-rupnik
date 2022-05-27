@@ -1,4 +1,5 @@
 #include <bizcocho.h>
+#include <help.h>
 
 #define LASTCOLUMN 80
 #define LASTLINE 25
@@ -35,15 +36,20 @@ void bizcocho()
         
         sys_set_cursor(&promptCursor);//Reseteamos la linea del prompt
         
+        setColor(BLACK,L_GRAY);
+        
         for(int i = 0; i<WIDTH;i++){
             putChar(' ');
         }
 
         sys_set_cursor(&promptCursor);
-        printStringColor((unsigned char*)"Usuario N1 ", BLACK, MAGENTA);
-        putCharColor(2, BLACK, MAGENTA); 
-        putCharColor(' ', BLACK, MAGENTA); 
-        putCharColor(16, BLACK, MAGENTA); //para el chirimbolito
+        setColor(BLACK,MAGENTA);
+        printString((unsigned char*)"Usuario N1 ");
+        putChar(2); 
+        putChar(' '); 
+        putChar(16); //para el chirimbolito
+        
+        setColor(BLACK,L_GRAY);
         
         /*		BORRAR DPS, ES PARA VER LOS ASCIIS Q HAY 
         sys_set_cursor(&printingCursor);
@@ -94,7 +100,12 @@ void bizcocho()
         
         unsigned char foundFlag=0; //si reconocio algun comando
         int index;
-        for(index=0; index<CANTPROGRAMAS && foundFlag ; index++){
+        for(index=0; index<CANTPROGRAMAS && !foundFlag ; index++)
+        {
+        	if(strCmp(promptBuffer, "help")==0)
+        	{
+        		foundFlag++;
+        	}
     /*      if(strcompare(readingBuffer,programas[index])){
                 programsPointers[index](); Algo como esto tiene que ser con punteros a funciones
                 foundFlag++;
@@ -132,7 +143,10 @@ void bizcocho()
 
         if(foundFlag)
         {
-            
+            sys_set_cursor(&printingCursor);
+            sys_add_task_with_shared_screen(help, 1, 0);
+            sys_deactivate_task(1);
+            sys_get_cursor(&printingCursor);
         }
         else
         {

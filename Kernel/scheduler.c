@@ -131,6 +131,8 @@ void deactivateTask(const uint16_t taskId)
 	if(taskIndex<0) //no existe esa task
 		return;
 	taskArray[taskIndex].active = 0;
+	
+	followingTask();      					//////AAAAAAAAAAAAAAAAAAA
 }
 
 void killTask(const uint16_t taskId)
@@ -140,6 +142,7 @@ void killTask(const uint16_t taskId)
 		return;
 	currentTaskCount--;
 	taskArray[taskIndex] = (task_t){0};
+	followingTask();
 }
 
 void exit(){

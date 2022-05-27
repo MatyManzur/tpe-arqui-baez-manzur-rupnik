@@ -25,6 +25,7 @@ EXTERN addTask
 EXTERN addTaskWithSharedScreen
 EXTERN activateTask
 EXTERN deactivateTask
+EXTERN exit
 
 EXTERN printChar
 EXTERN print
