@@ -1,9 +1,10 @@
 GLOBAL sys_exit
-GLOBAL sys_kill_task
 GLOBAL sys_add_task
 GLOBAL sys_add_task_with_shared_screen
 GLOBAL sys_activate_task
 GLOBAL sys_deactivate_task
+GLOBAL sys_kill_task
+GLOBAL sys_get_task_id
 GLOBAL sys_print_char
 GLOBAL sys_print
 GLOBAL sys_new_line
@@ -34,7 +35,7 @@ SECTION .text
 	ret
 %endmacro
 
-sys_kill_task:
+sys_exit: 
 	make_syscall 0
 
 sys_add_task:
@@ -49,6 +50,12 @@ sys_activate_task:
 sys_deactivate_task:
 	make_syscall 4
 
+sys_kill_task:
+	make_syscall 5
+
+sys_get_task_id:
+	make_syscall 6
+	
 sys_print_char:
 	make_syscall 10
 	
@@ -94,6 +101,5 @@ sys_ticks_elapsed:
 sys_seconds_elapsed:
 	make_syscall 33
 
-sys_exit: ;esta tiene que ser la 0 en realidad
-	make_syscall 50
+
 	

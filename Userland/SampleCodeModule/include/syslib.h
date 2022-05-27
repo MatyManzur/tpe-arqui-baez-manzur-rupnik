@@ -42,11 +42,12 @@ struct timezone_t{
 };
 
 void sys_exit();
-void sys_kill_task(const uint16_t taskId);
 int16_t sys_add_task(const void (*initTask) (), const uint8_t topLeft_row, const uint8_t topLeft_column, const uint8_t bottomRight_row, const uint8_t bottomRight_column, const uint8_t homeTask);
 int16_t sys_add_task_with_shared_screen(const void (*initTask) (), const uint16_t otherTaskId, const uint8_t homeTask);
 void sys_activate_task(const uint16_t taskId);
 void sys_deactivate_task(const uint16_t taskId);
+void sys_kill_task(const uint16_t taskId);
+uint8_t sys_get_task_id();
 uint8_t sys_print_char(char character, const struct format_t* format);
 uint8_t sys_print(const char * string, const struct format_t* format);
 uint8_t sys_new_line(color_t backgroundColor);

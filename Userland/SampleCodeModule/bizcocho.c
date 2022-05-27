@@ -144,8 +144,8 @@ void bizcocho()
         if(foundFlag)
         {
             sys_set_cursor(&printingCursor);
-            sys_add_task_with_shared_screen(help, 1, 0);
-            sys_deactivate_task(1);
+            sys_add_task_with_shared_screen(help,sys_get_task_id(), 0);
+            sys_deactivate_task(sys_get_task_id());
             sys_get_cursor(&printingCursor);
         }
         else

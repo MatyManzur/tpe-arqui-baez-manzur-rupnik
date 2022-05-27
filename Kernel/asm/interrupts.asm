@@ -26,6 +26,7 @@ EXTERN addTaskWithSharedScreen
 EXTERN activateTask
 EXTERN deactivateTask
 EXTERN exit
+EXTERN getCurrentTaskId
 
 EXTERN printChar
 EXTERN print
@@ -186,6 +187,8 @@ _syscallHandler:
 	caseSyscall 2,  .C2
 	caseSyscall 3,  .C3
 	caseSyscall 4,	.C4
+	caseSyscall 5,	.C5
+	caseSyscall 6,	.C6
 	caseSyscall 10, .C10
 	caseSyscall 11, .C11
 	caseSyscall 12, .C12
@@ -201,11 +204,10 @@ _syscallHandler:
 	caseSyscall 31, .C31
 	caseSyscall 32, .C32
 	caseSyscall 33, .C33
-	caseSyscall 50, .C50 ;exit quizas deberia ser el 0
 	jmp .end	;default: it does nothing
 .C0:
-	call killTask
-	jmp .end
+	call exit
+	jmp .end	
 .C1:
 	call addTask
 	jmp .end
@@ -217,6 +219,12 @@ _syscallHandler:
 	jmp .end
 .C4:
 	call deactivateTask
+	jmp .end
+.C5:
+	call killTask
+	jmp .end
+.C6:
+	call getCurrentTaskId
 	jmp .end
 .C10:
 	call printChar
@@ -264,9 +272,6 @@ _syscallHandler:
 .C33:
 	call seconds_elapsed
 	jmp .end
-.C50:
-	call exit
-	jmp .end	
 
 .end:
 	push rax ;; asi no pierdo la salida de rax
