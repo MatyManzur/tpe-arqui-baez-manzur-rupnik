@@ -1,3 +1,4 @@
+GLOBAL sys_exit
 GLOBAL sys_kill_task
 GLOBAL sys_add_task
 GLOBAL sys_add_task_with_shared_screen
@@ -93,5 +94,6 @@ sys_ticks_elapsed:
 sys_seconds_elapsed:
 	make_syscall 33
 
-
+sys_exit: ;esta tiene que ser la 0 en realidad
+	make_syscall 50
 	

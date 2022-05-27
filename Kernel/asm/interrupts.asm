@@ -200,6 +200,7 @@ _syscallHandler:
 	caseSyscall 31, .C31
 	caseSyscall 32, .C32
 	caseSyscall 33, .C33
+	caseSyscall 50, .C50 ;exit quizas deberia ser el 0
 	jmp .end	;default: it does nothing
 .C0:
 	call killTask
@@ -262,7 +263,10 @@ _syscallHandler:
 .C33:
 	call seconds_elapsed
 	jmp .end
-	
+.C50:
+	call exit
+	jmp .end	
+
 .end:
 	push rax ;; asi no pierdo la salida de rax
 	; signal pic EOI (End of Interrupt)

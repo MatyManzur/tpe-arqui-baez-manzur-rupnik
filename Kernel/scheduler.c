@@ -142,3 +142,7 @@ void killTask(const uint16_t taskId)
 	taskArray[taskIndex] = (task_t){0};
 }
 
+void exit(){
+	killTask(getCurrentTaskId());
+}
+
