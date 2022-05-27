@@ -3,7 +3,7 @@
 
 #define LASTCOLUMN 80
 #define LASTLINE 25
-#define CANTPROGRAMAS 10
+#define COMMAND_COUNT 10
 #define COLOROPTIONS 3
 
 #define BUFFER_DIM 50
@@ -16,6 +16,15 @@ int changeColor(const unsigned char * buffer, const unsigned char * colors[], co
 
 static point_t promptCursor = {HEIGHT-1, 0};
 static point_t printingCursor = {0,0};
+
+typedef struct command_t
+{
+	char* name;
+	void (*programFunction) (void);
+	uint8_t args;
+}command_t;
+
+static command_t commands[COMMAND_COUNT] = {{.name="help", .programFunction = help, .args = 0}};
 
 void bizcocho()
 {
@@ -100,18 +109,14 @@ void bizcocho()
         
         unsigned char foundFlag=0; //si reconocio algun comando
         int index;
-        for(index=0; index<CANTPROGRAMAS && !foundFlag ; index++)
+        for(index=0; index<COMMAND_COUNT && !foundFlag ; index++)
         {
-        	if(strCmp(promptBuffer, "help")==0)
+        	if(strCmp(promptBuffer, commands[index].name)==0)
         	{
-        		foundFlag++;
-        	}
-    /*      if(strcompare(readingBuffer,programas[index])){
-                programsPointers[index](); Algo como esto tiene que ser con punteros a funciones
-                foundFlag++;
-            }
-    */
+		        foundFlag++;
+            	}
         }
+        index--; //asi commands[index] tiene lo que queremos ejecutar si foundFlag quedó = 1
         
         /* COLORES
         
@@ -120,32 +125,17 @@ void bizcocho()
         }
         
         */
-        /*
-        for(int i=2; i<LASTLINE;i++){ //empieza en 2 porq se pierden las primeras 2 lineas
-            for(int j=0; j<LASTCOLUMN;j++){                                          
-                screen[i-2][j]=screen[i][j]; //mueve todo 2 para arriba
-            }
-        }
-        */
-
-/*						BORRAR?
-        column = 0;
-        
-        printStringColor("Usuario N1: ~> ", BLACK, MAGENTA);
-        printString(readingBuffer);
-
-        point_t point; //Esto es un asco
-        sys_get_cursor(&point);
-        point.row++;
-        sys_set_cursor(&point);
-*/
 
 
         if(foundFlag)
         {
             sys_set_cursor(&printingCursor);
-            sys_add_task_with_shared_screen(help,sys_get_task_id(), 0);
-            sys_deactivate_task(sys_get_task_id());
+            
+            int bizcochoId = sys_get_task_id();
+            
+            sys_add_task_with_shared_screen(commands[index].programFunction, bizcochoId, 0);
+            sys_deactivate_task(bizcochoId);
+            
             sys_get_cursor(&printingCursor);
         }
         else
