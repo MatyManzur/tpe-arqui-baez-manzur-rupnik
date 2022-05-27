@@ -56,16 +56,16 @@ uint8_t printChar(unsigned char character, const struct format_t* format)
 	return 0;
 }
 
-uint8_t print(const unsigned char * string, const struct format_t* format)
+unsigned char * print(const unsigned char * string, const struct format_t* format)
 {
 	int i;
 	for (i = 0; string[i] != 0; i++)
 	{
 		int error = printChar(string[i], format);
 		if(error)
-			return 1;
+			return string+i;
 	}
-	return 0;
+	return NULL;
 }
 
 uint8_t newLine(color_t backgroundColor)

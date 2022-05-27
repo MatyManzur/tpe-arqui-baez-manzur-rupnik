@@ -1,5 +1,6 @@
 #include <userlib.h>
 
+
 static struct format_t format = { BLACK, L_GRAY };
 
 int strToNum(const unsigned char* str){
@@ -53,18 +54,36 @@ void setColor(color_t backgroundColor, color_t characterColor)
 
 void printString(unsigned char * str)
 {
-	sys_print(str, &format);
+    int overload=0;
+    overload=sys_print(str, &format);
+    if(overload!=NULL){
+        sys_scroll_up(2);
+        sys_move_cursor(-2,0);
+        printString(overload);
+    }
 }
 
 void putChar(unsigned char c)
 {
-	sys_print_char(c, &format);
+    int overload=0;
+	overload=sys_print_char(c, &format);
+    if(overload){
+        sys_scroll_up(1);
+        sys_move_cursor(-1,0);
+        putChar(c);
+    }
 }
 
 void printStringColor(unsigned char * str, color_t backgroundColor, color_t characterColor)
 {
 	struct format_t format = {.backgroundColor = backgroundColor % 16, .characterColor = characterColor % 16};
-    sys_print(str, &format);
+    int overload=0;
+    overload=sys_print(str, &format);
+    if(overload!=NULL){
+        sys_scroll_up(2);
+        sys_move_cursor(-2,0);
+        printStringColor(overload,backgroundColor,characterColor);
+    }
 }
 
 void putCharColor(unsigned char c, color_t backgroundColor, color_t characterColor)

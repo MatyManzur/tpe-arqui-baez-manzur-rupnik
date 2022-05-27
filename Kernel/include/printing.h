@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <scheduler.h>
 
+#define NULL 0
 #define MAX_SCREEN_COUNT 16
 
 typedef enum color_t {BLACK=0,BLUE,GREEN,CYAN,RED,MAGENTA,BROWN,L_GRAY,D_GRAY,L_BLUE,L_GREEN,L_CYAN,L_RED,PINK,YELLOW,WHITE} color_t;
@@ -31,7 +32,7 @@ int8_t addScreenState(uint8_t topLeftRow, uint8_t topLeftColumn, uint8_t bottomR
 
 //syscalls
 uint8_t printChar(unsigned char character, const struct format_t* format);
-uint8_t print(const unsigned char * string, const struct format_t* format);
+unsigned char * print(const unsigned char * string, const struct format_t* format);
 uint8_t newLine(color_t backgroundColor);
 void clearScreen(color_t backgroundColor);
 void getCursor(struct point_t* cursor);

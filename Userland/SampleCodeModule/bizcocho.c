@@ -155,7 +155,7 @@ void bizcocho()
 void addMessage(const char * message)
 {
     sys_set_cursor(&printingCursor);
-    if(printingCursor.row==HEIGHT-1)
+    if(printingCursor.row>=HEIGHT-1)
     {
     	sys_scroll_up(1);
     	sys_move_cursor(-1, 0);
