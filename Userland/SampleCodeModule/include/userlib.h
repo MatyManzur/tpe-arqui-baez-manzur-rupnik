@@ -4,7 +4,7 @@
 #include <syslib.h>
 #include <stdarg.h>
 
-#define NULL 0
+
 
 int strToNum(const unsigned char* str);
 char strLength(const unsigned char* str);

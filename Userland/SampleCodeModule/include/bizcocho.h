@@ -5,6 +5,6 @@
 #include <syslib.h>
 #include <commands.h>
 
-void bizcocho(void);
+void bizcocho(uint8_t argc, void** argv);
 
 #endif

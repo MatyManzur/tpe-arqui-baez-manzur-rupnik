@@ -19,17 +19,20 @@ static point_t printingCursor = {0,0};
 typedef struct command_t
 {
 	char* name;
-	void (*programFunction) (void);
+	void (*programFunction) (uint8_t argc, void** argv);
 	uint8_t args;
 }command_t;
 
 static command_t commands[COMMAND_COUNT] = {{.name="help", .programFunction = help, .args = 0}, {.name="inforeg", .programFunction = printRegisters, .args = 0}};
 
+<<<<<<< Updated upstream
 static color_t colorValues[COLOROPTIONS] = {L_GRAY, BLACK, MAGENTA};
 static const unsigned char * colors[COLOROPTIONS] = {(const unsigned char *)"letter",(const unsigned char *) "background",(const unsigned char *)"user"};
     
 
-void bizcocho()
+
+void bizcocho(uint8_t argc, void** argv)
+>>>>>>> Stashed changes
 {
     
     unsigned char promptBuffer[BUFFER_DIM]={0};
@@ -131,7 +134,7 @@ void bizcocho()
             
             int bizcochoId = sys_get_task_id();
             
-            sys_add_task_with_shared_screen(commands[index].programFunction, bizcochoId, 0);
+            sys_add_task_with_shared_screen(commands[index].programFunction, bizcochoId, 0, 0, NULL);
             sys_deactivate_task(bizcochoId);
             
             sys_get_cursor(&printingCursor);

@@ -53,18 +53,18 @@ saveStackPointer:
 	ret
 	
 swapTasks:
-	mov rsp, rdi;; Por como usamos saveStackPointer en rdi apunta al rbp de TimerHandler entonces lo popeamos para no perderlo 
+	mov rsp, rdi  ;; Por como usamos saveStackPointer en rdi apunta al rbp de TimerHandler entonces lo popeamos para no perderlo 
 				;;y volvemos a timer handler es como hacer un desarmado de stack a mano
 	pop rbp
 	ret
 
 initializeTask:
-	mov rsp, rsi
+	mov rsp, rcx	;;movemos el rsp
 	
-	push rax
+	push rax	;;EOI
 	mov al, 20h			
 	out 20h, al
 	pop rax
 	
-	call rdi
+	call rdx	;;en rdi y rsi ya tenemos los argumentos de la funcion, llamamos a la funcion
 	ret

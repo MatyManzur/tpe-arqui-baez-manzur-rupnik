@@ -9,7 +9,7 @@
 
 //en asm
 void swapTasks(const uint64_t newStackPointer);
-void initializeTask(const void (*newTaskFunction)(void), const uint64_t newStackPointer);
+void initializeTask(uint8_t argc, void** argv, const void (*newTaskFunction)(uint8_t argc, void** argv), const uint64_t newStackPointer);
 void saveStackPointer(uint64_t* oldStackPointer);
 
 int8_t getCurrentScreenId();
@@ -18,8 +18,8 @@ void followingTask();
 
 //syscalls
 void exit();
-int16_t addTask(const void (*initTask) (), const uint8_t topLeft_row, const uint8_t topLeft_column, const uint8_t bottomRight_row, const uint8_t bottomRight_column, const uint8_t homeTask);
-int16_t addTaskWithSharedScreen(const void (*initTask) (), const uint16_t otherTaskId, const uint8_t homeTask);
+int16_t addTask(const void (*initTask) (uint8_t argc, void** argv), const struct point_t* topLeft, const struct point_t* bottomRight, uint8_t homeTask, uint8_t argc, const void** argv);
+int16_t addTaskWithSharedScreen(const void (*initTask) (uint8_t argc, void** argv), uint16_t otherTaskId, uint8_t homeTask, uint8_t argc, const void** argv);
 void activateTask(const uint16_t taskId);
 void deactivateTask(const uint16_t taskId);
 void killTask(const uint16_t taskId);

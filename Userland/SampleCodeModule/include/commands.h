@@ -5,7 +5,7 @@
 #include <syslib.h>
 
 
-void printRegisters();
-void help();
+void printRegisters(uint8_t argc, void** argv);
+void help(uint8_t argc, void** argv);
 
 #endif

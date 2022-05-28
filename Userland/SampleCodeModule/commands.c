@@ -3,7 +3,7 @@
 
 uint64_t* inforegisters();
 
-void printRegisters()
+void printRegisters(uint8_t argc, void** argv)
 {
 	uint64_t* registers = inforegisters();
 	setColor(BLACK, WHITE);
@@ -64,7 +64,7 @@ void printRegisters()
 	sys_exit();
 }
 
-void help()
+void help(uint8_t argc, void** argv)
 {
     printStringColor("The available commands are the following: ", MAGENTA,BLACK);
     setColor(L_GRAY,BLUE);

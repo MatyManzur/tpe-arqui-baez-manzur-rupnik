@@ -7,7 +7,9 @@ typedef struct task_t
 	uint8_t active;
 	uint8_t homeTask;
 	uint64_t stackPointer;
-	const void (*initTask)(void);
+	const void (*initTask)(uint8_t argc, void**argv);
+	uint8_t argc;
+	void** argv;
 } task_t;
 
 static task_t taskArray[MAX_TASK_COUNT];
@@ -41,12 +43,13 @@ static void activateHomeTasks()
 
 void followingTask() //llamada por el timer_tick para que pase a la sgte task
 {
-	if(currentTaskCount==0)
+	if(currentTaskCount==0)	//si no hay nada para correr, no hace nada
 		return;
-	uint8_t lastTaskIndex = currentTaskIndex;
-	if(currentTaskIndex<0)
+	uint8_t lastTaskIndex = currentTaskIndex; //se guarda en qué task estabamos anteriormente
+	if(currentTaskIndex<0)	//si nunca hubo una task devolvió -1, entonces que intente con la 0
 		currentTaskIndex=0;
 	int i=0; //para ver si se dio una vuelta y no encontro nada activo
+	//nos movemos hasta encontrar la proxima task que deberia correr
 	while(i<MAX_TASK_COUNT && (taskArray[currentTaskIndex].taskId == 0 || taskArray[currentTaskIndex].active == 0))
 	{
 		i++;
@@ -54,19 +57,19 @@ void followingTask() //llamada por el timer_tick para que pase a la sgte task
 		if(currentTaskIndex >= MAX_TASK_COUNT)
 			currentTaskIndex = 0;
 	}
-	if(i>=MAX_TASK_COUNT) //si no hay nada activo
+	if(i>=MAX_TASK_COUNT) //si dio una vuelta y no había nada activo
 	{
 		activateHomeTasks(); //activa todos los hometask y mueve el currentTaskIndex a un homeTask
 	}
 	
 	//taskArray[currentTaskIndex] es la proxima task a ejecutar
 	
-	if(lastTaskIndex>=0)
+	if(lastTaskIndex>=0) //si hubo una task previa
 		saveStackPointer(&taskArray[lastTaskIndex].stackPointer); //deja en el puntero del argumento el rsp viejo
 	
 	if(taskArray[currentTaskIndex].stackPointer == 0) //si nunca se inicio esta task
 	{
-		initializeTask(taskArray[currentTaskIndex].initTask, TASKS_STACK_BASE - (i+1) * TASK_STACK_SIZE);
+		initializeTask(taskArray[currentTaskIndex].argc, taskArray[currentTaskIndex].argv, taskArray[currentTaskIndex].initTask, TASKS_STACK_BASE - (i+1) * TASK_STACK_SIZE);
 		//mueve el rsp a donde indica el 2do parametro, hace el EOI para el pic, y llama la funcion del primer parametro
 		return;
 	}
@@ -87,7 +90,7 @@ int8_t getCurrentTaskId()
 	return taskArray[currentTaskIndex].taskId;
 }
 
-static int16_t addTaskToArray(const void (*initTask) (), const uint8_t screenId, const uint8_t homeTask)
+static int16_t addTaskToArray(const void (*initTask) (uint8_t argc, void** argv), const uint8_t screenId, const uint8_t homeTask, uint8_t argc, const void** argv)
 {
 	if(currentTaskCount >= MAX_TASK_COUNT)
 		return -1;
@@ -95,29 +98,29 @@ static int16_t addTaskToArray(const void (*initTask) (), const uint8_t screenId,
 	currentTaskCount++;
 	while(taskArray[i].taskId != 0) //nos movemos hasta encontrar un lugar vacio
 		i++;
-	taskArray[i] = (task_t) {.taskId = nextTaskId, .screenId = screenId, .active = 1, .homeTask = homeTask, .stackPointer = 0, .initTask = initTask};
+	taskArray[i] = (task_t) {.taskId = nextTaskId, .screenId = screenId, .active = 1, .homeTask = homeTask, .stackPointer = 0, .initTask = initTask, .argc = argc, .argv = argv};
 	
 	return nextTaskId++;
 }
 
-int16_t addTask(const void (*initTask) (), const uint8_t topLeft_row, const uint8_t topLeft_column, const uint8_t bottomRight_row, const uint8_t bottomRight_column, const uint8_t homeTask) //devuelve -1 si no se pudo agregar
+int16_t addTask(const void (*initTask) (uint8_t argc, void** argv), const struct point_t* topLeft, const struct point_t* bottomRight, uint8_t homeTask, uint8_t argc, const void** argv) //devuelve -1 si no se pudo agregar
 {
-	int8_t screenId = addScreenState(topLeft_row, topLeft_column, bottomRight_row, bottomRight_column);
+	int8_t screenId = addScreenState(topLeft->row, topLeft->column, bottomRight->row, bottomRight->column);
 	if(screenId<0) //no hay mas screens disponibles
 		return -1;
-	return addTaskToArray(initTask, screenId, homeTask);
+	return addTaskToArray(initTask, screenId, homeTask, argc, argv);
 	
 }
 
-int16_t addTaskWithSharedScreen(const void (*initTask) (), const uint16_t otherTaskId, const uint8_t homeTask)
+int16_t addTaskWithSharedScreen(const void (*initTask) (uint8_t argc, void** argv), uint16_t otherTaskId, uint8_t homeTask, uint8_t argc, const void** argv)
 {
 	int8_t otherTaskIndex = getTaskArrayIndex(otherTaskId);
 	if(otherTaskIndex<0) //no existe esa other task
 		return -1;
-	return addTaskToArray(initTask, taskArray[otherTaskIndex].screenId, homeTask);
+	return addTaskToArray(initTask, taskArray[otherTaskIndex].screenId, homeTask, argc, argv);
 }
 
-void activateTask(const uint16_t taskId)
+void activateTask(uint16_t taskId)
 {
 	int8_t taskIndex = getTaskArrayIndex(taskId);
 	if(taskIndex<0) //no existe esa task
@@ -125,17 +128,16 @@ void activateTask(const uint16_t taskId)
 	taskArray[taskIndex].active = 1;
 }
 
-void deactivateTask(const uint16_t taskId)
+void deactivateTask(uint16_t taskId)
 {
 	int8_t taskIndex = getTaskArrayIndex(taskId);
 	if(taskIndex<0) //no existe esa task
 		return;
 	taskArray[taskIndex].active = 0;
-	
-	followingTask();      					//////AAAAAAAAAAAAAAAAAAA
+	followingTask();
 }
 
-void killTask(const uint16_t taskId)
+void killTask(uint16_t taskId)
 {
 	int8_t taskIndex = getTaskArrayIndex(taskId);
 	if(taskIndex<0) //no existe esa task
