@@ -89,7 +89,13 @@ void printStringColor(unsigned char * str, color_t backgroundColor, color_t char
 void putCharColor(unsigned char c, color_t backgroundColor, color_t characterColor)
 {
     struct format_t format = {.backgroundColor = backgroundColor % 16, .characterColor = characterColor % 16};
-    sys_print_char(c, &format);
+    int overload=0;
+	overload=sys_print_char(c, &format);
+    if(overload){
+        sys_scroll_up(2);
+        sys_move_cursor(-2,0);
+        putCharColor(c, backgroundColor, characterColor);
+    }
 }     
 
 // código sacado de:

@@ -1,5 +1,4 @@
 #include <bizcocho.h>
-#include <help.h>
 
 #define LASTCOLUMN 80
 #define LASTLINE 25
@@ -40,8 +39,8 @@ void bizcocho()
     
     
     //set cursor al inicio de todo
-    while(1){
-   	 	if(printingCursor.row >= HEIGHT)
+    while(1){				     //esta 2da opcion es por si el programa no tiene un newline al final
+   	 if(printingCursor.row >= HEIGHT || (printingCursor.row == HEIGHT-1 && printingCursor.column > 0))
         {	sys_set_cursor(&printingCursor);
 			sys_move_cursor(-1,0);
 			sys_get_cursor(&printingCursor);

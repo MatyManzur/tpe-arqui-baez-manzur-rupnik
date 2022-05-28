@@ -1,6 +1,5 @@
 
-#include <help.h>
-#include <userlib.h>
+#include <commands.h>
 
 void help(){
     printStringColor("The available commands are the following: ", MAGENTA,BLACK);
