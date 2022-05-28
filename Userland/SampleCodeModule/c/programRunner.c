@@ -2,7 +2,8 @@
 
 void runner(uint8_t argc, void** argv) //argv[] = {(functionPointer_t*)firstFuncPointer, (uint8_t*)firstargc, (void***)firstargv, (functionPointer_t*)secondFuncPointer, (uint8_t*)secondargc, (void***)secondargv}
 {
-	uint8_t firstTaskId, secondsTaskId;
+	uint8_t firstTaskId, secondTaskId;
+	uint8_t firstTaskPaused = 0, secondTaskPaused = 0;
 	if(argc==3) //Me pidieron uno solo, printea en el bizocho
 	{
             if(((functionPointer_t*)argv[0])->function == NULL)
@@ -24,10 +25,40 @@ void runner(uint8_t argc, void** argv) //argv[] = {(functionPointer_t*)firstFunc
 	{
 		sys_sleep(55);
 		sys_get_next_key(&key);
+		if(key.key == VK_N && key.action == PRESSED)
+		{
+			if(firstTaskPaused)
+			{
+				firstTaskPaused=0;
+				sys_activate_task(firstTaskId);
+			}
+			else
+			{
+				firstTaskPaused=1;
+				sys_deactivate_task(firstTaskId);
+			}
+		}
+		
+		if(argc==6 && (key.key == VK_M && key.action == PRESSED))
+		{
+			if(secondTaskPaused)
+			{
+				secondTaskPaused=0;
+				sys_activate_task(secondTaskId);
+			}
+			else
+			{
+				secondTaskPaused=1;
+				sys_deactivate_task(secondTaskId);
+			}
+		}
+		
 	}
+	
+	//end
 	sys_kill_task(firstTaskId);
 	if(argc==6)
-		sys_kill_task(secondsTaskId);
+		sys_kill_task(secondTaskId);
 	sys_exit();
 }
 

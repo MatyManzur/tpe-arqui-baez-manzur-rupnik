@@ -56,8 +56,8 @@ void followingTask() //llamada por el timer_tick para que pase a la sgte task
 		currentTaskIndex++;
 		if(currentTaskIndex >= MAX_TASK_COUNT)
 			currentTaskIndex = 0;
-	}while(i<MAX_TASK_COUNT && (taskArray[currentTaskIndex].taskId == 0 || taskArray[currentTaskIndex].active == 0));
-	if(i>=MAX_TASK_COUNT) //si dio una vuelta y no había nada activo
+	}while(i<=MAX_TASK_COUNT && (taskArray[currentTaskIndex].taskId == 0 || taskArray[currentTaskIndex].active == 0));
+	if(i>MAX_TASK_COUNT) //si dio una vuelta y no había nada activo
 	{
 		activateHomeTasks(); //activa todos los hometask y mueve el currentTaskIndex a un homeTask
 	}
