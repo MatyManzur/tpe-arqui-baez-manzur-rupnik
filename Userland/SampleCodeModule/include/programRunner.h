@@ -3,8 +3,12 @@
 
 #include <syslib.h>
 
-void initRunner(void *(firstProgramFunction) (void), void *(secondProgramFunction) (void));
-void runner();
+typedef struct functionPointer_t
+{
+	void (*function) (uint8_t argc, void** argv);
+}functionPointer_t;
+
+void runner(uint8_t argc, void** argv);
 
 
 #endif

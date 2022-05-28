@@ -18,12 +18,19 @@ static point_t printingCursor = {0,0};
 
 typedef struct command_t
 {
-	char* name;
-	void (*programFunction) (uint8_t argc, void** argv);
-	uint8_t args;
+	char* name; //el string que tiene que leer del prompt
+	uint8_t runnable;
+	void (*programFunction) (uint8_t argc, void** argv); //a quien tiene que llamar
+	uint8_t argc;
+	void** argv;
 }command_t;
 
-static command_t commands[COMMAND_COUNT] = {{.name="help", .programFunction = help, .args = 0}, {.name="inforeg", .programFunction = printRegisters, .args = 0},{.name="time", .programFunction = time, .args = 0}};
+static command_t commands[COMMAND_COUNT] = {
+{.name="help", .runnable = 0, .programFunction = help, .argc = 0, .argv = NULL}, 
+{.name="inforeg", .runnable = 0, .programFunction = printRegisters, .argc = 0, .argv = NULL},
+{.name="time", .runnable = 0, .programFunction = time, .argc = 0, .argv = NULL}, 
+{.name="fibonacci", .runnable = 1, .programFunction = fibonacci, .argc = 0, .argv = NULL}
+};
 
 static color_t colorValues[COLOROPTIONS] = {L_GRAY, BLACK, MAGENTA};
 static const unsigned char * colors[COLOROPTIONS] = {(const unsigned char *)"letter",(const unsigned char *) "background",(const unsigned char *)"user"};
@@ -38,7 +45,7 @@ void bizcocho(uint8_t argc, void** argv)
     sys_clear_screen(BLACK);
     
     //set cursor al inicio de todo
-    while(1){				     //esta 2da opcion es por si el programa no tiene un newline al final
+    while(1){	//esta 2da opcion es por si el programa no tiene un newline al final
    	 if(printingCursor.row >= HEIGHT || (printingCursor.row == HEIGHT-1 && printingCursor.column > 0))
         {	sys_set_cursor(&printingCursor);
 			sys_move_cursor(-1,0);
@@ -46,7 +53,7 @@ void bizcocho(uint8_t argc, void** argv)
         	sys_scroll_up(1);
         }
      
-        sys_set_cursor(&promptCursor);//Reseteamos la linea del prompt
+        sys_set_cursor(&promptCursor);	//Reseteamos la linea del prompt
        
        	sys_new_line(colorValues[1]);
        	
@@ -59,19 +66,6 @@ void bizcocho(uint8_t argc, void** argv)
         putChar(16); //para el chirimbolito
         
         setColor(colorValues[1],colorValues[0]);
-        
-        /*		BORRAR DPS, ES PARA VER LOS ASCIIS Q HAY 
-        sys_set_cursor(&printingCursor);
-       for(int k=0;k<255;k++)
-       {
-       	printWithFormat("%d", k);
-       	putChar('=');
-       	putChar(k);
-       	printStringColor(" | ", WHITE, RED);
-       }
-    	sys_new_line(BLACK);
-    	sys_get_cursor(&printingCursor);
-    	*/
 
         unsigned char key;
         int counter = 0; //cuantas letras van en este mensaje
@@ -114,7 +108,7 @@ void bizcocho(uint8_t argc, void** argv)
         	if(strCmp(promptBuffer, commands[index].name)==0)
         	{
 		        foundFlag++;
-            }
+            	}
         }
         index--; //asi commands[index] tiene lo que queremos ejecutar si foundFlag quedó = 1
         
@@ -132,7 +126,17 @@ void bizcocho(uint8_t argc, void** argv)
             
             int bizcochoId = sys_get_task_id();
             
-            sys_add_task_with_shared_screen(commands[index].programFunction, bizcochoId, 0, 0, NULL);
+            if(commands[index].runnable)
+            {
+            	functionPointer_t function = {commands[index].programFunction};
+            	void* args[3] = {&function, &(commands[index].argc), &(commands[index].argv)};
+            	sys_add_task_with_shared_screen(runner, bizcochoId, 0, 3, &args);
+            }
+            else
+            {
+            	sys_add_task_with_shared_screen(commands[index].programFunction, bizcochoId, 0, 0, NULL);
+            }
+            
             sys_deactivate_task(bizcochoId);
             
             sys_get_cursor(&printingCursor);

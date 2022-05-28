@@ -4,6 +4,8 @@
 #include <userlib.h>
 #include <syslib.h>
 #include <commands.h>
+#include <programRunner.h>
+#include <fibonacci.h>
 
 void bizcocho(uint8_t argc, void** argv);
 

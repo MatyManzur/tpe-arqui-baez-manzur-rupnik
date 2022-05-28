@@ -74,15 +74,16 @@ void help(uint8_t argc, void** argv)
     sys_new_line(BLACK);
     sys_exit();
 }
+
 void time(uint8_t argc, void** argv){
-struct datetime_t data;
-struct timezone_t tzone={ -3 , 0};
-sys_set_time_zone(&tzone);
-sys_get_current_date_time(&data,&tzone);
-setColor(BLACK,CYAN);
-printWithFormat("%d:%d:%d",data.hours,data.mins,data.secs);
-putChar(' ');
-printWithFormat("%d/%d/%d",data.day,data.month,data.year);
-sys_new_line(BLACK);
-sys_exit();
+	struct datetime_t data;
+	struct timezone_t tzone={ -3 , 0};
+	sys_set_time_zone(&tzone);
+	sys_get_current_date_time(&data,&tzone);
+	setColor(BLACK,CYAN);
+	printWithFormat("%d:%d:%d",data.hours,data.mins,data.secs);
+	putChar(' ');
+	printWithFormat("%d/%d/%d",data.day,data.month,data.year);
+	sys_new_line(BLACK);
+	sys_exit();
 }
