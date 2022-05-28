@@ -45,6 +45,7 @@ EXTERN getCurrentDateTime
 EXTERN setTimeZone
 EXTERN ticks_elapsed
 EXTERN seconds_elapsed
+EXTERN sleep
 
 SECTION .text
 
@@ -204,6 +205,7 @@ _syscallHandler:
 	caseSyscall 31, .C31
 	caseSyscall 32, .C32
 	caseSyscall 33, .C33
+	caseSyscall 34, .C34
 	jmp .end	;default: it does nothing
 .C0:
 	call exit
@@ -271,6 +273,9 @@ _syscallHandler:
 	jmp .end
 .C33:
 	call seconds_elapsed
+	jmp .end
+.C34:
+	call sleep
 	jmp .end
 
 .end:

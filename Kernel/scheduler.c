@@ -50,13 +50,13 @@ void followingTask() //llamada por el timer_tick para que pase a la sgte task
 		currentTaskIndex=0;
 	int i=0; //para ver si se dio una vuelta y no encontro nada activo
 	//nos movemos hasta encontrar la proxima task que deberia correr
-	while(i<MAX_TASK_COUNT && (taskArray[currentTaskIndex].taskId == 0 || taskArray[currentTaskIndex].active == 0))
+	do
 	{
 		i++;
 		currentTaskIndex++;
 		if(currentTaskIndex >= MAX_TASK_COUNT)
 			currentTaskIndex = 0;
-	}
+	}while(i<MAX_TASK_COUNT && (taskArray[currentTaskIndex].taskId == 0 || taskArray[currentTaskIndex].active == 0));
 	if(i>=MAX_TASK_COUNT) //si dio una vuelta y no había nada activo
 	{
 		activateHomeTasks(); //activa todos los hometask y mueve el currentTaskIndex a un homeTask
@@ -69,7 +69,7 @@ void followingTask() //llamada por el timer_tick para que pase a la sgte task
 	
 	if(taskArray[currentTaskIndex].stackPointer == 0) //si nunca se inicio esta task
 	{
-		initializeTask(taskArray[currentTaskIndex].argc, taskArray[currentTaskIndex].argv, taskArray[currentTaskIndex].initTask, TASKS_STACK_BASE - (i+1) * TASK_STACK_SIZE);
+		initializeTask(taskArray[currentTaskIndex].argc, taskArray[currentTaskIndex].argv, taskArray[currentTaskIndex].initTask, TASKS_STACK_BASE - (currentTaskIndex+1) * TASK_STACK_SIZE);
 		//mueve el rsp a donde indica el 2do parametro, hace el EOI para el pic, y llama la funcion del primer parametro
 		return;
 	}

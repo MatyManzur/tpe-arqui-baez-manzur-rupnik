@@ -20,6 +20,7 @@ GLOBAL sys_get_current_date_time
 GLOBAL sys_set_time_zone
 GLOBAL sys_ticks_elapsed
 GLOBAL sys_seconds_elapsed
+GLOBAL sys_sleep
 
 SECTION .text
 
@@ -100,6 +101,9 @@ sys_ticks_elapsed:
 	
 sys_seconds_elapsed:
 	make_syscall 33
+	
+sys_sleep:
+	make_syscall 34
 
 
 	

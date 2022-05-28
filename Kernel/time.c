@@ -60,6 +60,7 @@ void setTimeZone(const struct timezone_t * tzone){//Falta testing
 	timezone.hours=tzone->hours;
 	timezone.minutes=tzone->minutes;
 }
+
 int isLeapYear(int year){
 if(year%400==0){
 return 1;
@@ -68,8 +69,12 @@ return 1;
 }
 return 0;
 }
-void sleep(uint64_t miliseconds){
-    uint64_t finish = ticks + miliseconds/55 +1;
-	while(finish<initTicks){
-		initTicks=ticks;
+
+void sleep(uint64_t miliseconds) //minimo 55 miliseconds para que espere algo
+{
+    	uint64_t finish = ticks + miliseconds/55;
+	while(ticks < finish)
+	{
+		_hlt();
 	}
+}
