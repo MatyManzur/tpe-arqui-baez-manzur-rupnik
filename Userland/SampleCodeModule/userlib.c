@@ -54,7 +54,7 @@ void setColor(color_t backgroundColor, color_t characterColor)
 
 void printString(unsigned char * str)
 {
-    int overload=0;
+    unsigned char* overload=NULL;
     overload=sys_print(str, &format);
     if(overload!=NULL){
         sys_scroll_up(2);
@@ -76,8 +76,8 @@ void putChar(unsigned char c)
 
 void printStringColor(unsigned char * str, color_t backgroundColor, color_t characterColor)
 {
-	struct format_t format = {.backgroundColor = backgroundColor % 16, .characterColor = characterColor % 16};
-    int overload=0;
+    struct format_t format = {.backgroundColor = backgroundColor % 16, .characterColor = characterColor % 16};
+    unsigned char* overload=NULL;
     overload=sys_print(str, &format);
     if(overload!=NULL){
         sys_scroll_up(2);

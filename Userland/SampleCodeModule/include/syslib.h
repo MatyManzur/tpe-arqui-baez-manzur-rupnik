@@ -49,7 +49,7 @@ void sys_deactivate_task(const uint16_t taskId);
 void sys_kill_task(const uint16_t taskId);
 uint8_t sys_get_task_id();
 uint8_t sys_print_char(char character, const struct format_t* format);
-uint8_t sys_print(const char * string, const struct format_t* format);
+unsigned char* sys_print(const char * string, const struct format_t* format);
 uint8_t sys_new_line(color_t backgroundColor);
 void sys_clear_(color_t backgroundColor);
 void sys_get_cursor(struct point_t* cursor);

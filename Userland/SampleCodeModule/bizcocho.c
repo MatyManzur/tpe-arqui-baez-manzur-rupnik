@@ -50,6 +50,11 @@ void bizcocho()
         for(int i = 0; i<WIDTH;i++){
             putChar(' ');
         }
+        
+        if(printingCursor.row >= HEIGHT || (printingCursor.row == HEIGHT-1 && printingCursor.column > 0))
+        {
+        	sys_scroll_up(1);
+        }
 
         sys_set_cursor(&promptCursor);
         setColor(BLACK,MAGENTA);
@@ -155,11 +160,6 @@ void bizcocho()
 void addMessage(const char * message)
 {
     sys_set_cursor(&printingCursor);
-    if(printingCursor.row>=HEIGHT-1)
-    {
-    	sys_scroll_up(1);
-    	sys_move_cursor(-1, 0);
-    }
     printStringColor(message, BLACK, L_GRAY);
     sys_new_line(BLACK);
     sys_get_cursor(&printingCursor);
