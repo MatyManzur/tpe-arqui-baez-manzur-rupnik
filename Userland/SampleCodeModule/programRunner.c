@@ -1,9 +1,9 @@
-/*#include <programRunner.h>
+#include <programRunner.h>
 
-static void *(firstProgram) (void) = NULL;
-static void *(secondProgram) (void) = NULL;
+static void (*firstProgram) (void) = NULL;
+static void (*secondProgram) (void) = NULL;
 
-void initRunner(void *(firstProgramFunction) (void), void *(secondProgramFunction) (void))
+void initRunner(void (*firstProgramFunction) (void), void (*secondProgramFunction) (void))
 {
 	firstProgram = firstProgramFunction;
 	secondProgram = secondProgramFunction;
@@ -31,4 +31,4 @@ void end()
 	firstProgram = NULL;
 	secondProgram = NULL;
 	sys_exit();
-}*/
+}
