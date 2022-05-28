@@ -68,10 +68,21 @@ void help(uint8_t argc, void** argv)
 {
     printStringColor("The available commands are the following: ", MAGENTA,BLACK);
     setColor(L_GRAY,BLUE);
-    sys_new_line(BLACK);
-    printString("help y nada mas asjasj ");
-    printString("lol ayuda");
-    sys_new_line(BLACK);
+    sys_new_line(L_GRAY);
+    printString("help: Despliega los comandos y programas accesibles");
+	sys_new_line(L_GRAY);
+    printString("time: Despliega el dia y la hora");
+    sys_new_line(L_GRAY);
+	printString("inforeg: Despliega el valor de los registros");
+    sys_new_line(L_GRAY);
+	printString("fibonacci: Imprime la serie de Fibonacci");
+    sys_new_line(L_GRAY);
+	printString("letter \'num\': Cambia el color de las letras de esta terminal");
+    sys_new_line(L_GRAY);
+	printString("background \'num\': Cambia el color del fondo de esta terminal");
+    sys_new_line(L_GRAY);
+	printString("user \'num\': Cambia el color del user de esta terminal");
+    sys_new_line(L_GRAY);
     sys_exit();
 }
 
