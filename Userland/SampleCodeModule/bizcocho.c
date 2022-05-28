@@ -25,14 +25,12 @@ typedef struct command_t
 
 static command_t commands[COMMAND_COUNT] = {{.name="help", .programFunction = help, .args = 0}, {.name="inforeg", .programFunction = printRegisters, .args = 0}};
 
-<<<<<<< Updated upstream
 static color_t colorValues[COLOROPTIONS] = {L_GRAY, BLACK, MAGENTA};
 static const unsigned char * colors[COLOROPTIONS] = {(const unsigned char *)"letter",(const unsigned char *) "background",(const unsigned char *)"user"};
     
 
 
 void bizcocho(uint8_t argc, void** argv)
->>>>>>> Stashed changes
 {
     
     unsigned char promptBuffer[BUFFER_DIM]={0};
