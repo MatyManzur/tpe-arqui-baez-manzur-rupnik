@@ -41,22 +41,19 @@ void bizcocho()
     
     //set cursor al inicio de todo
     while(1){
-   
-        
-        sys_set_cursor(&promptCursor);//Reseteamos la linea del prompt
-        
-        setColor(BLACK,L_GRAY);
-        
-        for(int i = 0; i<WIDTH;i++){
-            putChar(' ');
-        }
-        
-        if(printingCursor.row >= HEIGHT || (printingCursor.row == HEIGHT-1 && printingCursor.column > 0))
-        {
+   	 	if(printingCursor.row >= HEIGHT)
+        {	sys_set_cursor(&printingCursor);
+			sys_move_cursor(-1,0);
+			sys_get_cursor(&printingCursor);
         	sys_scroll_up(1);
         }
-
+     
+        sys_set_cursor(&promptCursor);//Reseteamos la linea del prompt
+       
+       	sys_new_line(BLACK);
+       	
         sys_set_cursor(&promptCursor);
+        
         setColor(BLACK,MAGENTA);
         printString((unsigned char*)"Usuario N1 ");
         putChar(2); 

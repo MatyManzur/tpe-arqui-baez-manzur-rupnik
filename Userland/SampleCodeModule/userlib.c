@@ -68,8 +68,8 @@ void putChar(unsigned char c)
     int overload=0;
 	overload=sys_print_char(c, &format);
     if(overload){
-        sys_scroll_up(1);
-        sys_move_cursor(-1,0);
+        sys_scroll_up(2);
+        sys_move_cursor(-2,0);
         putChar(c);
     }
 }
