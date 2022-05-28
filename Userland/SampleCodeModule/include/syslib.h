@@ -32,7 +32,7 @@ typedef struct point_t
 struct datetime_t{
 	uint8_t hours;
 	uint8_t mins;
-	uint8_t segs;
+	uint8_t secs;
 
 	uint8_t day;
 	uint8_t month;
@@ -62,7 +62,7 @@ void sys_read_printables(unsigned char* bufferString, uint8_t count);
 void sys_get_next_key(struct kbEvent_t* kbEvent);
 void sys_clean_buffer();
 void sys_get_current_date_time(struct datetime_t* datetime, struct timezone_t* tzone);
-void set_time_zone(const struct timezone_t * tzone);
+void sys_set_time_zone(const struct timezone_t * tzone);
 unsigned long sys_ticks_elapsed();
 unsigned long sys_seconds_elapsed();
 

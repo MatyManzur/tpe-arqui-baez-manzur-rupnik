@@ -12,7 +12,6 @@ section .text
 
 %macro getTime 1
 cli
-
 mov al,0x0B
 out 70h,al
 in al,71h
@@ -20,10 +19,9 @@ or al,4
 out 71h,al
 
 
-mov al,1
+mov al,%1
 out 70h, al
 in al, 71h
-
 sti
 %endmacro
 

@@ -1,7 +1,7 @@
 #include <time.h>
 
 static unsigned long ticks = 0;
-static struct timezone_t timezone={0,0};
+static struct timezone_t timezone={0 , 0};
 
 void timer_handler() 
 {
@@ -20,9 +20,12 @@ unsigned long seconds_elapsed() {
 void getCurrentDateTime(struct datetime_t* datetime, struct timezone_t* tzone){///Falta testing
 	tzone->hours=timezone.hours;
 	tzone->minutes=timezone.minutes;
-	uint8_t h=getHours()+timezone.hours;
+	int8_t h=getHours()+timezone.hours;
+	int8_t m=getMinutes()+timezone.minutes;
+	if(m<0){
+	h-=1;
+	}
 	h%=24;
-	uint8_t m=getMinutes()+timezone.minutes;
 	m%=60;
 	uint8_t s=getSeconds();
 	datetime->hours=h;

@@ -23,7 +23,7 @@ typedef struct command_t
 	uint8_t args;
 }command_t;
 
-static command_t commands[COMMAND_COUNT] = {{.name="help", .programFunction = help, .args = 0}, {.name="inforeg", .programFunction = printRegisters, .args = 0}};
+static command_t commands[COMMAND_COUNT] = {{.name="help", .programFunction = help, .args = 0}, {.name="inforeg", .programFunction = printRegisters, .args = 0},{.name="time", .programFunction = time, .args = 0}};
 
 static color_t colorValues[COLOROPTIONS] = {L_GRAY, BLACK, MAGENTA};
 static const unsigned char * colors[COLOROPTIONS] = {(const unsigned char *)"letter",(const unsigned char *) "background",(const unsigned char *)"user"};
