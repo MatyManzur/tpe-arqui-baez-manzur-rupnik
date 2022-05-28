@@ -45,3 +45,10 @@ void setTimeZone(const struct timezone_t * tzone){//Falta testing
 	timezone.hours=tzone->hours;
 	timezone.minutes=tzone->minutes;
 }
+
+void sleep(uint64_t miliseconds){
+    uint64_t finish = ticks + miliseconds/55 +1;
+	while(finish<initTicks){
+		initTicks=ticks;
+	}
+}
