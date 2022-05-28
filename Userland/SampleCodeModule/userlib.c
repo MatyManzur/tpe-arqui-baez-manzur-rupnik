@@ -23,7 +23,9 @@ int strToNum(const unsigned char* str){
 
 char strLength(const unsigned char * str){
     int i=0;
-    while(str[i++]);
+    while(str[i]){
+        i++;
+    }
     return i;
 }
 

@@ -25,18 +25,16 @@ typedef struct command_t
 
 static command_t commands[COMMAND_COUNT] = {{.name="help", .programFunction = help, .args = 0}, {.name="inforeg", .programFunction = printRegisters, .args = 0}};
 
+static color_t colorValues[COLOROPTIONS] = {L_GRAY, BLACK, MAGENTA};
+static const unsigned char * colors[COLOROPTIONS] = {(const unsigned char *)"letter",(const unsigned char *) "background",(const unsigned char *)"user"};
+    
+
 void bizcocho()
 {
     
     unsigned char promptBuffer[BUFFER_DIM]={0};
     
     sys_clear_screen(BLACK);
-    
-    /* COLORES
-    static color_t colorValues[COLOROPTIONS] = {L_GRAY, BLACK, MAGENTA};
-    static const unsigned char * colors[COLOROPTIONS] = {(const unsigned char *)"letter",(const unsigned char *) "background",(const unsigned char *)"user"};
-    */
-    
     
     //set cursor al inicio de todo
     while(1){				     //esta 2da opcion es por si el programa no tiene un newline al final
@@ -49,17 +47,17 @@ void bizcocho()
      
         sys_set_cursor(&promptCursor);//Reseteamos la linea del prompt
        
-       	sys_new_line(BLACK);
+       	sys_new_line(colorValues[1]);
        	
         sys_set_cursor(&promptCursor);
         
-        setColor(BLACK,MAGENTA);
+        setColor(colorValues[1],colorValues[2]);
         printString((unsigned char*)"Usuario N1 ");
         putChar(2); 
         putChar(' '); 
         putChar(16); //para el chirimbolito
         
-        setColor(BLACK,L_GRAY);
+        setColor(colorValues[1],colorValues[0]);
         
         /*		BORRAR DPS, ES PARA VER LOS ASCIIS Q HAY 
         sys_set_cursor(&printingCursor);
@@ -115,17 +113,16 @@ void bizcocho()
         	if(strCmp(promptBuffer, commands[index].name)==0)
         	{
 		        foundFlag++;
-            	}
+            }
         }
         index--; //asi commands[index] tiene lo que queremos ejecutar si foundFlag quedó = 1
         
-        /* COLORES
+        int colorChange=0;
         
         if(!foundFlag){ // quizas era para cambiar el color?
-            foundFlag = changeColor(readingBuffer, colors, colorValues);
+            colorChange= changeColor(promptBuffer, colors, colorValues);
         }
         
-        */
 
 
         if(foundFlag)
@@ -141,7 +138,11 @@ void bizcocho()
         }
         else
         {
-            addMessage("Hey! That's not a valid command!");
+            if(!colorChange)
+                addMessage("Hey! That's not a valid command!");
+            else{
+                addMessage("Color changed!");
+            }
         }
         
         for(int i=0; i<counter; i++)	 //limpia el buffer
@@ -153,11 +154,11 @@ void bizcocho()
 }
 
 
-void addMessage(const char * message)
+void addMessage(const char * message) //sería mejor que reciba addMessage por parámetro
 {
     sys_set_cursor(&printingCursor);
-    printStringColor(message, BLACK, L_GRAY);
-    sys_new_line(BLACK);
+    printStringColor(message, colorValues[1], colorValues[0]);
+    sys_new_line(colorValues[1]);
     sys_get_cursor(&printingCursor);
 }
 
