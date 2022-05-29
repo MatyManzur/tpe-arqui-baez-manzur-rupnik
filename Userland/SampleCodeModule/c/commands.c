@@ -87,7 +87,8 @@ void help(uint8_t argc, void** argv)
     sys_exit();
 }
 
-void time(uint8_t argc, void** argv){
+void time(uint8_t argc, void** argv)
+{
 	struct datetime_t data;
 	struct timezone_t tzone={ -3 , 0};
 	sys_set_time_zone(&tzone);

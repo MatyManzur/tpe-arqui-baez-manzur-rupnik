@@ -1,9 +1,9 @@
 #include <userlib.h>
 
+static struct format_t format = { BLACK, L_GRAY };  // el formato que se utiliza para los colores
 
-static struct format_t format = { BLACK, L_GRAY };
-
-int strToNum(const unsigned char* str){
+int strToNum(const unsigned char* str)
+{ //Pasa un string a decimal
     int i = 0;
     int neg = 0;
     if(str[i]=='-'){
@@ -21,7 +21,8 @@ int strToNum(const unsigned char* str){
     return ans;
 }
 
-char strLength(const unsigned char * str){
+char strLength(const unsigned char * str)
+{  // strlength
     int i=0;
     while(str[i]){
         i++;
@@ -29,7 +30,8 @@ char strLength(const unsigned char * str){
     return i;
 }
 
-char strPrefix(const unsigned char*prefix, const unsigned char*str){
+char strPrefix(const unsigned char*prefix, const unsigned char*str)
+{    // se fija si el primer string está como prefijo del segundo
     int i;
     for(i=0;prefix[i] && str[i];i++){
         if(prefix[i]!=str[i]){
@@ -39,7 +41,8 @@ char strPrefix(const unsigned char*prefix, const unsigned char*str){
     return !prefix[i];
 }
 
-int strCmp(const unsigned char* str1,const unsigned char* str2){
+int strCmp(const unsigned char* str1,const unsigned char* str2)
+{    // compara strings, devuelve la diferencia entre el primero en el que difiere
 	while(*str1 != 0 && *str1 == *str2)
 	{
 		str1++;
@@ -48,14 +51,14 @@ int strCmp(const unsigned char* str1,const unsigned char* str2){
 	return (*str1) - (*str2);
 }
 
-void setColor(color_t backgroundColor, color_t characterColor)
+void setColor(color_t backgroundColor, color_t characterColor)  // cambia el format para que se empiece a imprimir con estos colores
 {
 	format.backgroundColor = backgroundColor;
 	format.characterColor = characterColor;
 }
 
-void printString(unsigned char * str)
-{
+void printString(unsigned char * str)   //imprime un string, si pisa una zona en la que no puede escribir, hace un scroll up
+{                                       // utiliza el color del format
     unsigned char* overload=NULL;
     overload=sys_print(str, &format);
     if(overload!=NULL){
@@ -65,7 +68,7 @@ void printString(unsigned char * str)
     }
 }
 
-void putChar(unsigned char c)
+void putChar(unsigned char c)   //idem anterior, pero con un char
 {
     int overload=0;
 	overload=sys_print_char(c, &format);
@@ -76,7 +79,7 @@ void putChar(unsigned char c)
     }
 }
 
-void printStringColor(unsigned char * str, color_t backgroundColor, color_t characterColor)
+void printStringColor(unsigned char * str, color_t backgroundColor, color_t characterColor) //idem printString, pero se le pasa el color
 {
     struct format_t format = {.backgroundColor = backgroundColor % 16, .characterColor = characterColor % 16};
     unsigned char* overload=NULL;
@@ -88,7 +91,7 @@ void printStringColor(unsigned char * str, color_t backgroundColor, color_t char
     }
 }
 
-void putCharColor(unsigned char c, color_t backgroundColor, color_t characterColor)
+void putCharColor(unsigned char c, color_t backgroundColor, color_t characterColor) // idem anterior, pero para chars
 {
     struct format_t format = {.backgroundColor = backgroundColor % 16, .characterColor = characterColor % 16};
     int overload=0;
@@ -174,7 +177,8 @@ char *convert(unsigned int num, int base)
     return(ptr); 
 }
 
-uint8_t ulongToStr(unsigned long num, char* ans){
+uint8_t ulongToStr(unsigned long num, char* ans)
+{   // pasa un numero entero a string
     char aux[20]; //un long puede ocupar hasta 10 caracteres (sin contar - o \0)
     //podria usar numLength pero asi esta bien
     int i = 0; //puntero de ans
@@ -192,7 +196,8 @@ uint8_t ulongToStr(unsigned long num, char* ans){
 }
 ///codigo sacado de:
 //https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Reciprocal_of_the_square_root
-int sqrt(int x){
+int sqrt(int x)
+{
 	float xhalf = 0.5f * x;
     union {
         float x;
@@ -205,7 +210,8 @@ int sqrt(int x){
     return ((int)(u.x * x))+2;//Esto es para conseguir la raiz ademas SSE esta deshabilitado entonces truncamos y sumamos uno
 }
 
-int parser(char string[], char buffer[10][20],char separator){//Se le pasa un string, un buffer donde dejara los tokens y el char separador de tokens
+int parser(char string[], char buffer[10][20],char separator)
+{  // parsea el string y lo deja en buffer[i], separados por el char separator
 	int count=0;
 	int j=0;
 	for(int i=0;string[i]!='\0';i++){

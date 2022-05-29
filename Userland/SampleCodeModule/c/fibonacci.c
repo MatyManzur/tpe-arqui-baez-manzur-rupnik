@@ -3,7 +3,8 @@
 uint64_t printNewValue(uint64_t value1, uint64_t value2,uint8_t counter, char str[],  char* terminations[]);
 
 
-void fibonacci(uint8_t argc, void ** argv){
+void fibonacci(uint8_t argc, void ** argv)
+{
     uint64_t first=FIRST;
     uint64_t second=SECOND;
     uint64_t third;
@@ -24,7 +25,8 @@ void fibonacci(uint8_t argc, void ** argv){
     }
 }
 
-uint64_t printNewValue(uint64_t value1, uint64_t value2, uint8_t counter, char str[], char* terminations[]){
+uint64_t printNewValue(uint64_t value1, uint64_t value2, uint8_t counter, char str[], char* terminations[])
+{
     uint64_t value3 = value1 + value2;
     ulongToStr(value3,str);
     printString(str);

@@ -208,7 +208,7 @@ int changeColor(const unsigned char * buffer, const unsigned char * colors[], co
         if(strPrefix(colors[i],buffer))
         {
             unsigned char aux=0x00;
-            if((aux=strToNum(buffer+strLength(colors[i])+1))<15 && aux>=0)
+            if((aux=strToNum(buffer+strLength(colors[i])+1))<=15 && aux>=0)
             {
                 colorValues[i] = aux;
                 return 1;
@@ -219,9 +219,13 @@ int changeColor(const unsigned char * buffer, const unsigned char * colors[], co
             }
         }
     }
-    if(strCmp(buffer,"boca")==0){
+    if(strCmp(buffer,"boquita")==0){
         colorValues[0]=14;
         colorValues[1]=1;
+        return 1;
+    }else if(strCmp(buffer,"river")==0){
+        colorValues[0]=15;
+        colorValues[1]=5;
         return 1;
     }
     return 0;

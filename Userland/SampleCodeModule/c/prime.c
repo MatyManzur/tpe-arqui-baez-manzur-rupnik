@@ -1,6 +1,7 @@
 #include <prime.h>
 
-void prime(uint8_t argc, void ** argv){
+void prime(uint8_t argc, void ** argv)
+{
 	uint64_t counter=3;
 	printString("2");
 	char str[20]={0};
@@ -24,6 +25,4 @@ void prime(uint8_t argc, void ** argv){
 	counter+=2;
 	
 	}
-
-
 }
