@@ -33,6 +33,6 @@ uint8_t getCentury();
 
 void getCurrentDateTime(struct datetime_t* datetime, struct timezone_t* tzone);
 void setTimeZone(const struct timezone_t * tzone);
-void sleep(uint64_t miliseconds);
+void sleep(uint64_t sleepTicks);
 
 #endif

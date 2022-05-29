@@ -23,7 +23,7 @@ void runner(uint8_t argc, void** argv) //argv[] = {(functionPointer_t*)firstFunc
 	struct kbEvent_t key = {0};
 	while(key.key != VK_ESCAPE || key.action != RELEASED)
 	{
-		sys_sleep(55);
+		sys_sleep(1);
 		sys_get_next_key(&key);
 		if(key.key == VK_N && key.action == PRESSED)
 		{

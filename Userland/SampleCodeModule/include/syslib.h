@@ -65,6 +65,6 @@ void sys_get_current_date_time(struct datetime_t* datetime, struct timezone_t* t
 void sys_set_time_zone(const struct timezone_t * tzone);
 unsigned long sys_ticks_elapsed();
 unsigned long sys_seconds_elapsed();
-void sys_sleep(uint64_t miliseconds);
+void sys_sleep(uint64_t sleepTicks);
 
 #endif

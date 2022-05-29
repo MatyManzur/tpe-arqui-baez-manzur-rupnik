@@ -26,21 +26,26 @@ void getCurrentDateTime(struct datetime_t* datetime, struct timezone_t* tzone){/
 	int8_t day=getDay();
 	int8_t month=getMonth();
 	uint16_t year=getYear()+getCentury()*100;
-	if(m<0){
+	if(m<0)
+	{
 		h-=1;
 	}
-	if(h<0){
-		if(day==1){
+	if(h<0)
+	{
+		if(day==1)
+		{
 			month-=1;
-			if(month==0){
+			if(month==0)
+			{
 				year-=1;
 				month=12;
 			}
-			day=monthdays[isLeapYear(year)][month-1]; 
-	}else{
-		day-=1;
-	}
-	
+			day = monthdays[isLeapYear(year)][month-1]; 
+		}
+		else
+		{
+			day-=1;
+		}
 	}
 	h%=24;
 	m%=60;
@@ -56,23 +61,27 @@ void getCurrentDateTime(struct datetime_t* datetime, struct timezone_t* tzone){/
 	datetime->year=year;
 
 }
-void setTimeZone(const struct timezone_t * tzone){//Falta testing
+void setTimeZone(const struct timezone_t * tzone){
 	timezone.hours=tzone->hours;
 	timezone.minutes=tzone->minutes;
 }
 
-int isLeapYear(int year){
-if(year%400==0){
-return 1;
-}else if(year%4==0 && year%100!=0){
-return 1;
-}
-return 0;
-}
-
-void sleep(uint64_t miliseconds) //minimo 55 miliseconds para que espere algo
+int isLeapYear(int year)
 {
-    	uint64_t finish = ticks + miliseconds/55;
+	if(year%400==0)
+	{
+		return 1;
+	}
+	else if(year%4==0 && year%100!=0)
+	{
+		return 1;
+	}
+	return 0;
+}	
+
+void sleep(uint64_t sleepTicks)
+{
+	uint64_t finish = ticks + sleep_ticks;
 	while(ticks < finish)
 	{
 		_hlt();

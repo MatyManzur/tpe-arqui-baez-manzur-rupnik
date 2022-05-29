@@ -16,6 +16,6 @@ void fibonacci(uint8_t argc, void ** argv){
         sys_new_line(BLACK);
         first=second;
         second=third;
-        sys_sleep(500);
+        sys_sleep(1);
     }
 }
