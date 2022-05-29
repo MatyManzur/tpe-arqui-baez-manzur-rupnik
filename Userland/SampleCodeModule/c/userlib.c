@@ -137,7 +137,7 @@ void printWithFormat(char* format,...)
                         } 
                         printString(convert(i,10));
                         break; 
-                        
+
             case 'o': i = va_arg(arg,unsigned int); //Fetch Octal representation
                         printString(convert(i,8));
                         break; 
@@ -174,7 +174,7 @@ char *convert(unsigned int num, int base)
     return(ptr); 
 }
 
-void ulongToStr(unsigned long num, char* ans){
+uint8_t ulongToStr(unsigned long num, char* ans){
     char aux[20]; //un long puede ocupar hasta 10 caracteres (sin contar - o \0)
     //podria usar numLength pero asi esta bien
     int i = 0; //puntero de ans
@@ -188,5 +188,5 @@ void ulongToStr(unsigned long num, char* ans){
         ans[i++] = aux[k--];
     }
     ans[i] = '\0';
-    return;
+    return i;
 }
