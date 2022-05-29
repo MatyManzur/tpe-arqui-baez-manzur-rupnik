@@ -1,6 +1,9 @@
 #ifndef FIBONACCI_H
 #define FIBONACCI_H
 
+#define FIRST 0
+#define SECOND 1
+
 #include <userlib.h>
 #include <syslib.h>
 
