@@ -81,7 +81,7 @@ int isLeapYear(int year)
 
 void sleep(uint64_t sleepTicks)
 {
-	uint64_t finish = ticks + sleep_ticks;
+	uint64_t finish = ticks + sleepTicks;
 	while(ticks < finish)
 	{
 		_hlt();
