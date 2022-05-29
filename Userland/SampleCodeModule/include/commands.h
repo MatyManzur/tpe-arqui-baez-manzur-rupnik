@@ -8,5 +8,6 @@
 void printRegisters(uint8_t argc, void** argv);
 void help(uint8_t argc, void** argv);
 void time(uint8_t argc, void** argv);
+void clear(uint8_t argc, void** argv);
 
 #endif

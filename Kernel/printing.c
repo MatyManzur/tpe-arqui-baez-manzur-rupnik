@@ -126,7 +126,8 @@ void scrollUp(uint8_t rows)
 	uint8_t screenId = getCurrentScreenId();
 	if(screenId<0)
 		return; //no hay tasks ejecutandose
-	for(int i = screenStates[screenId].topLeft.row ; i<= screenStates[screenId].bottomRight.row - rows; i++)
+	int i;
+	for(i = screenStates[screenId].topLeft.row ; i<= screenStates[screenId].bottomRight.row - rows; i++)
 	{
 		for(int j = screenStates[screenId].topLeft.column ; j<= screenStates[screenId].bottomRight.column ; j++)
 		{
@@ -134,6 +135,14 @@ void scrollUp(uint8_t rows)
 			point_t newPoint = {.row = i, .column = j};
 			*(pointToCursor(newPoint)) = *(pointToCursor(currentPoint));
 			*(pointToCursor(newPoint)+1) = *(pointToCursor(currentPoint)+1);
+		}
+	}
+	for( ; i<= screenStates[screenId].bottomRight.row ; i++)
+	{
+		for(int j = screenStates[screenId].topLeft.column ; j<= screenStates[screenId].bottomRight.column ; j++)
+		{
+			point_t currentPoint = {.row = i, .column = j};
+			*(pointToCursor(currentPoint)) = 0;
 		}
 	}
 }

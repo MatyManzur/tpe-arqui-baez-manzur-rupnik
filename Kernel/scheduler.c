@@ -90,7 +90,7 @@ int8_t getCurrentTaskId()
 	return taskArray[currentTaskIndex].taskId;
 }
 
-static int16_t addTaskToArray(const void (*initTask) (uint8_t argc, void** argv), const uint8_t screenId, const uint8_t homeTask, uint8_t argc, const void** argv)
+static int16_t addTaskToArray(const void (*initTask) (uint8_t argc, void** argv), uint8_t screenId, uint8_t homeTask, uint8_t argc, void** argv)
 {
 	if(currentTaskCount >= MAX_TASK_COUNT)
 		return -1;
@@ -103,7 +103,7 @@ static int16_t addTaskToArray(const void (*initTask) (uint8_t argc, void** argv)
 	return nextTaskId++;
 }
 
-int16_t addTask(const void (*initTask) (uint8_t argc, void** argv), const struct point_t* topLeft, const struct point_t* bottomRight, uint8_t homeTask, uint8_t argc, const void** argv) //devuelve -1 si no se pudo agregar
+int16_t addTask(const void (*initTask) (uint8_t argc, void** argv), const struct point_t* topLeft, const struct point_t* bottomRight, uint8_t homeTask, uint8_t argc, void** argv) //devuelve -1 si no se pudo agregar
 {
 	int8_t screenId = addScreenState(topLeft->row, topLeft->column, bottomRight->row, bottomRight->column);
 	if(screenId<0) //no hay mas screens disponibles
@@ -112,7 +112,7 @@ int16_t addTask(const void (*initTask) (uint8_t argc, void** argv), const struct
 	
 }
 
-int16_t addTaskWithSharedScreen(const void (*initTask) (uint8_t argc, void** argv), uint16_t otherTaskId, uint8_t homeTask, uint8_t argc, const void** argv)
+int16_t addTaskWithSharedScreen(const void (*initTask) (uint8_t argc, void** argv), uint16_t otherTaskId, uint8_t homeTask, uint8_t argc, void** argv)
 {
 	int8_t otherTaskIndex = getTaskArrayIndex(otherTaskId);
 	if(otherTaskIndex<0) //no existe esa other task

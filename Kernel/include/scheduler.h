@@ -18,10 +18,10 @@ void followingTask();
 
 //syscalls
 void exit();
-int16_t addTask(const void (*initTask) (uint8_t argc, void** argv), const struct point_t* topLeft, const struct point_t* bottomRight, uint8_t homeTask, uint8_t argc, const void** argv);
-int16_t addTaskWithSharedScreen(const void (*initTask) (uint8_t argc, void** argv), uint16_t otherTaskId, uint8_t homeTask, uint8_t argc, const void** argv);
-void activateTask(const uint16_t taskId);
-void deactivateTask(const uint16_t taskId);
-void killTask(const uint16_t taskId);
+int16_t addTask(const void (*initTask) (uint8_t argc, void** argv), const struct point_t* topLeft, const struct point_t* bottomRight, uint8_t homeTask, uint8_t argc, void** argv);
+int16_t addTaskWithSharedScreen(const void (*initTask) (uint8_t argc, void** argv), uint16_t otherTaskId, uint8_t homeTask, uint8_t argc, void** argv);
+void activateTask(uint16_t taskId);
+void deactivateTask(uint16_t taskId);
+void killTask(uint16_t taskId);
 
 #endif

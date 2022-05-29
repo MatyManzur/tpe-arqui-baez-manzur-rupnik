@@ -98,3 +98,9 @@ void time(uint8_t argc, void** argv){
 	sys_new_line(BLACK);
 	sys_exit();
 }
+
+void clear(uint8_t argc, void** argv)
+{
+	sys_clear_screen(BLACK);
+	sys_exit();
+}

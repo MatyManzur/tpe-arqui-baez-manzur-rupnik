@@ -44,16 +44,16 @@ struct timezone_t{
 };
 
 void sys_exit();
-int16_t sys_add_task(const void (*initTask) (uint8_t argc, void** argv), const struct point_t* topLeft, const struct point_t* bottomRight, uint8_t homeTask, uint8_t argc, const void** argv);
-int16_t sys_add_task_with_shared_screen(const void (*initTask) (uint8_t argc, void** argv), uint16_t otherTaskId, uint8_t homeTask, uint8_t argc, const void** argv);
-void sys_activate_task(const uint16_t taskId);
-void sys_deactivate_task(const uint16_t taskId);
-void sys_kill_task(const uint16_t taskId);
+int16_t sys_add_task(const void (*initTask) (uint8_t argc, void** argv), const struct point_t* topLeft, const struct point_t* bottomRight, uint8_t homeTask, uint8_t argc, void** argv);
+int16_t sys_add_task_with_shared_screen(const void (*initTask) (uint8_t argc, void** argv), uint16_t otherTaskId, uint8_t homeTask, uint8_t argc, void** argv);
+void sys_activate_task(uint16_t taskId);
+void sys_deactivate_task(uint16_t taskId);
+void sys_kill_task(uint16_t taskId);
 uint8_t sys_get_task_id();
 uint8_t sys_print_char(char character, const struct format_t* format);
 unsigned char* sys_print(const char * string, const struct format_t* format);
 uint8_t sys_new_line(color_t backgroundColor);
-void sys_clear_(color_t backgroundColor);
+void sys_clear_screen(color_t backgroundColor);
 void sys_get_cursor(struct point_t* cursor);
 void sys_set_cursor(const struct point_t* cursor);
 void sys_scroll_up(uint8_t rows);
