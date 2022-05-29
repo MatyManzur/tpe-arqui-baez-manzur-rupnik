@@ -1,6 +1,11 @@
 GLOBAL inforegisters
+GLOBAL invalidOpcode
 
 SECTION .text
+
+invalidOpcode:
+	ud2
+	ret
 
 inforegisters:
 	mov [registers],    rax

@@ -32,7 +32,8 @@ static command_t commands[COMMAND_COUNT] = {
 {.name="fibonacci", .runnable = 1, .programFunction = fibonacci, .argc = 0, .argv = NULL},
 {.name="prime", .runnable = 1, .programFunction = prime, .argc = 0, .argv = NULL},
 {.name="clear", .runnable = 0, .programFunction = clear, .argc = 0, .argv = NULL},
-{.name="prueba", .runnable = 2, .programFunction = NULL, .argc = 0, .argv = NULL}
+{.name="divZero", .runnable = 0, .programFunction = divZero, .argc = 0, .argv = NULL}, 
+{.name="invalidOpcode", .runnable = 0, .programFunction = invalidOpcode, .argc = 0, .argv = NULL},
 };
 
 static color_t colorValues[COLOROPTIONS] = {L_GRAY, BLACK, MAGENTA};
@@ -169,26 +170,7 @@ void bizcocho(uint8_t argc, void** argv)
                 void* args[6] = {&function1, &(commands[index[0]].argc), &(commands[index[0]].argv), &function2, &(commands[index[1]].argc), &(commands[index[1]].argv)};
                 sys_add_task_with_shared_screen(runner, bizcochoId, 0, 6, &args);
             }
-
-/*
-            if(commands[index[0]].runnable==2)	//borrar esta primera condicion
-            {				///PRUEBA DEL PIPE escribirndo "prueba"
-            	functionPointer_t function1 = {commands[3].programFunction};
-            	functionPointer_t function2 = {commands[4].programFunction};
-            	void* args[6] = {&function1, &(commands[3].argc), &(commands[3].argv), &function2, &(commands[4].argc), &(commands[4].argv)};
-            	sys_add_task_with_shared_screen(runner, bizcochoId, 0, 6, &args);
-            }
-            else if(commands[index[0]].runnable) //borrar el "else" del "else if"
-            {
-            	functionPointer_t function = {commands[index[0]].programFunction};
-            	void* args[3] = {&function, &(commands[index[0]].argc), &(commands[index[0]].argv)};
-            	sys_add_task_with_shared_screen(runner, bizcochoId, 0, 3, &args);
-            }
-            else
-            {
-            	sys_add_task_with_shared_screen(commands[index[0]].programFunction, bizcochoId, 0, 0, NULL);
-            }
-*/         
+                 
             sys_deactivate_task(bizcochoId);
             
             sys_get_cursor(&printingCursor);

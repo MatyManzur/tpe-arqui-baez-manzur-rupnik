@@ -3,6 +3,7 @@
 
 uint64_t* inforegisters();
 
+
 void printRegisters(uint8_t argc, void** argv)
 {
 	uint64_t* registers = inforegisters();
@@ -104,7 +105,9 @@ void clear(uint8_t argc, void** argv)
 	sys_clear_screen(BLACK);
 	sys_exit();
 }
-void printmem(uint8_t argc,void** argv){
+
+void printmem(uint8_t argc,void** argv)
+{
 	if(argc!=1){
 	sys_exit();
 	}
@@ -125,7 +128,13 @@ void printmem(uint8_t argc,void** argv){
 	printWithFormat("0x%x",buffer[3]);
 	sys_new_line(BLACK);
 	sys_exit();
-
-
-
 }
+
+void divZero(uint8_t argc, void** argv)
+{
+	int a = 8;
+	int b = 1;
+	b--;
+	int c = a/b;
+}
+
