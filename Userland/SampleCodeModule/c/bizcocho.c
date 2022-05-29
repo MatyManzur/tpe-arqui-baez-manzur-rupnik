@@ -29,7 +29,8 @@ static command_t commands[COMMAND_COUNT] = {
 {.name="help", .runnable = 0, .programFunction = help, .argc = 0, .argv = NULL}, 
 {.name="inforeg", .runnable = 0, .programFunction = printRegisters, .argc = 0, .argv = NULL},
 {.name="time", .runnable = 0, .programFunction = time, .argc = 0, .argv = NULL}, 
-{.name="fibonacci", .runnable = 1, .programFunction = fibonacci, .argc = 0, .argv = NULL}
+{.name="fibonacci", .runnable = 1, .programFunction = fibonacci, .argc = 0, .argv = NULL},
+{.name="prime", .runnable = 1, .programFunction = prime, .argc = 0, .argv = NULL}
 };
 
 static color_t colorValues[COLOROPTIONS] = {L_GRAY, BLACK, MAGENTA};

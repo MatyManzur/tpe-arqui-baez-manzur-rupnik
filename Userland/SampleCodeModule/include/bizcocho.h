@@ -6,6 +6,7 @@
 #include <commands.h>
 #include <programRunner.h>
 #include <fibonacci.h>
+#include <prime.h>
 
 void bizcocho(uint8_t argc, void** argv);
 
