@@ -34,8 +34,8 @@ static command_t commands[COMMAND_COUNT] = {
 {.name="prime", .runnable = 1, .programFunction = prime, .argc = 0, .argv = NULL},
 {.name="clear", .runnable = 0, .programFunction = clear, .argc = 0, .argv = NULL},
 {.name="divZero", .runnable = 0, .programFunction = divZero, .argc = 0, .argv = NULL}, 
-{.name="invalidOpcode", .runnable = 0, .programFunction = invalidOpcode, .argc = 0, .argv = NULL},{.name="printmem", .runnable = 0, .programFunction = printmem, .argc = 1, .argv = NULL}
-
+{.name="invalidOpcode", .runnable = 0, .programFunction = invalidOpcode, .argc = 0, .argv = NULL},
+{.name="printmem", .runnable = 0, .programFunction = printmem, .argc = 1, .argv = NULL}
 };
 
 static color_t colorValues[COLOROPTIONS] = {L_GRAY, BLACK, MAGENTA};
@@ -114,11 +114,13 @@ void bizcocho(uint8_t argc, void** argv)
         int index[2]={0,0};
         
         int argvFlag[2]={0,0};
-        void * argv1[1];
+        void * argv1[1] = {NULL}; 
         uint64_t arg1;
-        void * argv2[1];
+        void * argv2[1] = {NULL};
         uint64_t arg2; 
         
+        int monkey=0;
+
         unsigned char foundFlag=0; //si reconocio algun comando
 		char tokensPipe[4][30];
 		char tokens[4][30];
@@ -134,7 +136,7 @@ void bizcocho(uint8_t argc, void** argv)
 			if(tokenCount==2){
 				if(foundFlag){
 					arg1=xtou64(tokens[1]);
-					argv1[0]=&arg1
+					argv1[0]=&arg1; 
 					argvFlag[0]=1;
 				}else{
 					colorChange=changeColor(promptBuffer, colors, colorValues);	
@@ -155,6 +157,7 @@ void bizcocho(uint8_t argc, void** argv)
 				arg1=xtou64(tokens[1]);
 				argv1[0]=&arg1;
 				argvFlag[0]=1;
+
 			}
 			if(foundFlag){
 				foundFlag=0;
@@ -178,7 +181,8 @@ void bizcocho(uint8_t argc, void** argv)
 		}
 		index[1]--;
         index[0]--; 
-        int monkey=0; //hacer que funcione el monkey
+         
+        //hacer que funcione el monkey
 	/*
         // se tiene que poder mejorar para no estar recorriendo el promptBuffer 2 veces
         
@@ -238,13 +242,21 @@ void bizcocho(uint8_t argc, void** argv)
                 }
                 else
                 {
-            	    sys_add_task_with_shared_screen(commands[index[0]].programFunction, bizcochoId, 0, 0, NULL);
+                    
+            	    sys_add_task_with_shared_screen(commands[index[0]].programFunction, bizcochoId, 0, commands[index[0]].argc, &argv1);
                 }
             }
             else{
                 functionPointer_t function1 = {commands[index[0]].programFunction};
                 functionPointer_t function2 = {commands[index[1]].programFunction};
                 void* args[6] = {&function1, &(commands[index[0]].argc), &(commands[index[0]].argv), &function2, &(commands[index[1]].argc), &(commands[index[1]].argv)};
+                if(argvFlag[0]){
+                    args[2] = &argv1;
+                }// eso es un detalle
+                if(argvFlag[1]){
+                    args[5] = &argv2;
+                }
+                
                 sys_add_task_with_shared_screen(runner, bizcochoId, 0, 6, &args);
             }
                  
