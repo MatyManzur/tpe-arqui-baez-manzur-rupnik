@@ -205,3 +205,20 @@ int sqrt(int x){
     return ((int)(u.x * x))+2;//Esto es para conseguir la raiz ademas SSE esta deshabilitado entonces truncamos y sumamos uno
 }
 
+int parser(char string[], char buffer[10][20],char separator){//Se le pasa un string, un buffer donde dejara los tokens y el char separador de tokens
+	int count=0;
+	int j=0;
+	for(int i=0;string[i]!='\0';i++){
+		if(string[i]==separator) {
+            if ( j != 0){
+                buffer[count++][j] = '\0';
+                j = 0;
+            }
+        }else{
+			buffer[count][j++]=string[i];
+		}
+	}
+	buffer[count++][j]='\0';
+	return count;
+}
+
