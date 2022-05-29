@@ -3,7 +3,7 @@
 
 uint64_t* inforegisters();
 
-
+// imprime el valor de los registros al momento de llamarse
 void printRegisters(uint8_t argc, void** argv)
 {
 	uint64_t* registers = inforegisters();
@@ -65,30 +65,45 @@ void printRegisters(uint8_t argc, void** argv)
 	sys_exit();
 }
 
+// imprime los distintos comandos a los que se puede acceder
 void help(uint8_t argc, void** argv)
 {
     printStringColor("The available commands are the following: ", MAGENTA,BLACK);
     setColor(L_GRAY,BLUE);
-    sys_new_line(L_GRAY);
-    printString("help: Despliega los comandos y programas accesibles");
+    sys_new_line(BLACK);
+    printString("help: Despliega los comandos y programas accesibles.");
 	sys_new_line(L_GRAY);
-    printString("time: Despliega el dia y la hora");
+    printString("time: Despliega el dia y la hora.");
     sys_new_line(L_GRAY);
-	printString("inforeg: Despliega el valor de los registros");
+	printString("inforeg: Despliega el valor de los registros.");
     sys_new_line(L_GRAY);
-	printString("fibonacci: Imprime la serie de Fibonacci");
+	printString("fibonacci: Imprime la serie de Fibonacci.");
     sys_new_line(L_GRAY);
-	printString("letter \'num\': Cambia el color de las letras de esta terminal");
+	printString("clear: Deja la pantalla en negro.");
     sys_new_line(L_GRAY);
-	printString("background \'num\': Cambia el color del fondo de esta terminal");
+	printString("divZero: Divide por cero.");
     sys_new_line(L_GRAY);
-	printString("user \'num\': Cambia el color del user de esta terminal");
+	printString("printmem \'hexa\': Imprime la zona de memoria elegida por el usuario (Sin h al final).");
     sys_new_line(L_GRAY);
-    sys_exit();
+	printString("invalidOpcode: Realiza un procedimiento no permitido.");
+    sys_new_line(L_GRAY);
+	printString("letter \'num\': Cambia el color de las letras de esta terminal.");
+    sys_new_line(L_GRAY);
+	printString("background \'num\': Cambia el color del fondo de esta terminal.");
+    sys_new_line(L_GRAY);
+	printString("user \'num\': Cambia el color del user de esta terminal.");
+    sys_new_line(L_GRAY);
+	printString("boquita: Cambia a los colores xeneizes.");
+    sys_new_line(L_GRAY);
+	printString("river: Para que nadie se ofenda, cambia a los colores de River.");
+    sys_new_line(L_GRAY);
+	printString("monkey: Despliega 4 monitos graciosos");
+    sys_new_line(L_GRAY);
+	sys_exit();
 }
-
-void time(uint8_t argc, void** argv)
-{
+// imprime en pantalla la fecha y el horario (GMT-3)
+void time(uint8_t argc, void** argv) // podemos hacer un getColor para cambiar el color y después volver al anterior
+{	
 	struct datetime_t data;
 	struct timezone_t tzone={ -3 , 0};
 	sys_set_time_zone(&tzone);
@@ -101,12 +116,14 @@ void time(uint8_t argc, void** argv)
 	sys_exit();
 }
 
+// deja en negro la pantalla
 void clear(uint8_t argc, void** argv)
 {
 	sys_clear_screen(BLACK);
 	sys_exit();
 }
 
+// imprime la zona de memoria escogida por el usuario
 void printmem(uint8_t argc,void** argv)
 {
 	if(argc!=1){
@@ -131,6 +148,7 @@ void printmem(uint8_t argc,void** argv)
 	sys_exit();
 }
 
+// una función cuyo objetivo es romperse. Divide por cero sin temor alguno
 void divZero(uint8_t argc, void** argv)
 {
 	int a = 8;

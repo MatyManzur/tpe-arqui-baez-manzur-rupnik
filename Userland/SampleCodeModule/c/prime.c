@@ -1,5 +1,6 @@
 #include <prime.h>
 
+// imprime los números primos, con un sleep de 1 tick
 void prime(uint8_t argc, void ** argv)
 {
 	uint64_t counter=3;
@@ -18,9 +19,9 @@ void prime(uint8_t argc, void ** argv)
 		}
 		if(isPrime){
 			ulongToStr(counter,str);
-			printString(str);
-	    		sys_new_line(BLACK);
-	    		sys_sleep(1);
+			printStringColor(str,L_GRAY,BLUE);
+	    	sys_new_line(BLACK);
+	    	sys_sleep(1);
 		}
 	counter+=2;
 	

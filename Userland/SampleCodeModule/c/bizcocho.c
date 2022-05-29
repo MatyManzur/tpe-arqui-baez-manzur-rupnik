@@ -10,6 +10,7 @@
 #define WIDTH 80
 #define HEIGHT 25
 
+void printMonkey();
 void addMessage(const char * message);
 int changeColor(const unsigned char * buffer, const unsigned char * colors[], color_t colorValues[]);
 
@@ -112,11 +113,11 @@ void bizcocho(uint8_t argc, void** argv)
         int colorChange=0;
         int index[2]={0,0};
         
-      /*int argvFlag[2]={0,0};
-       void * argv1[1];
+        int argvFlag[2]={0,0};
+        void * argv1[1];
         uint64_t arg1;
         void * argv2[1];
-        uint64_t arg2; */
+        uint64_t arg2; 
         
         unsigned char foundFlag=0; //si reconocio algun comando
 		char tokensPipe[4][30];
@@ -132,13 +133,16 @@ void bizcocho(uint8_t argc, void** argv)
 			}
 			if(tokenCount==2){
 				if(foundFlag){
-					/*arg1=xtou64(tokens[1]);
+					arg1=xtou64(tokens[1]);
 					argv1[0]=&arg1
-					argvFlag[0]=1;*/
+					argvFlag[0]=1;
 				}else{
 					colorChange=changeColor(promptBuffer, colors, colorValues);	
 				}		
-			}
+			}else if(!strCmp(tokens[0],"monkey")){
+                monkey++;
+                printMonkey();
+            }
 		}else if(tokenCount==2){
 			tokenCount=parser(tokensPipe[0],tokens,' ');
 			for(index[0]=0;index[0]<COMMAND_COUNT && !foundFlag; index[0]++){
@@ -148,9 +152,9 @@ void bizcocho(uint8_t argc, void** argv)
            		}
 			}
 			if(tokenCount==2 && foundFlag){
-				/*arg1=xtou64(tokens[1]);
+				arg1=xtou64(tokens[1]);
 				argv1[0]=&arg1;
-				argvFlag[0]=1;*/
+				argvFlag[0]=1;
 			}
 			if(foundFlag){
 				foundFlag=0;
@@ -163,9 +167,9 @@ void bizcocho(uint8_t argc, void** argv)
            			}
            		}
            		if(tokenCount==2 && foundFlag){
-          			/*arg2=xtou64(tokens[1]);
+          			arg2=xtou64(tokens[1]);
 					argv2[0]=&arg2;
-					argvFlag[1]=1;*/
+					argvFlag[1]=1;
            		}
            		
 			}
@@ -174,6 +178,7 @@ void bizcocho(uint8_t argc, void** argv)
 		}
 		index[1]--;
         index[0]--; 
+        int monkey=0; //hacer que funcione el monkey
 	/*
         // se tiene que poder mejorar para no estar recorriendo el promptBuffer 2 veces
         
@@ -207,9 +212,14 @@ void bizcocho(uint8_t argc, void** argv)
         index[0]--; //asi commands[index] tiene lo que queremos ejecutar si foundFlag quedó = 1
         
         int colorChange=0;
+        int monkey=0;
         
         if(!foundFlag && !pipe){ // No hace falta preguntar !problem
             colorChange= changeColor(promptBuffer, colors, colorValues);
+            if(!colorChange && strCmp(promptBuffer,"monkey")==0){
+                printMonkey();
+                monkey=1;
+            }
         }
         */
         
@@ -244,9 +254,9 @@ void bizcocho(uint8_t argc, void** argv)
         }
         else
         {
-            if(!colorChange)
+            if(!colorChange && !monkey)
                 addMessage("Hey! That's not a valid command!");
-            else{
+            else if(colorChange){
                 addMessage("Color changed!");
             }
         }
@@ -296,4 +306,26 @@ int changeColor(const unsigned char * buffer, const unsigned char * colors[], co
         return 1;
     }
     return 0;
+}
+
+//https://www.asciiart.eu/animals/monkeys
+void printMonkey(){
+    sys_set_cursor(&printingCursor);
+    printStringColor("       .-\"-.            .-\"-.            .-\"-.           .-\"-.",GREEN,YELLOW);
+    sys_new_line(GREEN);
+    printStringColor("     _/_-.-_\\_        _/.-.-.\\_        _/.-.-.\\_       _/.-.-.\\_",GREEN,YELLOW);
+    sys_new_line(GREEN);
+    printStringColor("    / __} {__ \\      /|( o o )|\\      ( ( o o ) )     ( ( o o ) )",GREEN,YELLOW);  
+    sys_new_line(GREEN);
+    printStringColor("   / //  \"  \\ \\     | //  \"  \\ |       |/  \"  \\|       |/  \"  \\|",GREEN,YELLOW);  
+    sys_new_line(GREEN); 
+    printStringColor("  / / \\'---'/ \\ \\  / / \\'---'/ \\ \\      \\'/^\\'/         \\ .-. /",GREEN,YELLOW);  
+    sys_new_line(GREEN); 
+    printStringColor("  \\ \\_/`\"\"\"`\\_/ /  \\ \\_/`\"\"\"`\\_/ /      /`\\ /`\\         /`\"\"\"`\\",GREEN,YELLOW);
+    sys_new_line(GREEN); 
+    printStringColor("   \\           /    \\           /      /  /|\\  \\       /       \\",GREEN,YELLOW);
+    sys_new_line(GREEN); 
+    printStringColor("-={ see no evil }={ hear no evil }={ speak no evil }={ have no fun }=-",GREEN,YELLOW);
+    sys_new_line(GREEN); 
+    sys_get_cursor(&printingCursor);
 }
