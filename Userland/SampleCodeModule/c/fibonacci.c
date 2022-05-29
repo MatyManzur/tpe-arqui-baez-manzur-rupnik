@@ -9,7 +9,11 @@ void fibonacci(uint8_t argc, void ** argv){
     uint64_t third;
     char* terminations[] = {"st","nd","rd","th"};
     char str[20]={0};
-    uint8_t numSerie = 1;
+    printString("0 1st");
+    sys_new_line(BLACK);
+    printString("1 2nd");
+    sys_new_line(BLACK);
+    uint8_t numSerie = 3;
     //hay que hacerlo con un pequeÃ±o sleep lol
     while(1){
         third=printNewValue(first,second,numSerie,str,terminations);

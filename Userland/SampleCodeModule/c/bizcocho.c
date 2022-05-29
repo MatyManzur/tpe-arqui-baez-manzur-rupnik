@@ -72,13 +72,17 @@ void bizcocho(uint8_t argc, void** argv)
 
         unsigned char key;
         int counter = 0; //cuantas letras van en este mensaje
-    
+        uint8_t pipe = 0;
+
         do{ //repite hasta un enter o que hayan BUFFER_DIM letras
             sys_read_printables(&key, 1); //leemos la letra y la dejamos en key
             if(key!='\n') //si es un enter, no printeamos nada y va a salir del while
             {
             	if(key!='\b')
             	{ //si no es un backspace
+                if(key=='|'){
+                    pipe=1;
+                }
 		        promptBuffer[counter++] = key; //la ponemos en el promptBuffer
 		        putChar(key); // printeamos la key, porq sino no va a aparecer hasta que apretemos enter
             	}
@@ -103,50 +107,90 @@ void bizcocho(uint8_t argc, void** argv)
         
         addMessage(promptBuffer);
         
-        
+        char* progs[2];
+        int index[2]={0,0};
         unsigned char foundFlag=0; //si reconocio algun comando
-        int index;
-        for(index=0; index<COMMAND_COUNT && !foundFlag ; index++)
-        {
-        	if(strCmp(promptBuffer, commands[index].name)==0)
-        	{
-		        foundFlag++;
-            	}
+
+        if(!pipe){
+            for(index[0]=0; index[0]<COMMAND_COUNT && !foundFlag ; index++)
+            {
+                if(strCmp(promptBuffer, commands[index].name)==0)
+                {
+                    foundFlag++;
+                }
+            }
+        }else{
+            // tokenización en dos strings del promptBuffer
+            char* progs[2];
+            int problem=0; // no encontro nada
+            for(int i =0; i<2 && !problem;i++){
+                foundFlag=0;
+                for(index[i]=0;index[i]<COMMAND_COUNT && !foundFlag ; index[i]++){
+                    if(strCmp(progs[0], commands[index[i]].name)==0)
+                    {
+                        foundFlag++;
+                    }
+                }
+                if(!foundFlag){
+                    problem=1;
+                }
+            }
+            index[1]--;
         }
-        index--; //asi commands[index] tiene lo que queremos ejecutar si foundFlag quedó = 1
+        index[0]--; //asi commands[index] tiene lo que queremos ejecutar si foundFlag quedó = 1
         
         int colorChange=0;
         
-        if(!foundFlag){ // quizas era para cambiar el color?
+        if(!foundFlag && !pipe){ // No hace falta preguntar !problem
             colorChange= changeColor(promptBuffer, colors, colorValues);
         }
         
 
 
-        if(foundFlag)
+        if(foundFlag) // No hace falta preguntar !problem, porque si problem=1, foundFlag==0
         {
             sys_set_cursor(&printingCursor);
             
             int bizcochoId = sys_get_task_id();
             
-            if(commands[index].runnable==2)	//borrar esta primera condicion
+            if(!pipe){
+                if(commands[index[0]].runnable) 
+                {
+                    functionPointer_t function = {commands[index[0]].programFunction};
+                    void* args[3] = {&function, &(commands[index[0]].argc), &(commands[index[0]].argv)};
+                    sys_add_task_with_shared_screen(runner, bizcochoId, 0, 3, &args);
+                }
+                else
+                {
+            	    sys_add_task_with_shared_screen(commands[index[0]].programFunction, bizcochoId, 0, 0, NULL);
+                }
+            }
+            else{
+                functionPointer_t function1 = {commands[index[0]].programFunction};
+                functionPointer_t function2 = {commands[index[1]].programFunction};
+                void* args[6] = {&function1, &(commands[index[0]].argc), &(commands[index[0]].argv), &function2, &(commands[index[1]].argc), &(commands[index[1]].argv)};
+                sys_add_task_with_shared_screen(runner, bizcochoId, 0, 6, &args);
+            }
+
+/*
+            if(commands[index[0]].runnable==2)	//borrar esta primera condicion
             {				///PRUEBA DEL PIPE escribirndo "prueba"
             	functionPointer_t function1 = {commands[3].programFunction};
             	functionPointer_t function2 = {commands[4].programFunction};
             	void* args[6] = {&function1, &(commands[3].argc), &(commands[3].argv), &function2, &(commands[4].argc), &(commands[4].argv)};
             	sys_add_task_with_shared_screen(runner, bizcochoId, 0, 6, &args);
             }
-            else if(commands[index].runnable) //borrar el "else" del "else if"
+            else if(commands[index[0]].runnable) //borrar el "else" del "else if"
             {
-            	functionPointer_t function = {commands[index].programFunction};
-            	void* args[3] = {&function, &(commands[index].argc), &(commands[index].argv)};
+            	functionPointer_t function = {commands[index[0]].programFunction};
+            	void* args[3] = {&function, &(commands[index[0]].argc), &(commands[index[0]].argv)};
             	sys_add_task_with_shared_screen(runner, bizcochoId, 0, 3, &args);
             }
             else
             {
-            	sys_add_task_with_shared_screen(commands[index].programFunction, bizcochoId, 0, 0, NULL);
+            	sys_add_task_with_shared_screen(commands[index[0]].programFunction, bizcochoId, 0, 0, NULL);
             }
-            
+*/         
             sys_deactivate_task(bizcochoId);
             
             sys_get_cursor(&printingCursor);
@@ -160,7 +204,7 @@ void bizcocho(uint8_t argc, void** argv)
             }
         }
         
-        for(int i=0; i<counter; i++)	 //limpia el buffer
+        for(int i=0; i<counter; i++)	 //limpia el buffer, ni hace falta en realidad
         {
             promptBuffer[i]='\0';
         }
@@ -169,7 +213,7 @@ void bizcocho(uint8_t argc, void** argv)
 }
 
 
-void addMessage(const char * message) //sería mejor que reciba addMessage por parámetro
+void addMessage(const char * message) //sería mejor que reciba los colores por parámetro
 {
     sys_set_cursor(&printingCursor);
     printStringColor(message, colorValues[1], colorValues[0]);
@@ -194,6 +238,11 @@ int changeColor(const unsigned char * buffer, const unsigned char * colors[], co
             	return 0;
             }
         }
+    }
+    if(strCmp(buffer,"boca")==0){
+        colorValues[0]=14;
+        colorValues[1]=1;
+        return 1;
     }
     return 0;
 }
