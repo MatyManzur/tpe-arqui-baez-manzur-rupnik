@@ -104,3 +104,28 @@ void clear(uint8_t argc, void** argv)
 	sys_clear_screen(BLACK);
 	sys_exit();
 }
+void printmem(uint8_t argc,void** argv){
+	if(argc!=1){
+	sys_exit();
+	}
+	uint64_t address = *((uint64_t*) argv[0]);
+	uint64_t buffer[4]={0};
+	
+	sys_memory_dump(address,buffer);
+	setColor(BLACK,YELLOW);
+	printWithFormat("The memory dump from the following address 0x%x",address);
+	sys_new_line(BLACK);
+	setColor(BLACK,CYAN);
+	printWithFormat("0x%x",buffer[0]);
+	sys_new_line(BLACK);
+	printWithFormat("0x%x",buffer[1]);
+	sys_new_line(BLACK);
+	printWithFormat("0x%x",buffer[2]);
+	sys_new_line(BLACK);
+	printWithFormat("0x%x",buffer[3]);
+	sys_new_line(BLACK);
+	sys_exit();
+
+
+
+}
