@@ -210,8 +210,7 @@ int sqrt(int x)
     return ((int)(u.x * x))+2;//Esto es para conseguir la raiz ademas SSE esta deshabilitado entonces truncamos y sumamos uno
 }
 
-int parser(char string[], char buffer[10][20],char separator)
-{  // parsea el string y lo deja en buffer[i], separados por el char separator
+int parser(char string[], char buffer[][30],char separator){//Se le pasa un string, un buffer donde dejara los tokens y el char separador de tokens
 	int count=0;
 	int j=0;
 	for(int i=0;string[i]!='\0';i++){
@@ -226,5 +225,19 @@ int parser(char string[], char buffer[10][20],char separator)
 	}
 	buffer[count++][j]='\0';
 	return count;
+}
+//base del codigo sacado de https://stackoverflow.com/questions/10156409/convert-hex-string-char-to-int
+
+uint64_t xtou64(const char *str)
+{
+    uint64_t res = 0;
+    char c;
+
+    while ((c = *str++)) {
+        char v = (c & 0xF) + (c >> 6) | ((c >> 3) & 0x8);
+        res = (res << 4) | (uint64_t) v;
+    }
+
+    return res;
 }
 

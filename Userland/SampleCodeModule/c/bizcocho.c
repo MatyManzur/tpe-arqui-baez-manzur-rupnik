@@ -33,7 +33,8 @@ static command_t commands[COMMAND_COUNT] = {
 {.name="prime", .runnable = 1, .programFunction = prime, .argc = 0, .argv = NULL},
 {.name="clear", .runnable = 0, .programFunction = clear, .argc = 0, .argv = NULL},
 {.name="divZero", .runnable = 0, .programFunction = divZero, .argc = 0, .argv = NULL}, 
-{.name="invalidOpcode", .runnable = 0, .programFunction = invalidOpcode, .argc = 0, .argv = NULL},
+{.name="invalidOpcode", .runnable = 0, .programFunction = invalidOpcode, .argc = 0, .argv = NULL},{.name="printmem", .runnable = 0, .programFunction = printmem, .argc = 1, .argv = NULL}
+
 };
 
 static color_t colorValues[COLOROPTIONS] = {L_GRAY, BLACK, MAGENTA};
@@ -106,11 +107,76 @@ void bizcocho(uint8_t argc, void** argv)
         addMessage(promptBuffer);
         
         char* progForPipe;
+        
+        
+        int colorChange=0;
         int index[2]={0,0};
+        
+      /*int argvFlag[2]={0,0};
+       void * argv1[1];
+        uint64_t arg1;
+        void * argv2[1];
+        uint64_t arg2; */
+        
         unsigned char foundFlag=0; //si reconocio algun comando
-
+		char tokensPipe[4][30];
+		char tokens[4][30];
+		int tokenCount=parser(promptBuffer,tokensPipe,'|');
+		if(tokenCount==1){
+			tokenCount=parser(tokensPipe[0],tokens,' ');
+			for(index[0]=0;index[0]<COMMAND_COUNT && !foundFlag; index[0]++){
+				if(strCmp(tokens[0], commands[index[0]].name)==0)
+            	{
+                	foundFlag++;
+           		}
+			}
+			if(tokenCount==2){
+				if(foundFlag){
+					/*arg1=xtou64(tokens[1]);
+					argv1[0]=&arg1
+					argvFlag[0]=1;*/
+				}else{
+					colorChange=changeColor(promptBuffer, colors, colorValues);	
+				}		
+			}
+		}else if(tokenCount==2){
+			tokenCount=parser(tokensPipe[0],tokens,' ');
+			for(index[0]=0;index[0]<COMMAND_COUNT && !foundFlag; index[0]++){
+				if(strCmp(tokens[0], commands[index[0]].name)==0)
+            	{
+                	foundFlag++;
+           		}
+			}
+			if(tokenCount==2 && foundFlag){
+				/*arg1=xtou64(tokens[1]);
+				argv1[0]=&arg1;
+				argvFlag[0]=1;*/
+			}
+			if(foundFlag){
+				foundFlag=0;
+				tokenCount=parser(tokensPipe[1],tokens,' ');
+				for(index[1]=0;index[1]<COMMAND_COUNT && !foundFlag; index[1]++){
+					if(strCmp(tokens[0], commands[index[1]].name)==0)
+            		{
+                		foundFlag++;
+                		pipe=1;
+           			}
+           		}
+           		if(tokenCount==2 && foundFlag){
+          			/*arg2=xtou64(tokens[1]);
+					argv2[0]=&arg2;
+					argvFlag[1]=1;*/
+           		}
+           		
+			}
+			
+			
+		}
+		index[1]--;
+        index[0]--; 
+	/*
         // se tiene que poder mejorar para no estar recorriendo el promptBuffer 2 veces
-
+        
         for(int i=0; promptBuffer[i];i++){
             if(promptBuffer[i]=='|'){
                 progForPipe = promptBuffer+i+1;
@@ -145,6 +211,7 @@ void bizcocho(uint8_t argc, void** argv)
         if(!foundFlag && !pipe){ // No hace falta preguntar !problem
             colorChange= changeColor(promptBuffer, colors, colorValues);
         }
+        */
         
         if(foundFlag) // No hace falta preguntar !problem, porque si problem=1, foundFlag==0
         {
