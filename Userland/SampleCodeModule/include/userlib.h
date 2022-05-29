@@ -17,5 +17,6 @@ void putChar(unsigned char c);
 void putCharColor(unsigned char c, color_t backgroundColor, color_t characterColor);
 void printWithFormat(char* format,...);
 char *convert(unsigned int num, int base);
+void ulongToStr(unsigned long num, char* ans);
 
 #endif
