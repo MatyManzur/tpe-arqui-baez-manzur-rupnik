@@ -18,10 +18,11 @@ void prime(uint8_t argc, void ** argv){
 		if(isPrime){
 			ulongToStr(counter,str);
 			printString(str);
-    		sys_new_line(BLACK);
+	    		sys_new_line(BLACK);
+	    		sys_sleep(1);
 		}
 	counter+=2;
-	sys_sleep(1);
+	
 	}
 
 
