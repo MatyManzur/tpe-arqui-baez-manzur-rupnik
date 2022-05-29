@@ -80,24 +80,21 @@ void bizcocho(uint8_t argc, void** argv)
             {
             	if(key!='\b')
             	{ //si no es un backspace
-                if(key=='|'){
-                    pipe=1;
-                }
-		        promptBuffer[counter++] = key; //la ponemos en el promptBuffer
-		        putChar(key); // printeamos la key, porq sino no va a aparecer hasta que apretemos enter
+                    promptBuffer[counter++] = key; //la ponemos en el promptBuffer
+                    putChar(key); // printeamos la key, porq sino no va a aparecer hasta que apretemos enter
             	}
             	else if(counter>0)
             	{ //si se apreto backspace y no habia nada para borrar no hace nada
-		        promptBuffer[--counter] ='\0'; //borramos del buffer
-		       
-		        point_t point;
-		        
-		        sys_move_cursor(0,-1);	//se mueve uno para atras para borrarlo
-		        
-		        //y printeamos un vacio
-		        putChar(' ');
-		        
-		        sys_move_cursor(0,-1);	//se mueve uno para atras para reemplazar lo que se borro
+                    promptBuffer[--counter] ='\0'; //borramos del buffer
+                
+                    point_t point;
+                    
+                    sys_move_cursor(0,-1);	//se mueve uno para atras para borrarlo
+                    
+                    //y printeamos un vacio
+                    putChar(' ');
+                    
+                    sys_move_cursor(0,-1);	//se mueve uno para atras para reemplazar lo que se borro
             	}
             }
             
@@ -107,36 +104,39 @@ void bizcocho(uint8_t argc, void** argv)
         
         addMessage(promptBuffer);
         
-        char* progs[2];
+        char* progForPipe;
         int index[2]={0,0};
         unsigned char foundFlag=0; //si reconocio algun comando
 
-        if(!pipe){
-            for(index[0]=0; index[0]<COMMAND_COUNT && !foundFlag ; index++)
+        // se tiene que poder mejorar para no estar recorriendo el promptBuffer 2 veces
+
+        for(int i=0; promptBuffer[i];i++){
+            if(promptBuffer[i]=='|'){
+                progForPipe = promptBuffer+i+1;
+                pipe=1;
+                promptBuffer[i--]='\0'; // Para poder comparar con el anterior
+            }
+        }
+
+        for(index[0]=0; index[0]<COMMAND_COUNT && !foundFlag ; index[0]++)
+        {
+            if(strCmp(promptBuffer, commands[index[0]].name)==0)
             {
-                if(strCmp(promptBuffer, commands[index].name)==0)
+                foundFlag++;
+            }
+        }
+
+        if(pipe){
+            foundFlag=0;
+            for(index[1]=0;index[1]<COMMAND_COUNT && !foundFlag; index[1]++){
+                if(strCmp(progForPipe, commands[index[1]].name)==0)
                 {
                     foundFlag++;
                 }
             }
-        }else{
-            // tokenización en dos strings del promptBuffer
-            char* progs[2];
-            int problem=0; // no encontro nada
-            for(int i =0; i<2 && !problem;i++){
-                foundFlag=0;
-                for(index[i]=0;index[i]<COMMAND_COUNT && !foundFlag ; index[i]++){
-                    if(strCmp(progs[0], commands[index[i]].name)==0)
-                    {
-                        foundFlag++;
-                    }
-                }
-                if(!foundFlag){
-                    problem=1;
-                }
-            }
-            index[1]--;
         }
+
+        index[1]--;
         index[0]--; //asi commands[index] tiene lo que queremos ejecutar si foundFlag quedó = 1
         
         int colorChange=0;
@@ -145,8 +145,6 @@ void bizcocho(uint8_t argc, void** argv)
             colorChange= changeColor(promptBuffer, colors, colorValues);
         }
         
-
-
         if(foundFlag) // No hace falta preguntar !problem, porque si problem=1, foundFlag==0
         {
             sys_set_cursor(&printingCursor);
