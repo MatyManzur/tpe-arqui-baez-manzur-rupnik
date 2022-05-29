@@ -31,7 +31,8 @@ static command_t commands[COMMAND_COUNT] = {
 {.name="time", .runnable = 0, .programFunction = time, .argc = 0, .argv = NULL}, 
 {.name="fibonacci", .runnable = 1, .programFunction = fibonacci, .argc = 0, .argv = NULL},
 {.name="prime", .runnable = 1, .programFunction = prime, .argc = 0, .argv = NULL},
-{.name="clear", .runnable = 0, .programFunction = clear, .argc = 0, .argv = NULL}
+{.name="clear", .runnable = 0, .programFunction = clear, .argc = 0, .argv = NULL},
+{.name="prueba", .runnable = 2, .programFunction = NULL, .argc = 0, .argv = NULL}
 };
 
 static color_t colorValues[COLOROPTIONS] = {L_GRAY, BLACK, MAGENTA};
@@ -128,7 +129,14 @@ void bizcocho(uint8_t argc, void** argv)
             
             int bizcochoId = sys_get_task_id();
             
-            if(commands[index].runnable)
+            if(commands[index].runnable==2)	//borrar esta primera condicion
+            {				///PRUEBA DEL PIPE escribirndo "prueba"
+            	functionPointer_t function1 = {commands[3].programFunction};
+            	functionPointer_t function2 = {commands[4].programFunction};
+            	void* args[6] = {&function1, &(commands[3].argc), &(commands[3].argv), &function2, &(commands[4].argc), &(commands[4].argv)};
+            	sys_add_task_with_shared_screen(runner, bizcochoId, 0, 6, &args);
+            }
+            else if(commands[index].runnable) //borrar el "else" del "else if"
             {
             	functionPointer_t function = {commands[index].programFunction};
             	void* args[3] = {&function, &(commands[index].argc), &(commands[index].argv)};
