@@ -124,74 +124,95 @@ void bizcocho(uint8_t argc, void** argv)
         int monkey=0;
 
         unsigned char foundFlag=0; //si reconocio algun comando
-		char tokensPipe[4][30];
-		char tokens[4][30];
-		int tokenCount=parser(promptBuffer,tokensPipe,'|');
-		if(tokenCount==1){
-			tokenCount=parser(tokensPipe[0],tokens,' ');
-			if(tokenCount==1){
-				for(index[0]=0;index[0]<COMMAND_COUNT && !foundFlag; index[0]++){
+	char tokensPipe[4][30];
+	char tokens[4][30];
+	int tokenCount=parser(promptBuffer,tokensPipe,'|');
+	if(tokenCount==1) //no hay pipe
+	{
+		tokenCount=parser(tokensPipe[0],tokens,' ');
+		if(tokenCount==1)
+		{
+			for(index[0]=0;index[0]<COMMAND_COUNT && !foundFlag; index[0]++)
+			{
 				if(strCmp(tokens[0], commands[index[0]].name)==0)
-            	{
-                	foundFlag++;
-           		}
-				}
+    				{
+        				foundFlag++;
+   				}
 			}
-			if(tokenCount==2){
-				if(strCmp(tokens[0],"printmem")==0){
-					foundFlag=1;
-					strCopy(tokens[1],arg1);
-					argv1[0] = &arg1; 
-					argvFlag[0]=1;
-				}else{
-					colorChange=changeColor(promptBuffer, colors, colorValues);	
-				}		
-			}else if(!strCmp(tokens[0],"monkey")){
-                monkey++;
-                printMonkey();
-            }
-		}else if(tokenCount==2){
-			tokenCount=parser(tokensPipe[0],tokens,' ');
-			if(tokenCount==1){
-				for(index[0]=0;index[0]<COMMAND_COUNT && !foundFlag; index[0]++){
-					if(strCmp(tokens[0], commands[index[0]].name)==0)
-            		{
-                		foundFlag++;
-           			}
-				}
-			}
-			if(tokenCount==2 && strCmp(tokens[0],"printmem")==0){
-					foundFlag=1;
-					strCopy(tokens[1],arg1);
-						argv1[0] = &arg1; 
-					argvFlag[0]=1;
-
-			}
-			if(foundFlag){
-				foundFlag=0;
-				tokenCount=parser(tokensPipe[1],tokens,' ');
-				if(tokenCount==1){
-					for(index[1]=0;index[1]<COMMAND_COUNT && !foundFlag; index[1]++){
-						if(strCmp(tokens[0], commands[index[1]].name)==0)
-            			{
-                			foundFlag++;
-                			pipe=1;
-           				}
-           			}
-           		}
-           		if(tokenCount==2 && strCmp(tokens[0],"printmem")==0){
-           			foundFlag=1;
-					strCopy(tokens[1],arg2);
-						argv2[0] = &arg2; 
-					argvFlag[1]=1;
-           		}
-           		
-			}
-			
-			
+			index[0]--;
 		}
-		index[1]--;
-        index[0]--; 
+		if(tokenCount==2)
+		{
+			if(strCmp(tokens[0],"printmem")==0)
+			{
+				foundFlag=1;
+				strCopy(tokens[1],arg1);
+				argv1[0] = &arg1; 
+				argvFlag[0]=1;
+				index[0] = 8;
+			}
+			else
+			{
+				colorChange=changeColor(promptBuffer, colors, colorValues);	
+			}		
+		}
+		else if(!strCmp(tokens[0],"monkey"))
+		{
+			monkey++;
+			printMonkey();
+    		}
+	}
+	else if(tokenCount==2) //hay pipe
+	{
+		tokenCount=parser(tokensPipe[0],tokens,' ');
+		if(tokenCount==1) //no recibe args
+		{
+			for(index[0]=0;index[0]<COMMAND_COUNT && !foundFlag; index[0]++)
+			{
+				if(strCmp(tokens[0], commands[index[0]].name)==0)
+    				{
+					foundFlag++;
+   				}
+			}
+			index[0]--;
+		}
+		if(tokenCount==2 && strCmp(tokens[0],"printmem")==0) //es el printmem(no puede ser change color)
+		{
+			foundFlag=1;
+			strCopy(tokens[1],arg1);
+			argv1[0] = &arg1; 
+			argvFlag[0]=1;
+			index[0] = 8;
+		}
+		if(foundFlag) //encontro el programa de la izquierda
+		{
+			foundFlag=0;
+			tokenCount=parser(tokensPipe[1],tokens,' ');
+			if(tokenCount==1) //el de la derecha no recibe args
+			{
+				for(index[1]=0;index[1]<COMMAND_COUNT && !foundFlag; index[1]++)
+				{
+					if(strCmp(tokens[0], commands[index[1]].name)==0)
+					{
+						foundFlag++;
+						pipe=1;
+					}
+				}
+				index[1]--;
+			}
+   			if(tokenCount==2 && strCmp(tokens[0],"printmem")==0) //el dela derecha es el printmem
+   			{
+   				foundFlag=1;
+				strCopy(tokens[1],arg2);
+				argv2[0] = &arg2; 
+				argvFlag[1]=1;
+				index[1]=8;
+   			}
+	
+		}
+		
+		
+	}
          
         //hacer que funcione el monkey
 	/*
