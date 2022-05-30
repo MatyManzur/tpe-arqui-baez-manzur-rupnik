@@ -115,9 +115,11 @@ void bizcocho(uint8_t argc, void** argv)
         
         int argvFlag[2]={0,0};
         void* argv1[1] = {NULL}; 
-        uint64_t arg1;
-        void * argv2[1] = {NULL};
-        uint64_t arg2; 
+        char arg1[18];
+        char** arg1Pointer= arg1;
+        void* argv2[1] = {NULL};
+        char arg2[18];
+        char** arg2Pointer=arg2;
         
         int monkey=0;
 
@@ -137,9 +139,9 @@ void bizcocho(uint8_t argc, void** argv)
 			}
 			if(tokenCount==2){
 				if(strCmp(tokens[0],"printmem")==0){
-				foundFlag=1;
-					arg1=xtou64(tokens[1]);
-					argv1[0]=&arg1; 
+					foundFlag=1;
+					strCopy(tokens[1],arg1);
+					argv1[0] = &arg1; 
 					argvFlag[0]=1;
 				}else{
 					colorChange=changeColor(promptBuffer, colors, colorValues);	
@@ -159,10 +161,10 @@ void bizcocho(uint8_t argc, void** argv)
 				}
 			}
 			if(tokenCount==2 && strCmp(tokens[0],"printmem")==0){
-				foundFlag=1;
-				arg1=xtou64(tokens[1]);
-				argv1[0]=&arg1;
-				argvFlag[0]=1;
+					foundFlag=1;
+					strCopy(tokens[1],arg1);
+						argv1[0] = &arg1; 
+					argvFlag[0]=1;
 
 			}
 			if(foundFlag){
@@ -179,8 +181,8 @@ void bizcocho(uint8_t argc, void** argv)
            		}
            		if(tokenCount==2 && strCmp(tokens[0],"printmem")==0){
            			foundFlag=1;
-          			arg2=xtou64(tokens[1]);
-					argv2[0]=&arg2;
+					strCopy(tokens[1],arg2);
+						argv2[0] = &arg2; 
 					argvFlag[1]=1;
            		}
            		
@@ -251,8 +253,7 @@ void bizcocho(uint8_t argc, void** argv)
                 }
                 else
                 {
-                    
-            	    sys_add_task_with_shared_screen(commands[index[0]].programFunction, bizcochoId, 0, commands[index[0]].argc, &argv1);
+            	    sys_add_task_with_shared_screen(commands[index[0]].programFunction, bizcochoId, 0, commands[index[0]].argc,&argv1);
                 }
             }
             else{

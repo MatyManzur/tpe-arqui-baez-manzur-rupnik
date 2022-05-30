@@ -124,12 +124,20 @@ void clear(uint8_t argc, void** argv)
 }
 
 // imprime la zona de memoria escogida por el usuario
-void printmem(uint8_t argc,void** argv)
+void printmem(uint8_t argc,void* * argv)
 {
 	if(argc!=1){
 	sys_exit();
 	}
-	uint64_t address = *((uint64_t*) argv[0]);
+	char * argument = *((char *) argv[0]);
+	int errorFlag=0;
+	uint64_t address = xtou64(argument,&errorFlag);
+	if(errorFlag){
+		printString(argument);
+		printString(" is not a valid memory address");
+		sys_new_line(BLACK);
+		sys_exit();
+	}
 	uint64_t buffer[4]={0};
 	
 	sys_memory_dump(address,buffer);

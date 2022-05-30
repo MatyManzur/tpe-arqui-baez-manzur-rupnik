@@ -250,16 +250,23 @@ int parser(char string[], char buffer[][30],char separator){//Se le pasa un stri
 }
 //base del código sacado de https://stackoverflow.com/questions/10156409/convert-hex-string-char-to-int
 
-uint64_t xtou64(const char *str)
+uint64_t xtou64(const char *str, int* errorFlag)
 {
     uint64_t res = 0;
     char c;
-
-    while ((c = *str++)) {
-        char v = (c & 0xF) + (c >> 6) | ((c >> 3) & 0x8);
-        res = (res << 4) | (uint64_t) v;
+	int count=0;
+    while ( (c = *str++) && !(*errorFlag)) {
+    	if( (c<='f'&& c>='a') || (c>='A' && c<='F') ){
+        	char v =((c & 0xF) + (c >> 6))| ((c >> 3) & 0x8);
+        	res = (res << 4) | (uint64_t) v;
+        	count++;
+        }else{
+        	*errorFlag=1;
+        }
     }
-
+    if(count>16){
+    	*errorFlag=1;
+    }
     return res;
 }
 
