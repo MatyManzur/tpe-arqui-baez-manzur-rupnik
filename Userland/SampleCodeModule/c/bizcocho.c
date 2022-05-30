@@ -114,7 +114,7 @@ void bizcocho(uint8_t argc, void** argv)
         int index[2]={0,0};
         
         int argvFlag[2]={0,0};
-        void * argv1[1] = {NULL}; 
+        void* argv1[1] = {NULL}; 
         uint64_t arg1;
         void * argv2[1] = {NULL};
         uint64_t arg2; 
@@ -127,14 +127,17 @@ void bizcocho(uint8_t argc, void** argv)
 		int tokenCount=parser(promptBuffer,tokensPipe,'|');
 		if(tokenCount==1){
 			tokenCount=parser(tokensPipe[0],tokens,' ');
-			for(index[0]=0;index[0]<COMMAND_COUNT && !foundFlag; index[0]++){
+			if(tokenCount==1){
+				for(index[0]=0;index[0]<COMMAND_COUNT && !foundFlag; index[0]++){
 				if(strCmp(tokens[0], commands[index[0]].name)==0)
             	{
                 	foundFlag++;
            		}
+				}
 			}
 			if(tokenCount==2){
-				if(foundFlag){
+				if(strCmp(tokens[0],"printmem")==0){
+				foundFlag=1;
 					arg1=xtou64(tokens[1]);
 					argv1[0]=&arg1; 
 					argvFlag[0]=1;
@@ -147,13 +150,16 @@ void bizcocho(uint8_t argc, void** argv)
             }
 		}else if(tokenCount==2){
 			tokenCount=parser(tokensPipe[0],tokens,' ');
-			for(index[0]=0;index[0]<COMMAND_COUNT && !foundFlag; index[0]++){
-				if(strCmp(tokens[0], commands[index[0]].name)==0)
-            	{
-                	foundFlag++;
-           		}
+			if(tokenCount==1){
+				for(index[0]=0;index[0]<COMMAND_COUNT && !foundFlag; index[0]++){
+					if(strCmp(tokens[0], commands[index[0]].name)==0)
+            		{
+                		foundFlag++;
+           			}
+				}
 			}
-			if(tokenCount==2 && foundFlag){
+			if(tokenCount==2 && strCmp(tokens[0],"printmem")==0){
+				foundFlag=1;
 				arg1=xtou64(tokens[1]);
 				argv1[0]=&arg1;
 				argvFlag[0]=1;
@@ -162,14 +168,17 @@ void bizcocho(uint8_t argc, void** argv)
 			if(foundFlag){
 				foundFlag=0;
 				tokenCount=parser(tokensPipe[1],tokens,' ');
-				for(index[1]=0;index[1]<COMMAND_COUNT && !foundFlag; index[1]++){
-					if(strCmp(tokens[0], commands[index[1]].name)==0)
-            		{
-                		foundFlag++;
-                		pipe=1;
+				if(tokenCount==1){
+					for(index[1]=0;index[1]<COMMAND_COUNT && !foundFlag; index[1]++){
+						if(strCmp(tokens[0], commands[index[1]].name)==0)
+            			{
+                			foundFlag++;
+                			pipe=1;
+           				}
            			}
            		}
-           		if(tokenCount==2 && foundFlag){
+           		if(tokenCount==2 && strCmp(tokens[0],"printmem")==0){
+           			foundFlag=1;
           			arg2=xtou64(tokens[1]);
 					argv2[0]=&arg2;
 					argvFlag[1]=1;

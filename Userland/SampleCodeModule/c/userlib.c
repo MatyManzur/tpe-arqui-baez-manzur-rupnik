@@ -223,7 +223,9 @@ int parser(char string[], char buffer[][30],char separator){//Se le pasa un stri
 			buffer[count][j++]=string[i];
 		}
 	}
-	buffer[count++][j]='\0';
+	if(j!=0){
+        buffer[count++][j]='\0';
+    }
 	return count;
 }
 //base del codigo sacado de https://stackoverflow.com/questions/10156409/convert-hex-string-char-to-int
