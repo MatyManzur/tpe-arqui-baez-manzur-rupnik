@@ -19,7 +19,7 @@ void prime(uint8_t argc, void ** argv)
 		}
 		if(isPrime){
 			ulongToStr(counter,str);
-			printStringColor(str,BLACK,BLUE);
+			printStringColor(str,BLACK,WHITE);
 	    	sys_new_line(BLACK);
 	    	sys_sleep(1);
 		}
