@@ -233,24 +233,30 @@ int sqrt(int x)
     u.x = u.x * (1.5f - xhalf * u.x * u.x);
     return ((int)(u.x * x))+2;//Esto es para conseguir la raiz ademas SSE esta deshabilitado entonces truncamos y sumamos uno
 }
-
-int parser(char string[], char buffer[][30],char separator){//Se le pasa un string, un buffer donde dejara los tokens y el char separador de tokens
-	int count=0;
-	int j=0;
-	for(int i=0;string[i]!='\0';i++){
-		if(string[i]==separator) {
-            if ( j != 0){
-                buffer[count++][j] = '\0';
+//Se le pasa un string, un buffer donde dejara los tokens, el char separador de tokens, una cantidad maxima de tokens y la longitud maxima de cada token. La funcion parsea con el char provisto el string en tokens, si se llega a la longitud maxima en un token el mismo quedara con esa longitud y si se llega a la cantidad maxima de tokens se dejara de parsear, si esta ultima no se alcanza entonces parsea hasta el final del string. Devuelve por parametro la cantidad de tokens que llego a parsear.
+int parser(char* string, char** buffer,char separator,int maxTokenCount,int maxTokenLenght){
+    if(maxTokenLenght==0||maxTokenCount==0){
+        return -1;
+    }
+    char * bufferpointer=(char *)buffer;
+    int count=0;
+    int j=0;
+    for(int i=0; string[i]!='\0'&&(count!=maxTokenCount);i++){
+        if(string[i]==separator||j==maxTokenLenght){
+            if ( j!= 0){
+                *(bufferpointer+count*maxTokenLenght+j)= '\0';
+                count++;
                 j = 0;
             }
         }else{
-			buffer[count][j++]=string[i];
-		}
-	}
-	if(j!=0){
-        buffer[count++][j]='\0';
+            *(bufferpointer+count*maxTokenLenght+j)=string[i];
+            j++;
+        }
     }
-	return count;
+    if(j!=0){
+        *(bufferpointer+count*maxTokenLenght+j) ='\0';
+    }
+    return count;
 }
 //base del código sacado de https://stackoverflow.com/questions/10156409/convert-hex-string-char-to-int
 
