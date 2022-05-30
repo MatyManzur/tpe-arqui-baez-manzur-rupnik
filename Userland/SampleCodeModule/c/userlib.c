@@ -32,15 +32,19 @@ char strLength(const unsigned char * str)
     return i;
 }
 
-char strPrefix(const unsigned char*prefix, const unsigned char*str)
-{    // se fija si el primer string está como prefijo del segundo
-    int i;
-    for(i=0;prefix[i] && str[i];i++){
+uint8_t strPrefix(const unsigned char*prefix, const unsigned char*str, unsigned char** afterPrefix)
+{    // se fija si el primer string está como prefijo del segundo (ignora los espacios al principio del segundo)
+    int i=0;
+    while(str[i]==' '){
+        i++;
+    }
+    for(;prefix[i] && str[i];i++){
         if(prefix[i]!=str[i]){
             return 0;
         }
     }
-    return !prefix[i];
+    *afterPrefix = (!prefix[i])? str+i+1:NULL;
+    return !prefix[i];  //en el caso de que prefix no haya terminado y str sí, devuelve 0, sino devuelve 1
 }
 
 int strCmp(const unsigned char* str1,const unsigned char* str2)

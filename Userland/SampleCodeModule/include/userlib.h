@@ -8,7 +8,7 @@
 
 int strToNum(const unsigned char* str);
 char strLength(const unsigned char* str);
-char strPrefix(const unsigned char* prefix, const unsigned char*str);
+uint8_t strPrefix(const unsigned char*prefix, const unsigned char*str, unsigned char** afterPrefix);
 int strCmp(const unsigned char* str1,const unsigned char* str2);
 void setColor(color_t backgroundColor, color_t characterColor);
 void printString(unsigned char * str);
