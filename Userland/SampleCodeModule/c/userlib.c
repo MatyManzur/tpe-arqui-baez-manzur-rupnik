@@ -1,5 +1,7 @@
 #include <userlib.h>
 
+#define IS_DIGIT(x) ((x)>='0' && (x)<='9')
+
 static struct format_t format = { BLACK, L_GRAY };  // el formato que se utiliza para los colores
 
 int strToNum(const unsigned char* str)
@@ -117,13 +119,23 @@ void printWithFormat(char* format,...)
 
     for(traverse = format; *traverse != '\0'; traverse++) 
     { 
-        while( *traverse != '%' ) 
+        while( *traverse != '%' ) //frenamos en un %
         { 
             putChar(*traverse);
             traverse++; 
         } 
-
-        traverse++; 
+        
+        traverse++;
+        
+        int minDigitCount = 0;
+        
+        while ( IS_DIGIT(*traverse) )	//leemos si hay un numero entre el % y la letra indicando la cantidad minima de cifras a mostrar para que complete con ceros adelante
+        {
+        	minDigitCount *= 10;
+        	minDigitCount += *traverse - '0';
+        	traverse++;
+        }
+        
 
         //Fetching and executing arguments
         switch(*traverse) 
@@ -138,11 +150,11 @@ void printWithFormat(char* format,...)
                             i = -i;
                             putChar('-'); 
                         } 
-                        printString(convert(i,10));
+                        printString(convert(i,10, minDigitCount));
                         break; 
 
             case 'o': i = va_arg(arg,unsigned int); //Fetch Octal representation
-                        printString(convert(i,8));
+                        printString(convert(i,8, minDigitCount));
                         break; 
 
             case 's': s = va_arg(arg,char *);       //Fetch string
@@ -150,7 +162,7 @@ void printWithFormat(char* format,...)
                         break; 
 
             case 'x': i = va_arg(arg,unsigned int); //Fetch Hexadecimal representation
-                        printString(convert(i,16));
+                        printString(convert(i,16, minDigitCount));
                         break; 
         }   
     } 
@@ -159,11 +171,12 @@ void printWithFormat(char* format,...)
     va_end(arg); 
 } 
 
-char *convert(unsigned int num, int base) 
+char *convert(unsigned int num, int base, unsigned int minDigitCount) 
 { 
     static char Representation[]= "0123456789ABCDEF";
     static char buffer[50]; 
     char *ptr; 
+    int digitCount = 0;
 
     ptr = &buffer[49]; 
     *ptr = '\0'; 
@@ -172,7 +185,14 @@ char *convert(unsigned int num, int base)
     { 
         *--ptr = Representation[num%base]; 
         num /= base; 
+        digitCount++;
     }while(num != 0); 
+    
+    while(digitCount < minDigitCount) //agrega ceros adelante si faltan digits
+    {
+    	*--ptr = Representation[0]; 
+    	digitCount++;
+    }
 
     return(ptr); 
 }

@@ -31,34 +31,57 @@ void getCurrentDateTime(struct datetime_t* datetime, struct timezone_t* tzone)
 {
 	tzone->hours=timezone.hours;
 	tzone->minutes=timezone.minutes;
-	int8_t h=getHours()+timezone.hours;
-	int8_t m=getMinutes()+timezone.minutes;
-	int8_t day=getDay();
-	int8_t month=getMonth();
-	uint16_t year=getYear()+getCentury()*100;
+	int8_t h = ((int8_t) getHours()) + timezone.hours;
+	int8_t m = ((int8_t) getMinutes()) + timezone.minutes;
+	int8_t day = getDay();
+	int8_t month = getMonth();
+	uint16_t year = getYear() + getCentury() * 100;
 	if(m<0)
 	{
-		h-=1;
+		h--;
+	}
+	if(m>=60)
+	{
+		h++;
 	}
 	if(h<0)
 	{
 		if(day==1)
 		{
-			month-=1;
+			month--;
 			if(month==0)
 			{
-				year-=1;
+				year--;
 				month=12;
 			}
 			day = monthdays[isLeapYear(year)][month-1]; 
 		}
 		else
 		{
-			day-=1;
+			day--;
 		}
 	}
-	h%=24;
-	m%=60;
+	if(h>=24)
+	{
+		if(day==monthdays[isLeapYear(year)][month-1])
+		{
+			month++;
+			if(month>12)
+			{
+				year++;
+				month = 1;
+			}
+			day = 1;
+		}
+		else
+		{
+			day++;
+		}
+	}
+	h += 24;
+	h %= 24;
+	m += 60;
+	m %= 60;
 	uint8_t s=getSeconds();
 	datetime->hours=h;
 	datetime->mins=m;

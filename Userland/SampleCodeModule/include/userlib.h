@@ -16,7 +16,7 @@ void printStringColor(unsigned char * str, color_t backgroundColor, color_t char
 void putChar(unsigned char c);
 void putCharColor(unsigned char c, color_t backgroundColor, color_t characterColor);
 void printWithFormat(char* format,...);
-char *convert(unsigned int num, int base);
+char *convert(unsigned int num, int base, unsigned int minDigitCount);
 uint8_t ulongToStr(unsigned long num, char* ans);
 uint8_t strCopy(char* source, char* dest);
 

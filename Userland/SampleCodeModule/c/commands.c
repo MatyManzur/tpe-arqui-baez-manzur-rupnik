@@ -109,9 +109,9 @@ void time(uint8_t argc, void** argv) // podemos hacer un getColor para cambiar e
 	sys_set_time_zone(&tzone);
 	sys_get_current_date_time(&data,&tzone);
 	setColor(BLACK,CYAN);
-	printWithFormat("%d:%d:%d",data.hours,data.mins,data.secs);
+	printWithFormat("%2d:%2d:%2d",data.hours,data.mins,data.secs);
 	putChar(' ');
-	printWithFormat("%d/%d/%d",data.day,data.month,data.year);
+	printWithFormat("%2d/%2d/%2d",data.day,data.month,data.year);
 	sys_new_line(BLACK);
 	sys_exit();
 }
