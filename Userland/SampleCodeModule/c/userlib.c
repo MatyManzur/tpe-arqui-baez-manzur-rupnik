@@ -228,7 +228,7 @@ int parser(char string[], char buffer[][30],char separator){//Se le pasa un stri
     }
 	return count;
 }
-//base del codigo sacado de https://stackoverflow.com/questions/10156409/convert-hex-string-char-to-int
+//base del código sacado de https://stackoverflow.com/questions/10156409/convert-hex-string-char-to-int
 
 uint64_t xtou64(const char *str)
 {
@@ -243,3 +243,12 @@ uint64_t xtou64(const char *str)
     return res;
 }
 
+uint8_t strCopy(char* source, char* dest){
+    int i=0;
+    while(source[i]){
+        dest[i] = source[i];
+        i++;
+    }
+    dest[i] = '\0';
+    return i;
+}

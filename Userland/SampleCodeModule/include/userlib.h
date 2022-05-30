@@ -18,5 +18,6 @@ void putCharColor(unsigned char c, color_t backgroundColor, color_t characterCol
 void printWithFormat(char* format,...);
 char *convert(unsigned int num, int base);
 uint8_t ulongToStr(unsigned long num, char* ans);
+uint8_t strCopy(char* source, char* dest);
 
 #endif
