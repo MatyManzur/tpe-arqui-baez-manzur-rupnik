@@ -1,6 +1,6 @@
-#ifndef IDTLOADERH
-#define IDTLOADERH
+#ifndef IDTLOADER_H_
+#define IDTLOADER_H_
 
-void load_idt();
+void load_idt();	//Arma la IDT
 
 #endif

@@ -85,7 +85,7 @@ void * initializeKernelBinary()
 
 int main()
 {	
-	load_idt();
+	load_idt();	//arma la IDT
 	
 	ncPrint("[Kernel Main]");
 	ncNewline();
@@ -93,7 +93,7 @@ int main()
 	ncPrintHex((uint64_t)sampleCodeModuleAddress);
 	ncNewline();
 	ncPrint("  Calling the sample code module returned: ");
-	ncPrintHex(((EntryPoint)sampleCodeModuleAddress)());
+	ncPrintHex(((EntryPoint)sampleCodeModuleAddress)());	//llama a que arranque el userland
 	ncNewline();
 	ncNewline();
 

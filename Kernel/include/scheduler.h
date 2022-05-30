@@ -7,11 +7,12 @@
 #define TASK_STACK_SIZE 0x1000
 #define TASKS_STACK_BASE 0x300000
 
-//en asm
+//implementados en libasm.asm
 void swapTasks(const uint64_t newStackPointer);
 void initializeTask(uint8_t argc, void** argv, const void (*newTaskFunction)(uint8_t argc, void** argv), const uint64_t newStackPointer);
 void saveStackPointer(uint64_t* oldStackPointer);
 
+//funciones para que llamen otros desde Kernel, no son syscalls
 int8_t getCurrentScreenId();
 int8_t getCurrentTaskId();
 void followingTask();

@@ -7,7 +7,7 @@ GLOBAL memdump
 
 section .text
 
-getScanCode:			;Waits until something happens in the keyboard and returns that key
+getScanCode:
 	push rbp
 	mov rbp, rsp
 	

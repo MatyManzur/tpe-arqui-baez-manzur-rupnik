@@ -1,24 +1,34 @@
 #include <time.h>
 
-static unsigned long ticks = 0;
-static struct timezone_t timezone={0 , 0};
-static int monthdays[2][12]={{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},{31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}};
-int isLeapYear(int year);
+static unsigned long ticks = 0; //cantidad total de ticks desde la primera interrupcion del timer tick
+
+static struct timezone_t timezone={0 , 0}; //time zone actual con horas y minutos
+static int monthdays[2][12]={{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},{31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}}; //dias de cada mes en años bisiestos y no bisiestos
+
+static int isLeapYear(int year);
+
+//lo llama en la interrupcion del timer tick
 void timer_handler() 
 {
 	ticks++;
 	followingTask();
 }
 
-unsigned long ticks_elapsed() {
+//devuelve la cantidad total de ticks desde la primera interrupcion del timer tick
+unsigned long ticks_elapsed() 
+{
 	return ticks;
 }
 
-unsigned long seconds_elapsed() {
+//devuelve la cantidad total de segundos desde la primera interrupcion del timer tick
+unsigned long seconds_elapsed() 
+{
 	return ticks / 18;
 }
 
-void getCurrentDateTime(struct datetime_t* datetime, struct timezone_t* tzone){///Falta testing
+//devuelve por parametro la fecha y hora actual, y el timezone que se usó para devolverla
+void getCurrentDateTime(struct datetime_t* datetime, struct timezone_t* tzone)
+{
 	tzone->hours=timezone.hours;
 	tzone->minutes=timezone.minutes;
 	int8_t h=getHours()+timezone.hours;
@@ -61,12 +71,16 @@ void getCurrentDateTime(struct datetime_t* datetime, struct timezone_t* tzone){/
 	datetime->year=year;
 
 }
-void setTimeZone(const struct timezone_t * tzone){
+
+//setea el timezone al indicado por parametro con horas y minutos
+void setTimeZone(const struct timezone_t * tzone)
+{
 	timezone.hours=tzone->hours;
 	timezone.minutes=tzone->minutes;
 }
 
-int isLeapYear(int year)
+//Funcion auxiliar para ver si es un año bisiesto
+static int isLeapYear(int year)
 {
 	if(year%400==0)
 	{
@@ -79,11 +93,12 @@ int isLeapYear(int year)
 	return 0;
 }	
 
+//Espera a que hayan pasado la cantidad de ticks indicada
 void sleep(uint64_t sleepTicks)
 {
 	uint64_t finish = ticks + sleepTicks;
 	while(ticks < finish)
 	{
-		_hlt();
+		_hlt();	//espera a la proxima interrupcion. Tienen que llegar interrupciones del mismo timer tick para que incremente ticks y así salir de este while
 	}
 }

@@ -14,7 +14,7 @@ typedef struct {
   uint32_t offset_h, other_cero;
 } DESCR_INT;
 
-#pragma pack(pop)		/* Reestablece la alinceación actual */
+#pragma pack(pop)		/* Reestablece la alineación actual */
 
 
 
@@ -22,27 +22,30 @@ DESCR_INT * idt = (DESCR_INT *) 0;	// IDT de 255 entradas
 
 static void setup_IDT_entry (int index, uint64_t offset);
 
-void load_idt() {
+//Arma la IDT
+void load_idt() 
+{
+	//Agregamos las interrupciones y excepciones deseadas a la IDT
+	setup_IDT_entry (0x20, (uint64_t)&_irq00Handler);		//teclado
+	setup_IDT_entry (0x21, (uint64_t)&_irq01Handler);		//timer tick
+	setup_IDT_entry (0x88, (uint64_t)&_syscallHandler);		//syscalls	
+	setup_IDT_entry (0x00, (uint64_t)&_exception0Handler);	//excepcion: division por cero
+	setup_IDT_entry (0x06, (uint64_t)&_exception6Handler);	//excepcion: invalid opcode
 
-  setup_IDT_entry (0x20, (uint64_t)&_irq00Handler);
-  setup_IDT_entry (0x21, (uint64_t)&_irq01Handler);
-  setup_IDT_entry (0x88, (uint64_t)&_syscallHandler);
-  setup_IDT_entry (0x00, (uint64_t)&_exception0Handler);
-  setup_IDT_entry (0x06, (uint64_t)&_exception6Handler);
-
-	//Solo interrupcion timer tick habilitadas
+	//enmascaramos las interrupciones no utilizadas del PIC
 	picMasterMask(0xFC); 
 	picSlaveMask(0xFF);
         
 	_sti();
 }
 
-static void setup_IDT_entry (int index, uint64_t offset) {
-  idt[index].selector = 0x08;
-  idt[index].offset_l = offset & 0xFFFF;
-  idt[index].offset_m = (offset >> 16) & 0xFFFF;
-  idt[index].offset_h = (offset >> 32) & 0xFFFFFFFF;
-  idt[index].access = ACS_INT;
-  idt[index].cero = 0;
-  idt[index].other_cero = (uint64_t) 0;
+static void setup_IDT_entry (int index, uint64_t offset) 
+{
+	idt[index].selector = 0x08;
+	idt[index].offset_l = offset & 0xFFFF;
+	idt[index].offset_m = (offset >> 16) & 0xFFFF;
+	idt[index].offset_h = (offset >> 32) & 0xFFFFFFFF;
+	idt[index].access = ACS_INT;
+	idt[index].cero = 0;
+	idt[index].other_cero = (uint64_t) 0;
 }
