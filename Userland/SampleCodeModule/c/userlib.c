@@ -32,19 +32,22 @@ char strLength(const unsigned char * str)
     return i;
 }
 
+// se fija si el primer string está como prefijo del segundo (ignora los espacios al principio del segundo)
+// deja si afterPrefix no es null lo deja apuntando al proximo caracter de str luego de encontrar el prefijo, si no lo encontro lo pone en null
 uint8_t strPrefix(const unsigned char*prefix, const unsigned char*str, unsigned char** afterPrefix)
-{    // se fija si el primer string está como prefijo del segundo (ignora los espacios al principio del segundo)
-    int i=0;
+{    
+    int i=0, j=0;
     while(str[i]==' '){
         i++;
     }
-    for(;prefix[i] && str[i];i++){
-        if(prefix[i]!=str[i]){
+    for(;prefix[j] && str[i];i++,j++){
+        if(prefix[j]!=str[i]){
             return 0;
         }
     }
-    *afterPrefix = (!prefix[i])? str+i+1:NULL;
-    return !prefix[i];  //en el caso de que prefix no haya terminado y str sí, devuelve 0, sino devuelve 1
+    if(afterPrefix!=NULL)	
+    	*afterPrefix = (!prefix[j])? str+i:NULL;
+    return !prefix[j];  //en el caso de que prefix no haya terminado y str sí, devuelve 0, sino devuelve 1
 }
 
 int strCmp(const unsigned char* str1,const unsigned char* str2)
@@ -233,6 +236,7 @@ int sqrt(int x)
     u.x = u.x * (1.5f - xhalf * u.x * u.x);
     return ((int)(u.x * x))+2;//Esto es para conseguir la raiz ademas SSE esta deshabilitado entonces truncamos y sumamos uno
 }
+
 //Se le pasa un string, un buffer donde dejara los tokens, el char separador de tokens, una cantidad maxima de tokens y la longitud maxima de cada token. La funcion parsea con el char provisto el string en tokens, si se llega a la longitud maxima en un token el mismo quedara con esa longitud y si se llega a la cantidad maxima de tokens se dejara de parsear, si esta ultima no se alcanza entonces parsea hasta el final del string. Devuelve por parametro la cantidad de tokens que llego a parsear.
 int parser(char* string, char** buffer,char separator,int maxTokenCount,int maxTokenLenght){
     if(maxTokenLenght==0||maxTokenCount==0){
@@ -255,27 +259,40 @@ int parser(char* string, char** buffer,char separator,int maxTokenCount,int maxT
     }
     if(j!=0){
         *(bufferpointer+count*maxTokenLenght+j) ='\0';
+        count++;
     }
     return count;
 }
-//base del código sacado de https://stackoverflow.com/questions/10156409/convert-hex-string-char-to-int
 
 uint64_t xtou64(const char *str, int* errorFlag)
 {
     uint64_t res = 0;
-    char c;
-	int count=0;
-    while ( (c = *str++) && !(*errorFlag)) {
-    	if( (c<='f'&& c>='a') || (c>='A' && c<='F') ){
-        	char v =((c & 0xF) + (c >> 6))| ((c >> 3) & 0x8);
-        	res = (res << 4) | (uint64_t) v;
-        	count++;
-        }else{
-        	*errorFlag=1;
-        }
+    int count = 0;
+    while(str[count] != '\0' && !(*errorFlag))
+    {
+    	res *= 16;
+    	char c = str[count];
+    	if(IS_DIGIT(c))
+    	{
+    		res += c - '0';
+    	}
+    	else if(c>='a' && c<='f')
+    	{
+    		res += 10 + c - 'a';
+    	}
+    	else if(c>='A' && c<='F')
+    	{
+    		res += 10 + c - 'A';
+    	}
+    	else
+    	{
+    		*errorFlag = 1;
+    	}
+    	count++;
     }
-    if(count>16){
-    	*errorFlag=1;
+    if(count>16)
+    {
+    	*errorFlag = 1;
     }
     return res;
 }

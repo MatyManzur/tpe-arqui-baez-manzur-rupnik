@@ -20,6 +20,7 @@ static void zero_division()
 	//imprime un error en rojo, printing.c ya sabe que task fue, y por lo tanto en qué screen imprimirlo
 	unsigned char* errorMsg = "An error occurred: division by zero exception!";
 	format_t fmt = {RED, WHITE};
+	clearScreen(BLACK);
 	print(errorMsg, &fmt); 
 	newLine(RED);
 	
@@ -35,6 +36,7 @@ static void invalid_opcode()
 	//imprime un error en rojo, printing.c ya sabe que task fue, y por lo tanto en qué screen imprimirlo
 	unsigned char* errorMsg = "An error occurred: invalid opcode exception!";
 	format_t fmt = {RED, WHITE};
+	clearScreen(BLACK);
 	print(errorMsg, &fmt);
 	newLine(RED);
 	

@@ -69,6 +69,7 @@ initializeTask:
 	
 	call rdx	;;en rdi y rsi ya tenemos los argumentos de la funcion, llamamos a la funcion
 	ret
+	
 ;Desde C nos deberian pasar por argumentos primero la direccion de memoria y despues una direccion a un array para dejar los 32bytes
 memdump:
 	push rdx
@@ -86,7 +87,7 @@ memdump:
 .fin:
 	pop rax
 	pop rdx
-ret
+	ret
 
 
 

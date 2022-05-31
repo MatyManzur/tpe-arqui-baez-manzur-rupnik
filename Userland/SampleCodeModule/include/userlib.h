@@ -19,5 +19,6 @@ void printWithFormat(char* format,...);
 char *convert(unsigned int num, int base, unsigned int minDigitCount);
 uint8_t ulongToStr(unsigned long num, char* ans);
 uint8_t strCopy(char* source, char* dest);
+int parser(char* string, char** buffer,char separator,int maxTokenCount,int maxTokenLenght);
 
 #endif

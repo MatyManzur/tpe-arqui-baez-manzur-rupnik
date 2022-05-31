@@ -130,7 +130,7 @@ void printmem(uint8_t argc,void** argv)
 	{
 		sys_exit();
 	}
-	char * argument = *((char *) argv[0]);
+	char * argument = (char *) argv[0];
 	int errorFlag=0;
 	uint64_t address = xtou64(argument,&errorFlag);
 	if(errorFlag)

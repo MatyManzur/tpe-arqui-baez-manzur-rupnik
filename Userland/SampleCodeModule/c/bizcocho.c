@@ -2,13 +2,17 @@
 
 #define LASTCOLUMN 80
 #define LASTLINE 25
-#define COMMAND_COUNT 10
+#define COMMAND_COUNT 9
 #define COLOROPTIONS 3
 
 #define BUFFER_DIM 50
 
 #define WIDTH 80
 #define HEIGHT 25
+
+#define MAX_LONG_TOKEN_LENGTH 30
+#define MAX_TOKEN_LENGTH 20
+#define MAX_ARG_COUNT 4
 
 void printMonkey();
 void addMessage(const char * message);
@@ -22,20 +26,18 @@ typedef struct command_t
 	char* name; //el string que tiene que leer del prompt
 	uint8_t runnable;
 	void (*programFunction) (uint8_t argc, void** argv); //a quien tiene que llamar
-	uint8_t argc;
-	void** argv;
 }command_t;
 
 static command_t commands[COMMAND_COUNT] = {
-{.name="help", .runnable = 0, .programFunction = help, .argc = 0, .argv = NULL}, 
-{.name="inforeg", .runnable = 0, .programFunction = printRegisters, .argc = 0, .argv = NULL},
-{.name="time", .runnable = 0, .programFunction = time, .argc = 0, .argv = NULL}, 
-{.name="fibonacci", .runnable = 1, .programFunction = fibonacci, .argc = 0, .argv = NULL},
-{.name="prime", .runnable = 1, .programFunction = prime, .argc = 0, .argv = NULL},
-{.name="clear", .runnable = 0, .programFunction = clear, .argc = 0, .argv = NULL},
-{.name="divZero", .runnable = 0, .programFunction = divZero, .argc = 0, .argv = NULL}, 
-{.name="invalidOpcode", .runnable = 0, .programFunction = invalidOpcode, .argc = 0, .argv = NULL},
-{.name="printmem", .runnable = 0, .programFunction = printmem, .argc = 1, .argv = NULL}
+{.name="help", .runnable = 0, .programFunction = help}, 
+{.name="inforeg", .runnable = 0, .programFunction = printRegisters},
+{.name="time", .runnable = 0, .programFunction = time}, 
+{.name="fibonacci", .runnable = 1, .programFunction = fibonacci},
+{.name="prime", .runnable = 1, .programFunction = prime},
+{.name="clear", .runnable = 0, .programFunction = clear},
+{.name="divZero", .runnable = 0, .programFunction = divZero}, 
+{.name="invalidOpcode", .runnable = 0, .programFunction = invalidOpcode},
+{.name="printmem", .runnable = 0, .programFunction = printmem}
 };
 
 static color_t colorValues[COLOROPTIONS] = {L_GRAY, BLACK, MAGENTA};
@@ -51,8 +53,9 @@ void bizcocho(uint8_t argc, void** argv)
     sys_clear_screen(BLACK);
     
     //set cursor al inicio de todo
-    while(1){	//esta 2da opcion es por si el programa no tiene un newline al final
-   	 if(printingCursor.row >= HEIGHT || (printingCursor.row == HEIGHT-1 && printingCursor.column > 0))
+    while(1)
+    {		
+   	 if(printingCursor.row >= HEIGHT || (printingCursor.row == HEIGHT-1 && printingCursor.column > 0)) //esta 2da opcion es por si el programa no tiene un newline al final
         {	sys_set_cursor(&printingCursor);
 			sys_move_cursor(-1,0);
 			sys_get_cursor(&printingCursor);
@@ -61,12 +64,12 @@ void bizcocho(uint8_t argc, void** argv)
      
         sys_set_cursor(&promptCursor);	//Reseteamos la linea del prompt
        
-       	sys_new_line(colorValues[1]);
+        sys_new_line(colorValues[1]);
        	
         sys_set_cursor(&promptCursor);
         
         setColor(colorValues[1],colorValues[2]);
-        printString((unsigned char*)"Usuario N1 ");
+        printString((unsigned char*)"Bizcocho ");
         putChar(2); 
         putChar(' '); 
         putChar(16); //para el chirimbolito
@@ -75,7 +78,6 @@ void bizcocho(uint8_t argc, void** argv)
 
         unsigned char key;
         int counter = 0; //cuantas letras van en este mensaje
-        uint8_t pipe = 0;
 
         do{ //repite hasta un enter o que hayan BUFFER_DIM letras
             sys_read_printables(&key, 1); //leemos la letra y la dejamos en key
@@ -107,202 +109,127 @@ void bizcocho(uint8_t argc, void** argv)
         
         addMessage(promptBuffer);
         
-        char* progForPipe;
+        //en promptBuffer está todo lo que lee del prompt cuando se apreto enter
         
+        unsigned char pipeTokens [2][MAX_LONG_TOKEN_LENGTH];
         
-        int colorChange=0;
-        int index[2]={0,0};
+        int pipeTokensCount = parser(promptBuffer, pipeTokens, '|', 2, MAX_LONG_TOKEN_LENGTH);
         
-        int argvFlag[2]={0,0};
-        void* argv1[1] = {NULL}; 
-        char arg1[18];
-        char** arg1Pointer= arg1;
-        void* argv2[1] = {NULL};
-        char arg2[18];
-        char** arg2Pointer=arg2;
+        //en pipeTokens[0] está lo que esté a la izquierda del '|', o todo el string en caso de que no haya '|'
+        //en pipeTokens[1] está lo que esté a la derecha del '|' en caso de que haya pipe
+        //pipeTokensCount = 1 si no hay pipe, = 2 si hay pipe
         
-        int monkey=0;
-
-        unsigned char foundFlag=0; //si reconocio algun comando
-	char tokensPipe[4][30];
-	char tokens[4][30];
-	int tokenCount=parser(promptBuffer,tokensPipe,'|');
-	if(tokenCount==1) //no hay pipe
-	{
-		tokenCount=parser(tokensPipe[0],tokens,' ');
-		if(tokenCount==1)
+        int index1, index2;
+        int foundFlag = 0;
+        unsigned char* argString1;
+        unsigned char* argString2;
+        int argc1, argc2;
+        unsigned char* argv1[MAX_ARG_COUNT] = {NULL};
+        unsigned char* argv2[MAX_ARG_COUNT] = {NULL};
+        unsigned char firstTokens[MAX_ARG_COUNT][MAX_TOKEN_LENGTH] = {0};
+        unsigned char secondTokens[MAX_ARG_COUNT][MAX_TOKEN_LENGTH] = {0};
+        
+        //buscamos comando en pipeTokens[0]
+        for(int i=0 ; i<COMMAND_COUNT && !foundFlag ; i++)
+        {
+        	if(strPrefix(commands[i].name, pipeTokens[0], &argString1))
+        	{
+        		foundFlag = 1;
+        		index1 = i;
+        	}
+        }
+        
+        //si reconocemos un comando, nos guardamos los argumentos que haya pasado
+        if(foundFlag)
+        {
+        	argc1 = parser(argString1, firstTokens, ' ', MAX_ARG_COUNT, MAX_TOKEN_LENGTH);
+        	for(int i=0; i<argc1 ; i++)
+        	{
+        		argv1[i] = firstTokens[i];
+        	}
+        }
+        
+        //si reconocimos el primer comando y había pipe, buscamos reconocer el segundo comando y sus argumentos
+        if(foundFlag && pipeTokensCount == 2)
+        {
+        	for(int i=0 ; i<COMMAND_COUNT && foundFlag==1 ; i++)
 		{
-			for(index[0]=0;index[0]<COMMAND_COUNT && !foundFlag; index[0]++)
+			if(strPrefix(commands[i].name, pipeTokens[1], &argString2))
 			{
-				if(strCmp(tokens[0], commands[index[0]].name)==0)
-    				{
-        				foundFlag++;
-   				}
+				foundFlag = 2;
+				index2 = i;
 			}
-			index[0]--;
 		}
-		if(tokenCount==2)
+		
+		if(foundFlag==2)
 		{
-			if(strCmp(tokens[0],"printmem")==0)
+			argc2 = parser(argString2, secondTokens, ' ', MAX_ARG_COUNT, MAX_TOKEN_LENGTH);
+			for(int i=0; i<argc2 ; i++)
 			{
-				foundFlag=1;
-				strCopy(tokens[1],arg1);
-				argv1[0] = &arg1; 
-				argvFlag[0]=1;
-				index[0] = 8;
+				argv2[i] = secondTokens[i];
 			}
-			else
-			{
-				colorChange=changeColor(promptBuffer, colors, colorValues);	
-			}		
 		}
-		else if(!strCmp(tokens[0],"monkey"))
-		{
-			monkey++;
-			printMonkey();
-    		}
-	}
-	else if(tokenCount==2) //hay pipe
-	{
-		tokenCount=parser(tokensPipe[0],tokens,' ');
-		if(tokenCount==1) //no recibe args
-		{
-			for(index[0]=0;index[0]<COMMAND_COUNT && !foundFlag; index[0]++)
-			{
-				if(strCmp(tokens[0], commands[index[0]].name)==0)
-    				{
-					foundFlag++;
-   				}
-			}
-			index[0]--;
-		}
-		if(tokenCount==2 && strCmp(tokens[0],"printmem")==0) //es el printmem(no puede ser change color)
-		{
-			foundFlag=1;
-			strCopy(tokens[1],arg1);
-			argv1[0] = &arg1; 
-			argvFlag[0]=1;
-			index[0] = 8;
-		}
-		if(foundFlag) //encontro el programa de la izquierda
+		else
 		{
 			foundFlag=0;
-			tokenCount=parser(tokensPipe[1],tokens,' ');
-			if(tokenCount==1) //el de la derecha no recibe args
-			{
-				for(index[1]=0;index[1]<COMMAND_COUNT && !foundFlag; index[1]++)
-				{
-					if(strCmp(tokens[0], commands[index[1]].name)==0)
-					{
-						foundFlag++;
-						pipe=1;
-					}
-				}
-				index[1]--;
-			}
-   			if(tokenCount==2 && strCmp(tokens[0],"printmem")==0) //el dela derecha es el printmem
-   			{
-   				foundFlag=1;
-				strCopy(tokens[1],arg2);
-				argv2[0] = &arg2; 
-				argvFlag[1]=1;
-				index[1]=8;
-   			}
-	
 		}
-		
-		
-	}
-         
-        //hacer que funcione el monkey
-	/*
-        // se tiene que poder mejorar para no estar recorriendo el promptBuffer 2 veces
-        
-        for(int i=0; promptBuffer[i];i++){
-            if(promptBuffer[i]=='|'){
-                progForPipe = promptBuffer+i+1;
-                pipe=1;
-                promptBuffer[i--]='\0'; // Para poder comparar con el anterior
-            }
         }
-
-        for(index[0]=0; index[0]<COMMAND_COUNT && !foundFlag ; index[0]++)
+        
+        if(!foundFlag && pipeTokensCount == 1) //si no hubo pipe y no reconcio un comando puede ser un changeColor
         {
-            if(strCmp(promptBuffer, commands[index[0]].name)==0)
-            {
-                foundFlag++;
-            }
+        	if(strPrefix(pipeTokens[0], "monkey", NULL))
+        	{
+        		printMonkey();
+        		foundFlag = -1;
+        	}
+        	else
+        	{
+        		int isChangeColor = changeColor(pipeTokens[0], colors, colorValues);
+        		if(isChangeColor)
+        		{
+        			addMessage("Color changed!");
+        			foundFlag = -1;
+        		}
+        	}
         }
-
-        if(pipe){
-            foundFlag=0;
-            for(index[1]=0;index[1]<COMMAND_COUNT && !foundFlag; index[1]++){
-                if(strCmp(progForPipe, commands[index[1]].name)==0)
-                {
-                    foundFlag++;
-                }
-            }
-        }
-
-        index[1]--;
-        index[0]--; //asi commands[index] tiene lo que queremos ejecutar si foundFlag quedó = 1
         
-        int colorChange=0;
-        int monkey=0;
-        
-        if(!foundFlag && !pipe){ // No hace falta preguntar !problem
-            colorChange= changeColor(promptBuffer, colors, colorValues);
-            if(!colorChange && strCmp(promptBuffer,"monkey")==0){
-                printMonkey();
-                monkey=1;
-            }
-        }
-        */
-        
-        if(foundFlag) // No hace falta preguntar !problem, porque si problem=1, foundFlag==0
+        if(!foundFlag) //si no fue un comando ni cambiar color, damos error
         {
-            sys_set_cursor(&printingCursor);
-            
-            int bizcochoId = sys_get_task_id();
-            
-            if(!pipe){
-                if(commands[index[0]].runnable) 
-                {
-                    functionPointer_t function = {commands[index[0]].programFunction};
-                    void* args[3] = {&function, &(commands[index[0]].argc), &(commands[index[0]].argv)};
-                    sys_add_task_with_shared_screen(runner, bizcochoId, 0, 3, &args);
-                }
-                else
-                {
-            	    sys_add_task_with_shared_screen(commands[index[0]].programFunction, bizcochoId, 0, commands[index[0]].argc,&argv1);
-                }
-            }
-            else{
-                functionPointer_t function1 = {commands[index[0]].programFunction};
-                functionPointer_t function2 = {commands[index[1]].programFunction};
-                void* args[6] = {&function1, &(commands[index[0]].argc), &(commands[index[0]].argv), &function2, &(commands[index[1]].argc), &(commands[index[1]].argv)};
-                if(argvFlag[0]){
-                    args[2] = &argv1;
-                }// eso es un detalle
-                if(argvFlag[1]){
-                    args[5] = &argv2;
-                }
-                
-                sys_add_task_with_shared_screen(runner, bizcochoId, 0, 6, &args);
-            }
-                 
-            sys_deactivate_task(bizcochoId);
-            
-            sys_get_cursor(&printingCursor);
+        	addMessage("Hey! That's not a valid command!");
         }
-        else
+        else if(foundFlag > 0) //si tenemos que correr un comando
         {
-            if(!colorChange && !monkey)
-                addMessage("Hey! That's not a valid command!");
-            else if(colorChange){
-                addMessage("Color changed!");
-            }
+        	sys_set_cursor(&printingCursor);
+            
+		int bizcochoId = sys_get_task_id();
+
+		if(pipeTokensCount == 1) //no hay pipe
+		{
+			if(commands[index1].runnable) //si necesita el runner 
+			{
+			    functionPointer_t function = {commands[index1].programFunction};
+			    void* args[3] = {&function, &argc1, &argv1};
+			    sys_add_task_with_shared_screen(runner, bizcochoId, 0, 3, args);
+			}
+			else	//si corre solo, sin el runner
+			{
+			    sys_add_task_with_shared_screen(commands[index1].programFunction, bizcochoId, 0, argc1, argv1);
+			}
+		}
+		else //hay pipe
+		{
+			functionPointer_t function1 = {commands[index1].programFunction};
+			functionPointer_t function2 = {commands[index2].programFunction};
+			void* args[6] = {&function1, &argc1, &argv1, &function2, &argc2, &argv2};
+
+			sys_add_task_with_shared_screen(runner, bizcochoId, 0, 6, args);
+		}
+		 
+		sys_deactivate_task(bizcochoId);
+
+		sys_get_cursor(&printingCursor);
         }
+        
         
         for(int i=0; i<counter; i++)	 //limpia el buffer, ni hace falta en realidad
         {
@@ -325,7 +252,7 @@ void addMessage(const char * message) //sería mejor que reciba los colores por 
 int changeColor(const unsigned char * buffer, const unsigned char * colors[], color_t colorValues[]){
     for(int i=0; i<COLOROPTIONS;i++)
     {
-        if(strPrefix(colors[i],buffer))
+        if(strPrefix(colors[i],buffer, NULL))
         {
             unsigned char aux=0x00;
             if((aux=strToNum(buffer+strLength(colors[i])+1))<=15 && aux>=0)
@@ -342,10 +269,12 @@ int changeColor(const unsigned char * buffer, const unsigned char * colors[], co
     if(strCmp(buffer,"boquita")==0){
         colorValues[0]=14;
         colorValues[1]=1;
+        colorValues[2]=14;
         return 1;
     }else if(strCmp(buffer,"river")==0){
-        colorValues[0]=15;
-        colorValues[1]=5;
+        colorValues[0]=4;
+        colorValues[1]=15;
+        colorValues[2]=4;
         return 1;
     }
     return 0;
