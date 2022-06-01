@@ -38,6 +38,7 @@ EXTERN setCursor
 EXTERN scrollUp
 EXTERN moveCursor
 EXTERN memdump
+EXTERN inforegisters
 
 EXTERN readPrintables
 EXTERN getNextKey
@@ -205,6 +206,7 @@ _syscallHandler:
 	caseSyscall 16, .C16
 	caseSyscall 17, .C17
 	caseSyscall 18, .C18
+	caseSyscall 19, .C19
 	caseSyscall 20, .C20
 	caseSyscall 21, .C21
 	caseSyscall 22, .C22
@@ -261,6 +263,9 @@ _syscallHandler:
 	jmp .end
 .C18:
 	call memdump
+	jmp .end
+.C19
+	call inforegisters
 	jmp .end
 .C20:
 	call readPrintables

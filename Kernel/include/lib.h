@@ -10,5 +10,6 @@ char *cpuVendor(char *result);
 void load_idt();
 uint8_t getScanCode();
 void _hlt();
+uint64_t* inforegisters();
 
 #endif

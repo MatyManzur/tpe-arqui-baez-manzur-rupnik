@@ -1,12 +1,11 @@
 
 #include <commands.h>
 
-uint64_t* inforegisters();
 
 // imprime el valor de los registros al momento de llamarse
 void printRegisters(uint8_t argc, void** argv)
 {
-	uint64_t* registers = inforegisters();
+	uint64_t* registers = sys_info_registers();
 	setColor(BLACK, WHITE);
 	printStringColor("rax  ", BLACK, YELLOW);
 	printWithFormat("=  0x%x", registers[0]);
@@ -142,7 +141,13 @@ void printmem(uint8_t argc,void** argv)
 	}
 	uint64_t buffer[4]={0};
 	
-	sys_memory_dump(address,buffer);
+	int error = sys_memory_dump(address,buffer);
+	if(error==-1){
+		printString(argument);
+		printString(" is out of bounds [00000000h-7fffffffh]");
+		sys_new_line(BLACK);
+		sys_exit();
+	}
 	setColor(BLACK,YELLOW);
 	printWithFormat("The memory dump from the following address 0x%16x",address);
 	sys_new_line(BLACK);
