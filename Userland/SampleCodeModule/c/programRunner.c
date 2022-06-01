@@ -3,10 +3,11 @@
 #define HEIGHT 25
 #define WIDTH 80
 
-void runner(uint8_t argc, void** argv) //argv[3 ó 6] = {(functionPointer_t*)firstFuncPointer, (uint8_t*)firstargc, (void***)firstargv, (functionPointer_t*)secondFuncPointer, (uint8_t*)secondargc, (void***)secondargv}
+void runner(uint8_t argc, void** argv) //argv[3 ó 6] = {(functionPointer_t*)firstFuncPointer, (uint8_t*)firstargc, (void**)firstargv, (functionPointer_t*)secondFuncPointer, (uint8_t*)secondargc, (void**)secondargv}
 {
 	uint8_t firstTaskId, secondTaskId;
 	uint8_t firstTaskPaused = 0, secondTaskPaused = 0;
+	uint8_t firstTaskKilled = 0, secondTaskKilled = 0;
 	
 	
 	if(argc==3) //Me pidieron uno solo, printea en el bizocho
@@ -17,7 +18,7 @@ void runner(uint8_t argc, void** argv) //argv[3 ó 6] = {(functionPointer_t*)fir
             int runnerId = sys_get_task_id(); //este task tiene el mismo screenId que bizcocho, entonces pedir el taskId de runner es lo mismo.
             
             //agregamos la task pasandole runnerId -> va a compartir screen con runner -> comparte screen con bizcocho
-            firstTaskId = sys_add_task_with_shared_screen( ((functionPointer_t*)argv[0])->function, runnerId, 0, *((uint8_t*)argv[1]), *((void***)argv[2]) );
+            firstTaskId = sys_add_task_with_shared_screen( ((functionPointer_t*)argv[0])->function, runnerId, 0, *((uint8_t*)argv[1]), (void**)argv[2] );
             
 	}
 	else if(argc==6) //Me pidieron dos, hacemos el pipe
@@ -41,13 +42,13 @@ void runner(uint8_t argc, void** argv) //argv[3 ó 6] = {(functionPointer_t*)fir
             	point_t topLeft = {0,0}; 
             	point_t bottomRight = {HEIGHT-1,(WIDTH/2)-2};
             	
-            	firstTaskId = sys_add_task( ((functionPointer_t*)argv[0])->function, &topLeft, &bottomRight, 0, *((uint8_t*)argv[1]), *((void***)argv[2]));
+            	firstTaskId = sys_add_task( ((functionPointer_t*)argv[0])->function, &topLeft, &bottomRight, 0, *((uint8_t*)argv[1]), (void**)argv[2]);
             	
             	//agregamos la task en la mitad derecha
             	topLeft = (point_t) {0,(WIDTH/2)+1};
             	bottomRight = (point_t) {HEIGHT-1,WIDTH-1};
             	
-            	secondTaskId = sys_add_task( ((functionPointer_t*)argv[3])->function, &topLeft, &bottomRight, 0, *((uint8_t*)argv[4]), *((void***)argv[5]));
+            	secondTaskId = sys_add_task( ((functionPointer_t*)argv[3])->function, &topLeft, &bottomRight, 0, *((uint8_t*)argv[4]), (void**)argv[5]);
             	
 	}
 	else //no me pasaron ni 3 ni 6 args
@@ -72,20 +73,33 @@ void runner(uint8_t argc, void** argv) //argv[3 ó 6] = {(functionPointer_t*)fir
 				sys_deactivate_task(firstTaskId);
 			}
 		}
-		
-		if(argc==6 && (key.key == VK_M && key.action == PRESSED)) //si es una M pausamos o reanudamos la secondTask
+		if(argc==6) //si hay pipe
 		{
-			if(secondTaskPaused)
+			if(key.key == VK_M && key.action == PRESSED) //si es una M pausamos o reanudamos la secondTask
 			{
-				secondTaskPaused=0;
-				sys_activate_task(secondTaskId);
+				if(secondTaskPaused)
+				{
+					secondTaskPaused=0;
+					sys_activate_task(secondTaskId);
+				}
+				else
+				{
+					secondTaskPaused=1;
+					sys_deactivate_task(secondTaskId);
+				}
 			}
-			else
+			if(!firstTaskKilled && key.key == VK_J && key.action == PRESSED) //si se apreta la J se mata la firstTask
 			{
-				secondTaskPaused=1;
-				sys_deactivate_task(secondTaskId);
+				firstTaskKilled = 1;
+				sys_kill_task(firstTaskId);
+			}
+			if(!secondTaskKilled && key.key == VK_K && key.action == PRESSED) //si se apreta la K se mata la secondTask
+			{
+				secondTaskKilled = 1;
+				sys_kill_task(secondTaskId);
 			}
 		}
+		
 	}
 	
 	//se apreto ESC -> cerramos los programas y cerramos al runner

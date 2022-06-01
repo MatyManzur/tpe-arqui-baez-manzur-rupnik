@@ -4,7 +4,7 @@
 void prime(uint8_t argc, void ** argv)
 {
 	uint64_t counter=3;
-	printString("2");
+	printStringColor("2",BLACK,WHITE);
 	char str[20]={0};
 	sys_new_line(BLACK);
 	int isPrime;

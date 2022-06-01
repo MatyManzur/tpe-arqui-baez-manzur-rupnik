@@ -113,13 +113,6 @@ void time(uint8_t argc, void** argv) // podemos hacer un getColor para cambiar e
 	sys_exit();
 }
 
-// deja en negro la pantalla
-void clear(uint8_t argc, void** argv)
-{
-	sys_clear_screen(BLACK);
-	sys_exit();
-}
-
 // imprime la zona de memoria escogida por el usuario
 void printmem(uint8_t argc,void** argv)
 {

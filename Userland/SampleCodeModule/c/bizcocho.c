@@ -2,7 +2,7 @@
 
 #define LASTCOLUMN 80
 #define LASTLINE 25
-#define COMMAND_COUNT 9
+#define COMMAND_COUNT 8
 #define COLOROPTIONS 3
 
 #define BUFFER_DIM 50
@@ -34,7 +34,6 @@ static command_t commands[COMMAND_COUNT] = {
 {.name="time", .runnable = 0, .programFunction = time}, 
 {.name="fibonacci", .runnable = 1, .programFunction = fibonacci},
 {.name="prime", .runnable = 1, .programFunction = prime},
-{.name="clear", .runnable = 0, .programFunction = clear},
 {.name="divZero", .runnable = 0, .programFunction = divZero}, 
 {.name="invalidOpcode", .runnable = 0, .programFunction = invalidOpcode},
 {.name="printmem", .runnable = 0, .programFunction = printmem}
@@ -182,6 +181,11 @@ void bizcocho(uint8_t argc, void** argv)
         		printMonkey();
         		foundFlag = -1;
         	}
+        	else if(strPrefix(pipeTokens[0], "clear", NULL))
+        	{
+        		sys_clear_screen(colorValues[1]);
+        		foundFlag = -1;
+        	}
         	else
         	{
         		int isChangeColor = changeColor(pipeTokens[0], colors, colorValues);
@@ -220,7 +224,7 @@ void bizcocho(uint8_t argc, void** argv)
 		{
 			functionPointer_t function1 = {commands[index1].programFunction};
 			functionPointer_t function2 = {commands[index2].programFunction};
-			void* args[6] = {&function1, &argc1, &argv1, &function2, &argc2, &argv2};
+			void* args[6] = {&function1, &argc1, argv1, &function2, &argc2, argv2};
 
 			sys_add_task_with_shared_screen(runner, bizcochoId, 0, 6, args);
 		}
