@@ -92,9 +92,7 @@ void help(uint8_t argc, void** argv)
     sys_new_line(L_GRAY);
 	printString("user \'num\': Cambia el color del user de esta terminal.");
     sys_new_line(L_GRAY);
-	printString("boquita: Cambia a los colores xeneizes.");
-    sys_new_line(L_GRAY);
-	printString("river: Para que nadie se ofenda, cambia a los colores de River.");
+	printString("boquita: Cambia a los colores xeneizes. (river y banfield sirven)");
     sys_new_line(L_GRAY);
 	printString("monkey: Despliega 4 monitos graciosos");
     sys_new_line(L_GRAY);

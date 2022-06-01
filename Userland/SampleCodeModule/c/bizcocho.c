@@ -111,7 +111,7 @@ void bizcocho(uint8_t argc, void** argv)
         
         //en promptBuffer está todo lo que lee del prompt cuando se apreto enter
         
-        unsigned char pipeTokens [2][MAX_LONG_TOKEN_LENGTH];
+        unsigned char pipeTokens [2][MAX_LONG_TOKEN_LENGTH]={0};
         
         int pipeTokensCount = parser(promptBuffer, pipeTokens, '|', 2, MAX_LONG_TOKEN_LENGTH);
         
@@ -203,7 +203,7 @@ void bizcocho(uint8_t argc, void** argv)
             
 		int bizcochoId = sys_get_task_id();
 
-		if(pipeTokensCount == 1) //no hay pipe
+		if(pipeTokensCount <= 1) //no hay pipe
 		{
 			if(commands[index1].runnable) //si necesita el runner 
 			{
@@ -276,6 +276,10 @@ int changeColor(const unsigned char * buffer, const unsigned char * colors[], co
         colorValues[1]=15;
         colorValues[2]=4;
         return 1;
+    }else if(strCmp(buffer,"banfield")==0){
+        colorValues[0]=2;
+        colorValues[1]=15;
+        colorValues[2]=2;
     }
     return 0;
 }
