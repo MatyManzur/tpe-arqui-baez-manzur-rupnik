@@ -1,7 +1,7 @@
 
 #include <commands.h>
 
-
+#define HALF 0x100000000
 // imprime el valor de los registros al momento de llamarse
 void printRegisters(uint8_t argc, void** argv)
 {
@@ -139,18 +139,17 @@ void printmem(uint8_t argc,void** argv)
 		sys_new_line(BLACK);
 		sys_exit();
 	}
+	unsigned int toPrint;
 	setColor(BLACK,YELLOW);
-	printWithFormat("The memory dump from the following address 0x%16x",address);
+	printWithFormat("The memory dump from the following address 0x%8x%8x",address/HALF,address%HALF);
+
 	sys_new_line(BLACK);
 	setColor(BLACK,CYAN);
-	printWithFormat("0x%16x",buffer[0]);
-	sys_new_line(BLACK);
-	printWithFormat("0x%16x",buffer[1]);
-	sys_new_line(BLACK);
-	printWithFormat("0x%16x",buffer[2]);
-	sys_new_line(BLACK);
-	printWithFormat("0x%16x",buffer[3]);
-	sys_new_line(BLACK);
+	for(int i=0; i<4;i++){
+		printWithFormat("0x%8x%8x",buffer[i]/HALF,buffer[i]%HALF);
+		sys_new_line(BLACK);
+	}
+	
 	sys_exit();
 }
 

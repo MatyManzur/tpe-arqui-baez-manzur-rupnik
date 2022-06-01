@@ -117,7 +117,7 @@ void putCharColor(unsigned char c, color_t backgroundColor, color_t characterCol
 void printWithFormat(char* format,...) 
 { 
     char *traverse; 
-    unsigned int i; 
+    uint64_t i; 
     char *s; 
 
     //Initializing arguments 
@@ -168,7 +168,7 @@ void printWithFormat(char* format,...)
                         printString(s); 
                         break; 
 
-            case 'x': i = va_arg(arg,unsigned int); //Fetch Hexadecimal representation
+            case 'x': i = va_arg(arg,unsigned long); //Fetch Hexadecimal representation
                         printString(convert(i,16, minDigitCount));
                         break; 
         }   
