@@ -6,96 +6,94 @@
 void printRegisters(uint8_t argc, void** argv)
 {
 	uint64_t* registers = sys_info_registers();
-	setColor(BLACK, WHITE);
-	printStringColor("rax  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[0]/HALF,registers[0]%HALF);
-	sys_new_line(BLACK);
-	printStringColor("rbx  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[1]/HALF,registers[1]%HALF);
-	sys_new_line(BLACK);
-	printStringColor("rcx  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[2]/HALF,registers[2]%HALF);
-	sys_new_line(BLACK);
-	printStringColor("rdx  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[3]/HALF,registers[3]%HALF);
-	sys_new_line(BLACK);
-	printStringColor("rsi  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[4]/HALF,registers[4]%HALF);
-	sys_new_line(BLACK);
-	printStringColor("rdi  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[5]/HALF,registers[5]%HALF);
-	sys_new_line(BLACK);
-	printStringColor("r8  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[6]/HALF,registers[6]%HALF);
-	sys_new_line(BLACK);
-	printStringColor("r9  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[7]/HALF,registers[7]%HALF);
-	sys_new_line(BLACK);
-	printStringColor("r10  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[8]/HALF,registers[8]%HALF);
-	sys_new_line(BLACK);
-	printStringColor("r11  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[9]/HALF,registers[9]%HALF);
-	sys_new_line(BLACK);
-	printStringColor("r12  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[10]/HALF,registers[10]%HALF);
-	sys_new_line(BLACK);
-	printStringColor("r13  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[11]/HALF,registers[11]%HALF);
-	sys_new_line(BLACK);
-	printStringColor("r14  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[12]/HALF,registers[12]%HALF);
-	sys_new_line(BLACK);
-	printStringColor("r15  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[13]/HALF,registers[13]%HALF);
-	sys_new_line(BLACK);
-	printStringColor("rip  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[14]/HALF,registers[14]%HALF);
-	sys_new_line(BLACK);
-	printStringColor("rbp  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[15]/HALF,registers[15]%HALF);
-	sys_new_line(BLACK);
-	printStringColor("rsp  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[16]/HALF,registers[16]%HALF);
-	sys_new_line(BLACK);
-	printStringColor("eflags  ", BLACK, YELLOW);
-	printWithFormat("=  0x%8x%8x", registers[17]/HALF,registers[17]%HALF);
-	sys_new_line(BLACK);
+	printStringColor("rax", BLUE, WHITE);
+	printWithFormat(" =  0x%8x%8x", registers[0]/HALF,registers[0]%HALF);
+	newLine();
+	printStringColor("rbx", BLUE, WHITE);
+	printWithFormat(" =  0x%8x%8x", registers[1]/HALF,registers[1]%HALF);
+	newLine();
+	printStringColor("rcx", BLUE, WHITE);
+	printWithFormat(" =  0x%8x%8x", registers[2]/HALF,registers[2]%HALF);
+	newLine();
+	printStringColor("rdx", BLUE, WHITE);
+	printWithFormat(" =  0x%8x%8x", registers[3]/HALF,registers[3]%HALF);
+	newLine();
+	printStringColor("rsi", BLUE, WHITE);
+	printWithFormat(" =  0x%8x%8x", registers[4]/HALF,registers[4]%HALF);
+	newLine();
+	printStringColor("rdi", BLUE, WHITE);
+	printWithFormat(" =  0x%8x%8x", registers[5]/HALF,registers[5]%HALF);
+	newLine();
+	printStringColor("r8", BLUE, WHITE);
+	printWithFormat("  =  0x%8x%8x", registers[6]/HALF,registers[6]%HALF);
+	newLine();
+	printStringColor("r9", BLUE, WHITE);
+	printWithFormat("  =  0x%8x%8x", registers[7]/HALF,registers[7]%HALF);
+	newLine();
+	printStringColor("r10", BLUE, WHITE);
+	printWithFormat(" =  0x%8x%8x", registers[8]/HALF,registers[8]%HALF);
+	newLine();
+	printStringColor("r11", BLUE, WHITE);
+	printWithFormat(" =  0x%8x%8x", registers[9]/HALF,registers[9]%HALF);
+	newLine();
+	printStringColor("r12", BLUE, WHITE);
+	printWithFormat(" =  0x%8x%8x", registers[10]/HALF,registers[10]%HALF);
+	newLine();
+	printStringColor("r13", BLUE, WHITE);
+	printWithFormat(" =  0x%8x%8x", registers[11]/HALF,registers[11]%HALF);
+	newLine();
+	printStringColor("r14", BLUE, WHITE);
+	printWithFormat(" =  0x%8x%8x", registers[12]/HALF,registers[12]%HALF);
+	newLine();
+	printStringColor("r15", BLUE, WHITE);
+	printWithFormat(" =  0x%8x%8x", registers[13]/HALF,registers[13]%HALF);
+	newLine();
+	printStringColor("rip", BLUE, WHITE);
+	printWithFormat(" =  0x%8x%8x", registers[14]/HALF,registers[14]%HALF);
+	newLine();
+	printStringColor("rbp", BLUE, WHITE);
+	printWithFormat(" =  0x%8x%8x", registers[15]/HALF,registers[15]%HALF);
+	newLine();
+	printStringColor("rsp", BLUE, WHITE);
+	printWithFormat(" =  0x%8x%8x", registers[16]/HALF,registers[16]%HALF);
+	newLine();
+	printStringColor("eflags", BLUE, WHITE);
+	printWithFormat(" =  0x%8x%8x", registers[17]/HALF,registers[17]%HALF);
+	newLine();
 	sys_exit();
 }
 
 // imprime los distintos comandos a los que se puede acceder
 void help(uint8_t argc, void** argv)
 {
-    printStringColor("The available commands are the following: ", MAGENTA,BLACK);
-    setColor(L_GRAY,BLUE);
-    sys_new_line(BLACK);
+    printStringColor("The available commands are the following: ", WHITE,MAGENTA);
+    newLine();
     printString("help: Despliega los comandos y programas accesibles.");
-	sys_new_line(L_GRAY);
+    newLine();
     printString("time: Despliega el dia y la hora.");
-    sys_new_line(L_GRAY);
+    newLine();
 	printString("inforeg: Despliega el valor de los registros.");
-    sys_new_line(L_GRAY);
+    newLine();
 	printString("fibonacci: Imprime la serie de Fibonacci.");
-    sys_new_line(L_GRAY);
+    newLine();
 	printString("clear: Deja la pantalla en negro.");
-    sys_new_line(L_GRAY);
+    newLine();
 	printString("divZero: Divide por cero.");
-    sys_new_line(L_GRAY);
+    newLine();
 	printString("printmem \'hexa\': Imprime la zona de memoria elegida por el usuario (Sin h al final).");
-    sys_new_line(L_GRAY);
+    newLine();
 	printString("invalidOpcode: Realiza un procedimiento no permitido.");
-    sys_new_line(L_GRAY);
+    newLine();
 	printString("letter \'num\': Cambia el color de las letras de esta terminal.");
-    sys_new_line(L_GRAY);
+    newLine();
 	printString("background \'num\': Cambia el color del fondo de esta terminal.");
-    sys_new_line(L_GRAY);
+    newLine();
 	printString("user \'num\': Cambia el color del user de esta terminal.");
-    sys_new_line(L_GRAY);
+    newLine();
 	printString("boquita: Cambia a los colores xeneizes. (river y banfield sirven)");
-    sys_new_line(L_GRAY);
+    newLine();
 	printString("monkey: Despliega 4 monitos graciosos");
-    sys_new_line(L_GRAY);
+    newLine();
 	sys_exit();
 }
 // imprime en pantalla la fecha y el horario (GMT-3)
@@ -105,11 +103,10 @@ void time(uint8_t argc, void** argv) // podemos hacer un getColor para cambiar e
 	struct timezone_t tzone={ -3 , 0};
 	sys_set_time_zone(&tzone);
 	sys_get_current_date_time(&data,&tzone);
-	setColor(BLACK,CYAN);
 	printWithFormat("%2d:%2d:%2d",data.hours,data.mins,data.secs);
 	putChar(' ');
 	printWithFormat("%2d/%2d/%2d",data.day,data.month,data.year);
-	sys_new_line(BLACK);
+	newLine();
 	sys_exit();
 }
 
@@ -118,6 +115,7 @@ void printmem(uint8_t argc,void** argv)
 {
 	if(argc!=1)
 	{
+		printString("printmem needs exactly one argument");
 		sys_exit();
 	}
 	char * argument = (char *) argv[0];
@@ -127,7 +125,7 @@ void printmem(uint8_t argc,void** argv)
 	{
 		printString(argument);
 		printString(" is not a valid memory address");
-		sys_new_line(BLACK);
+		newLine();
 		sys_exit();
 	}
 	uint64_t buffer[4]={0};
@@ -136,18 +134,16 @@ void printmem(uint8_t argc,void** argv)
 	if(error==-1){
 		printString(argument);
 		printString(" is out of bounds");
-		sys_new_line(BLACK);
+		newLine();
 		sys_exit();
 	}
 	unsigned int toPrint;
-	setColor(BLACK,YELLOW);
 	printWithFormat("The memory dump from the following address 0x%8x%8x",address/HALF,address%HALF);
 
-	sys_new_line(BLACK);
-	setColor(BLACK,CYAN);
+	newLine();
 	for(int i=0; i<4;i++){
 		printWithFormat("0x%8x%8x",buffer[i]/HALF,buffer[i]%HALF);
-		sys_new_line(BLACK);
+		newLine();
 	}
 	
 	sys_exit();

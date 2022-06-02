@@ -49,7 +49,7 @@ void bizcocho(uint8_t argc, void** argv)
     
     unsigned char promptBuffer[BUFFER_DIM]={0};
     
-    sys_clear_screen(BLACK);
+    sys_clear_screen(colorValues[1]);
     
     //set cursor al inicio de todo
     while(1)

@@ -4,9 +4,9 @@
 void prime(uint8_t argc, void ** argv)
 {
 	uint64_t counter=3;
-	printStringColor("2",BLACK,WHITE);
+	printString("2");
 	char str[20]={0};
-	sys_new_line(BLACK);
+	newLine();
 	int isPrime;
 	int stop;
 	while(1){
@@ -19,8 +19,8 @@ void prime(uint8_t argc, void ** argv)
 		}
 		if(isPrime){
 			ulongToStr(counter,str);
-			printStringColor(str,BLACK,WHITE);
-	    	sys_new_line(BLACK);
+			printString(str);
+	    	newLine();
 	    	sys_sleep(1);
 		}
 	counter+=2;

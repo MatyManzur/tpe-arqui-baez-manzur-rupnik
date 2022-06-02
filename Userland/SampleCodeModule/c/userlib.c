@@ -66,6 +66,11 @@ void setColor(color_t backgroundColor, color_t characterColor)  // cambia el for
 	format.characterColor = characterColor;
 }
 
+void newLine()
+{
+	sys_new_line(format.backgroundColor);
+}
+
 void printString(unsigned char * str)   //imprime un string, si pisa una zona en la que no puede escribir, hace un scroll up
 {                                       // utiliza el color del format
     unsigned char* overload=NULL;

@@ -10,12 +10,11 @@ void fibonacci(uint8_t argc, void ** argv)
     uint64_t third;
     char* terminations[] = {"st","nd","rd","th"};
     char str[20]={0};
-    printStringColor("0 1st", BLACK, WHITE);   // imprime los primeros aparte
-    sys_new_line(BLACK);
-    printStringColor("1 2nd", BLACK, WHITE);
-    sys_new_line(BLACK);
+    printString("0 1st");   // imprime los primeros aparte
+    newLine();
+    printString("1 2nd");
+    newLine();
     uint8_t numSerie = 3;
-    //hay que hacerlo con un pequeÃ±o sleep lol
     while(1){
         third=printNewValue(first,second,numSerie,str,terminations);
         first=second;
@@ -29,14 +28,14 @@ uint64_t printNewValue(uint64_t value1, uint64_t value2, uint8_t counter, char s
 {   // realiza la impresión
     uint64_t value3 = value1 + value2;
     ulongToStr(value3,str);
-    printStringColor(str,BLACK,WHITE);
+    printString(str);
     ulongToStr(counter,str);
-    putCharColor(' ',BLACK,WHITE);
-    printStringColor(str,BLACK,WHITE);
+    putChar(' ');
+    printString(str);
     uint8_t termination = counter%10 -1;
     termination = (termination>=3)? 3:termination;
-    printStringColor(terminations[termination],BLACK,WHITE);
-    sys_new_line(BLACK);
+    printString(terminations[termination]);
+    newLine();
     return value3;
 }
 
