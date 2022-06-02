@@ -264,37 +264,37 @@ int parser(char* string, char** buffer,char separator,int maxTokenCount,int maxT
     return count;
 }
 
-uint64_t xtou64(const char *str, int* errorFlag)
+int xtou64(const char *str, uint64_t* ans) //devuelve el numero por parametro porque sino C lo castea mal
 {
-    uint64_t res = 0;
+    *ans = 0;
     int count = 0;
-    while(str[count] != '\0' && !(*errorFlag))
+    while(str[count] != '\0')
     {
-    	res *= 16;
+    	*ans *= 16;
     	char c = str[count];
     	if(IS_DIGIT(c))
     	{
-    		res += c - '0';
+    		*ans += c - '0';
     	}
     	else if(c>='a' && c<='f')
     	{
-    		res += 10 + c - 'a';
+    		*ans += 10 + c - 'a';
     	}
     	else if(c>='A' && c<='F')
     	{
-    		res += 10 + c - 'A';
+    		*ans += 10 + c - 'A';
     	}
     	else
     	{
-    		*errorFlag = 1;
+    		return 1;
     	}
     	count++;
     }
     if(count>16)
     {
-    	*errorFlag = 1;
+    	return 1;
     }
-    return res;
+    return 0;
 }
 
 uint8_t strCopy(char* source, char* dest){

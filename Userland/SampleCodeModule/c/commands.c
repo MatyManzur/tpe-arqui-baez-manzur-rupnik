@@ -121,8 +121,8 @@ void printmem(uint8_t argc,void** argv)
 		sys_exit();
 	}
 	char * argument = (char *) argv[0];
-	int errorFlag=0;
-	uint64_t address = xtou64(argument,&errorFlag);
+	uint64_t address;
+	int errorFlag = xtou64(argument, &address);
 	if(errorFlag)
 	{
 		printString(argument);
@@ -135,7 +135,7 @@ void printmem(uint8_t argc,void** argv)
 	int error = sys_memory_dump(address,buffer);
 	if(error==-1){
 		printString(argument);
-		printString(" is out of bounds [00000000h-7fffffffh]");
+		printString(" is out of bounds");
 		sys_new_line(BLACK);
 		sys_exit();
 	}

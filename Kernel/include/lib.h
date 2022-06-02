@@ -11,5 +11,6 @@ void load_idt();
 uint8_t getScanCode();
 void _hlt();
 uint64_t* inforegisters();
+int memdump(uint64_t address, uint64_t buffer[]);
 
 #endif

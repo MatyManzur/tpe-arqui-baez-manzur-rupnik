@@ -1,5 +1,12 @@
 #include <stdint.h>
 
+int memdump(uint64_t address, uint64_t buffer[])
+{
+	if(address > 0x0fffffffe0)
+		return -1;
+	return memdumpasm(address, buffer);
+}
+
 void * memset(void * destination, int32_t c, uint64_t length)
 {
 	uint8_t chr = (uint8_t)c;

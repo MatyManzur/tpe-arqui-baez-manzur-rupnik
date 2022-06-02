@@ -3,7 +3,7 @@ GLOBAL getScanCode
 GLOBAL swapTasks
 GLOBAL initializeTask
 GLOBAL saveStackPointer
-GLOBAL memdump
+GLOBAL memdumpasm
 GLOBAL inforegisters
 
 section .text
@@ -72,26 +72,20 @@ initializeTask:
 	ret
 	
 ;Desde C nos deberian pasar por argumentos primero la direccion de memoria y despues una direccion a un array para dejar los 32bytes
-memdump:
+memdumpasm:
 	push rdx
 	mov rdx,0
 .loop:
 	cmp rdx,32
-	je .normal
-	cmp rdi,7fffffffh
-	jg .error
+	je .fin
 	mov rax,[rdi]
 	mov [rsi],rax
 	add rdi, 8
 	add rsi, 8
 	add rdx, 8
 	jmp .loop
-.normal:
-	mov rax,1
-	jmp .fin
-.error:
-	mov rax,-1
 .fin:
+	mov rax,1
 	pop rdx
 	ret
 	
