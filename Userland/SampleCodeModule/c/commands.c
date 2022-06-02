@@ -66,8 +66,10 @@ void printRegisters(uint8_t argc, void** argv)
 // imprime los distintos comandos a los que se puede acceder
 void help(uint8_t argc, void** argv)
 {
-    printStringColor("The available commands are the following: ", WHITE,MAGENTA);
-    newLine();
+    printStringColor(" \2 \2 \2 \2 \2 Bienvenidos a Bizcocho! \2 \2 \2 \2 \2 ", YELLOW,BLACK);
+    sys_new_line(YELLOW);
+    printStringColor("Los comandos disponibles son los siguientes: ", WHITE,MAGENTA);
+    sys_new_line(WHITE);
     printString("help: Despliega los comandos y programas accesibles.");
     newLine();
     printString("time: Despliega el dia y la hora.");
@@ -76,13 +78,13 @@ void help(uint8_t argc, void** argv)
     newLine();
 	printString("fibonacci: Imprime la serie de Fibonacci.");
     newLine();
-	printString("clear: Deja la pantalla en negro.");
+	printString("clear: Borra todo el contenido de la pantalla.");
     newLine();
-	printString("divZero: Divide por cero.");
+	printString("divZero: Intenta dividir por cero.");
     newLine();
-	printString("printmem \'hexa\': Imprime la zona de memoria elegida por el usuario (Sin h al final).");
+	printString("printmem \'hexa\': Imprime la zona de memoria elegida por el usuario. Debe ser indicada en hexadecimal sin h al final.");
     newLine();
-	printString("invalidOpcode: Realiza un procedimiento no permitido.");
+	printString("invalidOpcode: Intenta realizar un procedimiento no permitido.");
     newLine();
 	printString("letter \'num\': Cambia el color de las letras de esta terminal.");
     newLine();
