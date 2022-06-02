@@ -90,7 +90,7 @@ SECTION .text
 
 %macro irqHandlerMaster 1
 	pushState
-
+	
 	mov rdi, %1 ; pasaje de parametro
 	call irqDispatcher
 
@@ -106,7 +106,16 @@ SECTION .text
 
 %macro exceptionHandler 1
 	pushState
-
+	
+	mov rax,rsp
+	add rax,112	; le resto lo que me movi con los push
+	add rax,8	; me muevo 8 mas para estar en la direccion de retorno que es el rip
+	mov rcx,[rax]
+	push rcx
+	add rax,8 ; me muevo 8 mas y este es el rsp de antes de la excepcion
+	push rax
+	pushfq
+	mov rsi,rsp
 	mov rdi, %1 ; pasaje de parametro
 	call exceptionDispatcher
 

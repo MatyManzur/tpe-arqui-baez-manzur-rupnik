@@ -2,7 +2,7 @@
 #define SCHEDULER_H
 
 #include <printing.h>
-
+#include <lib.h>
 #define MAX_TASK_COUNT 16
 #define TASK_STACK_SIZE 0x1000
 #define TASKS_STACK_BASE 0x300000

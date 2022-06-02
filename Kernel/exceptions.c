@@ -7,15 +7,15 @@
 static void zero_division();
 static void invalid_opcode();
 
-void exceptionDispatcher(int exception) //llamado desde interrupts.asm
+void exceptionDispatcher(int exception,uint64_t* registers) //llamado desde interrupts.asm
 {
 	if (exception == ZERO_EXCEPTION_ID)
-		zero_division();
+		zero_division(registers);
 	if (exception == INVALID_OPCODE_ID)
-		invalid_opcode();
+		invalid_opcode(registers);
 }
 
-static void zero_division() 
+static void zero_division(uint64_t* registers) 
 {
 	//imprime un error en rojo, printing.c ya sabe que task fue, y por lo tanto en qué screen imprimirlo
 	unsigned char* errorMsg = "An error occurred: division by zero exception!";
@@ -23,6 +23,7 @@ static void zero_division()
 	clearScreen(BLACK);
 	print(errorMsg, &fmt); 
 	newLine(RED);
+	printRegisters(registers);
 	
 	//elimina a esta task del scheduler (getCurrentTaskId me da el id de la task activa justo cuando se genero la excepcion)
 	int8_t currentTaskId = getCurrentTaskId();
@@ -31,7 +32,7 @@ static void zero_division()
 	killTask(currentTaskId);
 }
 
-static void invalid_opcode()
+static void invalid_opcode(uint64_t* registers)
 {
 	//imprime un error en rojo, printing.c ya sabe que task fue, y por lo tanto en qué screen imprimirlo
 	unsigned char* errorMsg = "An error occurred: invalid opcode exception!";
@@ -39,6 +40,7 @@ static void invalid_opcode()
 	clearScreen(BLACK);
 	print(errorMsg, &fmt);
 	newLine(RED);
+	printRegisters(registers);
 	
 	//elimina a esta task del scheduler (getCurrentTaskId me da el id de la task activa justo cuando se genero la excepcion)
 	int8_t currentTaskId = getCurrentTaskId();

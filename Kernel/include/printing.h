@@ -6,7 +6,7 @@
 
 #define NULL 0
 #define MAX_SCREEN_COUNT 16
-
+#define HALF 0x100000000
 //colores
 typedef enum color_t {BLACK=0,BLUE,GREEN,CYAN,RED,MAGENTA,BROWN,L_GRAY,D_GRAY,L_BLUE,L_GREEN,L_CYAN,L_RED,PINK,YELLOW,WHITE} color_t;
 
@@ -46,5 +46,6 @@ void getCursor(struct point_t* cursor);
 void setCursor(const struct point_t* cursor);
 void scrollUp(uint8_t rows);
 void moveCursor(int row,int columns);
-
+char *convert(unsigned int num, int base, unsigned int minDigitCount);
+void printRegisters();
 #endif

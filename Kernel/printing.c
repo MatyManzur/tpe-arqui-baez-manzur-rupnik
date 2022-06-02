@@ -257,3 +257,145 @@ void moveCursor(int rows,int columns)
 }
 
 
+char *convert(unsigned int num, int base, unsigned int minDigitCount) 
+{ 
+    static char Representation[]= "0123456789ABCDEF";
+    static char buffer[50]; 
+    char *ptr; 
+    int digitCount = 0;
+
+    ptr = &buffer[49]; 
+    *ptr = '\0'; 
+
+    do 
+    { 
+        *--ptr = Representation[num%base]; 
+        num /= base; 
+        digitCount++;
+    }while(num != 0); 
+    
+    while(digitCount < minDigitCount) //agrega ceros adelante si faltan digits
+    {
+    	*--ptr = Representation[0]; 
+    	digitCount++;
+    }
+
+    return(ptr); 
+}
+void printRegisters(uint64_t* registers)
+{
+	struct format_t registerformat={BLACK,YELLOW};
+	struct format_t numberformat={BLACK,WHITE};
+	
+	print("rax  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[17]/HALF,16,8),&numberformat);
+	print(convert(registers[17]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+	
+	print("rbx  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[16]/HALF,16,8),&numberformat);
+	print(convert(registers[16]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+	
+	print("rcx  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[15]/HALF,16,8),&numberformat);
+	print(convert(registers[15]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+	
+	print("rdx  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[14]/HALF,16,8),&numberformat);
+	print(convert(registers[14]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+	
+	
+	print("rbp  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[13]/HALF,16,8),&numberformat);
+	print(convert(registers[13]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+	
+	print("rdi  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[12]/HALF,16,8),&numberformat);
+	print(convert(registers[12]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+	
+	print("rsi  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[11]/HALF,16,8),&numberformat);
+	print(convert(registers[11]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+	
+	print("r8  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[10]/HALF,16,8),&numberformat);
+	print(convert(registers[10]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+	
+	print("r9  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[9]/HALF,16,8),&numberformat);
+	print(convert(registers[9]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+	
+	print("r10  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[8]/HALF,16,8),&numberformat);
+	print(convert(registers[8]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+	
+	print("r11  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[7]/HALF,16,8),&numberformat);
+	print(convert(registers[7]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+	
+	print("r12  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[6]/HALF,16,8),&numberformat);
+	print(convert(registers[6]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+	
+	print("r13  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[5]/HALF,16,8),&numberformat);
+	print(convert(registers[5]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+	
+	print("r14  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[4]/HALF,16,8),&numberformat);
+	print(convert(registers[4]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+	
+	print("r15  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[3]/HALF,16,8),&numberformat);
+	print(convert(registers[3]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+	
+	print("rip  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[2]/HALF,16,8),&numberformat);
+	print(convert(registers[2]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+
+	print("rsp  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[1]/HALF,16,8),&numberformat);
+	print(convert(registers[1]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+	
+	print("eflags  ",&registerformat);
+	print("=  0x",&numberformat);
+	print(convert(registers[0]/HALF,16,8), &numberformat);
+	print(convert(registers[0]%HALF,16,8),&numberformat);
+	newLine(BLACK);
+}
+
+
+

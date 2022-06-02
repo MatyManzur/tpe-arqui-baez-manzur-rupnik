@@ -105,7 +105,7 @@ inforegisters:
 	mov [registers+88], r13
 	mov [registers+96], r14
 	mov [registers+104], r15
-	mov rax, [rbp]
+	mov rax, [rbp+8]
 	mov [registers+112], rax 	;la direccion de retorno es la instruccion de donde se llamo printRegisters()
 	mov [registers+120], rbp
 	mov [registers+128], rsp
