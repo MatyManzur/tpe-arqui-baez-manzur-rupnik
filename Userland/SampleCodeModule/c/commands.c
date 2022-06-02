@@ -68,7 +68,11 @@ void help(uint8_t argc, void** argv)
 {
     printStringColor(" \2 \2 \2 \2 \2 Bienvenidos a Bizcocho! \2 \2 \2 \2 \2 ", YELLOW,BLACK);
     sys_new_line(YELLOW);
-	printStringColor("Con ESC se matan los m\162dulos en ejecuci\162n y se vuelve a la terminal Bizcocho. Con la n se pausan/reanudan los programas.", YELLOW,BLACK);
+	printStringColor("Con ESC se matan los m", YELLOW,BLACK);
+	putCharColor(162, YELLOW,BLACK);
+	printStringColor("dulos en ejecuci", YELLOW,BLACK);
+	putCharColor(162, YELLOW,BLACK);
+	printStringColor("n y se vuelve a la terminal Bizcocho. Con la \'N\' se pausan/reanudan los programas.", YELLOW,BLACK);
 	sys_new_line(YELLOW);
     printStringColor("Los comandos disponibles son los siguientes: ", WHITE,MAGENTA);
     sys_new_line(WHITE);
@@ -88,8 +92,10 @@ void help(uint8_t argc, void** argv)
     newLine();
 	printString("invalidOpcode: Intenta realizar un procedimiento no permitido.");
     newLine();
-	printString("\'programa1\' | \'programa2\': Corre ambos programas"); printString("SIMULTANEAMENTE (wink wink), usar n y m para pausar el 
-	de la izquierda y la derecha respectivamente."); printString("Matar los programas se hace con j y k.");
+	printString("\'programa1\' | \'programa2\': Corre ambos programas simult"); 
+	putChar(160);
+	printString(" neamente, usar \'N\' y \'M\' para pausar el de la izquierda y la derecha respectivamente."); 
+	printString(" Para matar los programas individualmente se hace con \'J\' y \'K\'.");
 	newLine();
 	printString("letter \'num\': Cambia el color de las letras de esta terminal.");
     newLine();
@@ -99,7 +105,11 @@ void help(uint8_t argc, void** argv)
     newLine();
 	printString("boquita: Cambia a los colores xeneizes. (river y banfield sirven)");
     newLine();
-	printString("monkey: Despliega 4 monitos de lo m\160s simp\160ticos.");
+	printString("monkey: Despliega 4 monitos de lo m");
+	putChar(160);
+	printString("s simp");
+	putChar(160);
+	printString("ticos.");
     newLine();
 	sys_exit();
 }
@@ -144,7 +154,6 @@ void printmem(uint8_t argc,void** argv)
 		newLine();
 		sys_exit();
 	}
-	unsigned int toPrint;
 	printWithFormat("The memory dump from the following address 0x%8x%8x",address/HALF,address%HALF);
 
 	newLine();

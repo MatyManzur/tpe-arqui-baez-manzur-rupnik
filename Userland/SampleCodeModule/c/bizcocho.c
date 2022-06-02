@@ -52,10 +52,16 @@ void bizcocho(uint8_t argc, void** argv)
     sys_clear_screen(colorValues[1]);
     
     unsigned char start =0;
+    printString("Bienvenidos! \2");
+    newLine();
     printString("Presione la tecla espacio para comenzar: ");
+    
+        
     while(start!=' '){
         sys_read_printables(&start, 1);
     }
+    
+    sys_clear_screen(colorValues[1]);
 
     //set cursor al inicio de todo
     while(1)

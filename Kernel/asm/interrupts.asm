@@ -273,7 +273,7 @@ _syscallHandler:
 .C18:
 	call memdump
 	jmp .end
-.C19
+.C19:
 	call inforegisters
 	jmp .end
 .C20:

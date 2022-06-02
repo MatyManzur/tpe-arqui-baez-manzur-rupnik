@@ -6,7 +6,6 @@ static const uint32_t height = 25;
 
 //Tenemos un array de secciones de pantalla (screenStates). Cada task usará una de estas screenStates.
 static screenState_t screenStates[MAX_SCREEN_COUNT];
-static uint8_t currentScreenCount;
 
 static uint8_t nextScreenId = 1; //screenIds a asignar. Arranca en 1 porque el 0 se usa para ver si el slot del array esta vacío
 
