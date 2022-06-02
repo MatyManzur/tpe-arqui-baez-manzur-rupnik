@@ -20,5 +20,6 @@ char *convert(unsigned int num, int base, unsigned int minDigitCount);
 uint8_t ulongToStr(unsigned long num, char* ans);
 uint8_t strCopy(char* source, char* dest);
 int parser(char* string, char** buffer,char separator,int maxTokenCount,int maxTokenLenght);
+int xtou64(const char *str, uint64_t* ans);
 
 #endif
