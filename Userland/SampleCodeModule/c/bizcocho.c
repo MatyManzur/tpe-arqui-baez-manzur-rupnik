@@ -46,11 +46,17 @@ static const unsigned char * colors[COLOROPTIONS] = {(const unsigned char *)"let
 
 void bizcocho(uint8_t argc, void** argv)
 {
-    
+
     unsigned char promptBuffer[BUFFER_DIM]={0};
     
     sys_clear_screen(colorValues[1]);
     
+    unsigned char start =0;
+    printString("Presione la tecla espacio para comenzar: ");
+    while(start!=' '){
+        sys_read_printables(&start, 1);
+    }
+
     //set cursor al inicio de todo
     while(1)
     {		
@@ -75,11 +81,12 @@ void bizcocho(uint8_t argc, void** argv)
         
         setColor(colorValues[1],colorValues[0]);
 
-        unsigned char key;
+        unsigned char key=0;
         int counter = 0; //cuantas letras van en este mensaje
 
         do{ //repite hasta un enter o que hayan BUFFER_DIM letras
             sys_read_printables(&key, 1); //leemos la letra y la dejamos en key
+            
             if(key!='\n') //si es un enter, no printeamos nada y va a salir del while
             {
             	if(key!='\b')
@@ -90,8 +97,6 @@ void bizcocho(uint8_t argc, void** argv)
             	else if(counter>0)
             	{ //si se apreto backspace y no habia nada para borrar no hace nada
                     promptBuffer[--counter] ='\0'; //borramos del buffer
-                
-                    point_t point;
                     
                     sys_move_cursor(0,-1);	//se mueve uno para atras para borrarlo
                     
@@ -261,6 +266,10 @@ int changeColor(const unsigned char * buffer, const unsigned char * colors[], co
             unsigned char aux=0x00;
             if((aux=strToNum(buffer+strLength(colors[i])+1))<=15 && aux>=0)
             {
+                if(i==1){
+                    sys_clear_screen(aux);
+                    printingCursor=(point_t){0,0};
+                }
                 colorValues[i] = aux;
                 return 1;
             }
@@ -274,18 +283,20 @@ int changeColor(const unsigned char * buffer, const unsigned char * colors[], co
         colorValues[0]=14;
         colorValues[1]=1;
         colorValues[2]=14;
-        return 1;
     }else if(strCmp(buffer,"river")==0){
         colorValues[0]=4;
         colorValues[1]=15;
         colorValues[2]=4;
-        return 1;
     }else if(strCmp(buffer,"banfield")==0){
-        colorValues[0]=2;
-        colorValues[1]=15;
-        colorValues[2]=2;
+        colorValues[0]=15;
+        colorValues[1]=2;
+        colorValues[2]=15;
+    }else{
+        return 0;
     }
-    return 0;
+    sys_clear_screen(colorValues[1]);
+    printingCursor=(point_t){0,0};
+    return 1;
 }
 
 //https://www.asciiart.eu/animals/monkeys

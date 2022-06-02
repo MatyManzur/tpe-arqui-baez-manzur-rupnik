@@ -311,3 +311,4 @@ uint8_t strCopy(char* source, char* dest){
     dest[i] = '\0';
     return i;
 }
+
