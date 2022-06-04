@@ -52,7 +52,7 @@ void printRegisters(uint64_t* registers)
 	
 	unsigned char* registerNames[] = {"eflags  ", "rsp  ","rip  ","r15  ","r14  ","r13  ","r12  ","r11  ","r10  ","r9  ","r8  ","rsi  ","rdi  ","rbp  ","rdx  ","rcx  ","rbx  ","rax  "};
 
-	for(uint8_t i=REGISTER_COUNT; i>=0; i--){
+	for(int i=REGISTER_COUNT-1; i>=0; i--){
 		printRegAux(registers,i,&registerformat,&numberformat,registerNames);
 	}
 }

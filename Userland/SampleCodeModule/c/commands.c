@@ -48,7 +48,7 @@ void help(uint8_t argc, void** argv)
     newLine();
     printString("time: Despliega el dia y la hora.");
     newLine();
-	printString("inforeg: Despliega el valor de los registros.");
+	printString("inforeg: Despliega el valor de los registros. El snapshot es sacado con F1.");
     newLine();
 	printString("fibonacci: Imprime la serie de Fibonacci.");
     newLine();
