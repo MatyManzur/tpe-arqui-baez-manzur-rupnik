@@ -15,6 +15,7 @@
 #define MAX_ARG_COUNT 4
 
 void printMonkey();
+void printLogo();
 void addMessage(const char * message);
 int changeColor(const unsigned char * buffer, const unsigned char * colors[], color_t colorValues[]);
 
@@ -52,24 +53,36 @@ void bizcocho(uint8_t argc, void** argv)
     sys_clear_screen(colorValues[1]);
     
     unsigned char start =0;
-    printString("Bienvenidos! \2");
+    setColor(BLACK, L_RED);
+    sys_set_cursor(&printingCursor);
+    for(int i=0;i<5;i++)
+    {
+    	newLine();
+    }
+    sys_get_cursor(&printingCursor);
+    printLogo();
+    for(int i=0;i<5;i++)
+    {
+    	newLine();
+    }
+    printString("                                Bienvenidos! \2");
     newLine();
-    printString("Presione la tecla espacio para comenzar: ");
-    
+    printString("                    Presione la tecla espacio para comenzar...");
         
     while(start!=' '){
         sys_read_printables(&start, 1);
     }
     
     sys_clear_screen(colorValues[1]);
+    sys_get_cursor(&printingCursor);
 
     //set cursor al inicio de todo
     while(1)
     {		
    	 if(printingCursor.row >= HEIGHT || (printingCursor.row == HEIGHT-1 && printingCursor.column > 0)) //esta 2da opcion es por si el programa no tiene un newline al final
         {	sys_set_cursor(&printingCursor);
-			sys_move_cursor(-1,0);
-			sys_get_cursor(&printingCursor);
+		sys_move_cursor(-1,0);
+		sys_get_cursor(&printingCursor);
         	sys_scroll_up(1);
         }
      
@@ -196,6 +209,7 @@ void bizcocho(uint8_t argc, void** argv)
         	{
         		sys_clear_screen(colorValues[1]);
         		foundFlag = -1;
+        		sys_get_cursor(&printingCursor);
         	}
         	else
         	{
@@ -245,17 +259,11 @@ void bizcocho(uint8_t argc, void** argv)
 		sys_get_cursor(&printingCursor);
         }
         
-        
-        for(int i=0; i<counter; i++)	 //limpia el buffer, ni hace falta en realidad
-        {
-            promptBuffer[i]='\0';
-        }
-        
     }
 }
 
-
-void addMessage(const char * message) //sería mejor que reciba los colores por parámetro
+//printea el string indicado en la terminal y pone un enter al final
+void addMessage(const char * message) 
 {
     sys_set_cursor(&printingCursor);
     printStringColor(message, colorValues[1], colorValues[0]);
@@ -274,7 +282,7 @@ int changeColor(const unsigned char * buffer, const unsigned char * colors[], co
             {
                 if(i==1){
                     sys_clear_screen(aux);
-                    printingCursor=(point_t){0,0};
+                    sys_get_cursor(&printingCursor);
                 }
                 colorValues[i] = aux;
                 return 1;
@@ -286,27 +294,28 @@ int changeColor(const unsigned char * buffer, const unsigned char * colors[], co
         }
     }
     if(strCmp(buffer,"boquita")==0){
-        colorValues[0]=14;
-        colorValues[1]=1;
-        colorValues[2]=14;
+        colorValues[0]=YELLOW;
+        colorValues[1]=BLUE;
+        colorValues[2]=YELLOW;
     }else if(strCmp(buffer,"river")==0){
-        colorValues[0]=4;
-        colorValues[1]=15;
-        colorValues[2]=4;
+        colorValues[0]=RED;
+        colorValues[1]=WHITE;
+        colorValues[2]=RED;
     }else if(strCmp(buffer,"banfield")==0){
-        colorValues[0]=15;
-        colorValues[1]=2;
-        colorValues[2]=15;
+        colorValues[0]=WHITE;
+        colorValues[1]=GREEN;
+        colorValues[2]=WHITE;
     }else{
         return 0;
     }
     sys_clear_screen(colorValues[1]);
-    printingCursor=(point_t){0,0};
+    sys_get_cursor(&printingCursor);
     return 1;
 }
 
 //https://www.asciiart.eu/animals/monkeys
-void printMonkey(){
+void printMonkey()
+{
     sys_set_cursor(&printingCursor);
     printStringColor("       .-\"-.            .-\"-.            .-\"-.           .-\"-.",GREEN,YELLOW);
     sys_new_line(GREEN);
@@ -325,4 +334,24 @@ void printMonkey(){
     printStringColor("-={ see no evil }={ hear no evil }={ speak no evil }={ have no fun }=-",GREEN,YELLOW);
     sys_new_line(GREEN); 
     sys_get_cursor(&printingCursor);
+}
+
+void printLogo()
+{
+	sys_set_cursor(&printingCursor);
+	printString("    >=>>=>");
+	newLine();
+	printString("    >>   >=>   >>                                      >=>");
+	newLine();
+	printString("    >>    >=>     >====>>=>    >==>    >=>        >==> >=>         >=>");
+	newLine();
+	printString("    >==>>=>   >=>      >=>   >=>     >=>  >=>   >=>    >=>>=>    >=>  >=>");
+	newLine();
+	printString("    >>    >=> >=>    >=>    >=>     >=>    >=> >=>     >=>  >=> >=>    >=>");
+	newLine();
+	printString("    >>     >> >=>   >=>      >=>     >=>  >=>   >=>    >>   >=>  >=>  >=>");
+	newLine();
+	printString("    >===>>=>  >=> >=======>    >==>    >=>        >==> >=>  >=>    >=>");
+	newLine();
+	sys_get_cursor(&printingCursor);
 }

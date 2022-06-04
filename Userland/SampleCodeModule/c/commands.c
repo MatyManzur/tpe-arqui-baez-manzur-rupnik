@@ -60,7 +60,7 @@ void help(uint8_t argc, void** argv)
     newLine();
 	printString("\'programa1\' | \'programa2\': Corre ambos programas simult"); 
 	putChar(160);
-	printString(" neamente, usar \'N\' y \'M\' para pausar el de la izquierda y la derecha respectivamente."); 
+	printString("neamente, usar \'N\' y \'M\' para pausar el de la izquierda y la derecha respectivamente."); 
 	printString(" Para matar los programas individualmente se hace con \'J\' y \'K\'.");
 	newLine();
 	printString("letter \'num\': Cambia el color de las letras de esta terminal.");
@@ -80,7 +80,7 @@ void help(uint8_t argc, void** argv)
 	sys_exit();
 }
 // imprime en pantalla la fecha y el horario (GMT-3)
-void time(uint8_t argc, void** argv) // podemos hacer un getColor para cambiar el color y después volver al anterior
+void time(uint8_t argc, void** argv)
 {	
 	struct datetime_t data;
 	struct timezone_t tzone={ -3 , 0};

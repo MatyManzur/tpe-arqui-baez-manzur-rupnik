@@ -9,7 +9,7 @@ void fibonacci(uint8_t argc, void ** argv)
     uint64_t second=SECOND;
     uint64_t third;
     char* terminations[] = {"st","nd","rd","th"};
-    char str[20]={0};
+    char str[STRING_LENGTH]={0};
     printString("0 1st");   // imprime los primeros aparte
     newLine();
     printString("1 2nd");
@@ -20,7 +20,7 @@ void fibonacci(uint8_t argc, void ** argv)
         first=second;
         second=third;
         numSerie++;
-        sys_sleep(3);
+        sys_sleep(SLEEP_TICKS);
     }
 }
 

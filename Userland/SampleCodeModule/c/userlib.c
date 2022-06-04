@@ -183,8 +183,14 @@ void printWithFormat(char* format,...)
     va_end(arg); 
 } 
 
+//Función auxiliar para convertir un numero a string en la base indicada (maximo base 16), minDigitCount es la cantidad minima de digitos del string, si el numero tiene menos digitos entonces completa con 0's
 char *convert(unsigned int num, int base, unsigned int minDigitCount) 
 { 
+    if(base > 16)
+    {
+    	return NULL;
+    }
+    
     static char Representation[]= "0123456789ABCDEF";
     static char buffer[50]; 
     char *ptr; 
@@ -209,8 +215,9 @@ char *convert(unsigned int num, int base, unsigned int minDigitCount)
     return(ptr); 
 }
 
+// pasa un numero entero a string
 uint8_t ulongToStr(unsigned long num, char* ans)
-{   // pasa un numero entero a string
+{   
     char aux[20]; //un long puede ocupar hasta 10 caracteres (sin contar - o \0)
     //podria usar numLength pero asi esta bien
     int i = 0; //puntero de ans
@@ -269,6 +276,7 @@ int parser(char* string, char** buffer,char separator,int maxTokenCount,int maxT
     return count;
 }
 
+//Pasa de string en hexadecimal a numero entero
 int xtou64(const char *str, uint64_t* ans) //devuelve el numero por parametro porque sino C lo castea mal
 {
     *ans = 0;
