@@ -2,64 +2,30 @@
 #include <commands.h>
 
 #define HALF 0x100000000
+#define REGISTER_COUNT 17
 // imprime el valor de los registros al momento de llamarse
+static void printRegAux(uint64_t* registers,uint8_t index, unsigned char * registerNames[]);
+
+
+
+static void printRegAux(uint64_t* registers,uint8_t index, unsigned char * registerNames[])
+{
+	printStringColor(registerNames[index], BLUE, WHITE);
+	printWithFormat(" =  0x%8x%8x", registers[index]/HALF,registers[index]%HALF);
+	newLine();
+}
+
 void printRegisters(uint8_t argc, void** argv)
 {
+
 	uint64_t* registers = sys_info_registers();
-	printStringColor("rax", BLUE, WHITE);
-	printWithFormat(" =  0x%8x%8x", registers[0]/HALF,registers[0]%HALF);
-	newLine();
-	printStringColor("rbx", BLUE, WHITE);
-	printWithFormat(" =  0x%8x%8x", registers[1]/HALF,registers[1]%HALF);
-	newLine();
-	printStringColor("rcx", BLUE, WHITE);
-	printWithFormat(" =  0x%8x%8x", registers[2]/HALF,registers[2]%HALF);
-	newLine();
-	printStringColor("rdx", BLUE, WHITE);
-	printWithFormat(" =  0x%8x%8x", registers[3]/HALF,registers[3]%HALF);
-	newLine();
-	printStringColor("rsi", BLUE, WHITE);
-	printWithFormat(" =  0x%8x%8x", registers[4]/HALF,registers[4]%HALF);
-	newLine();
-	printStringColor("rdi", BLUE, WHITE);
-	printWithFormat(" =  0x%8x%8x", registers[5]/HALF,registers[5]%HALF);
-	newLine();
-	printStringColor("r8", BLUE, WHITE);
-	printWithFormat("  =  0x%8x%8x", registers[6]/HALF,registers[6]%HALF);
-	newLine();
-	printStringColor("r9", BLUE, WHITE);
-	printWithFormat("  =  0x%8x%8x", registers[7]/HALF,registers[7]%HALF);
-	newLine();
-	printStringColor("r10", BLUE, WHITE);
-	printWithFormat(" =  0x%8x%8x", registers[8]/HALF,registers[8]%HALF);
-	newLine();
-	printStringColor("r11", BLUE, WHITE);
-	printWithFormat(" =  0x%8x%8x", registers[9]/HALF,registers[9]%HALF);
-	newLine();
-	printStringColor("r12", BLUE, WHITE);
-	printWithFormat(" =  0x%8x%8x", registers[10]/HALF,registers[10]%HALF);
-	newLine();
-	printStringColor("r13", BLUE, WHITE);
-	printWithFormat(" =  0x%8x%8x", registers[11]/HALF,registers[11]%HALF);
-	newLine();
-	printStringColor("r14", BLUE, WHITE);
-	printWithFormat(" =  0x%8x%8x", registers[12]/HALF,registers[12]%HALF);
-	newLine();
-	printStringColor("r15", BLUE, WHITE);
-	printWithFormat(" =  0x%8x%8x", registers[13]/HALF,registers[13]%HALF);
-	newLine();
-	printStringColor("rip", BLUE, WHITE);
-	printWithFormat(" =  0x%8x%8x", registers[14]/HALF,registers[14]%HALF);
-	newLine();
-	printStringColor("rbp", BLUE, WHITE);
-	printWithFormat(" =  0x%8x%8x", registers[15]/HALF,registers[15]%HALF);
-	newLine();
-	printStringColor("rsp", BLUE, WHITE);
-	printWithFormat(" =  0x%8x%8x", registers[16]/HALF,registers[16]%HALF);
-	newLine();
-	printStringColor("eflags", BLUE, WHITE);
-	printWithFormat(" =  0x%8x%8x", registers[17]/HALF,registers[17]%HALF);
-	newLine();
+
+	unsigned char* registerNames[] = {"rax  ", "rbx  ","rcx  ","rdx  ","rbp  ","rdi  ","rsi  ","r8  ","r9  ","r10  ","r11  ","r12  ","r13  ","r14  ","r15  ","rip  ","rsp  ","eflags  "};
+
+	for(uint8_t i=0;i<REGISTER_COUNT;i++){
+		printRegAux(registers,i,registerNames);
+	}	
+
 	sys_exit();
 }
 

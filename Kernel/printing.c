@@ -1,5 +1,9 @@
 #include <printing.h>
 
+#define REGISTER_COUNT 17
+
+static void printRegAux(uint64_t* registers,uint8_t index, format_t * registerformat, format_t * numberformat,unsigned char * registerNames[]);
+
 static uint8_t * const video = (uint8_t*)0xB8000;
 static const uint32_t width = 80;
 static const uint32_t height = 25;
@@ -281,119 +285,28 @@ char *convert(unsigned int num, int base, unsigned int minDigitCount)
 
     return(ptr); 
 }
+
+
+static void printRegAux(uint64_t* registers,uint8_t index, format_t * registerformat, format_t * numberformat,unsigned char * registerNames[])
+{
+	print(registerNames[index],registerformat);
+	print("=  0x",numberformat);
+	print(convert(registers[index]/HALF,16,8),numberformat);
+	print(convert(registers[index]%HALF,16,8),numberformat);
+	newLine(BLACK);
+}
+
+
 void printRegisters(uint64_t* registers)
 {
 	struct format_t registerformat={BLACK,YELLOW};
 	struct format_t numberformat={BLACK,WHITE};
 	
-	print("rax  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[17]/HALF,16,8),&numberformat);
-	print(convert(registers[17]%HALF,16,8),&numberformat);
-	newLine(BLACK);
-	
-	print("rbx  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[16]/HALF,16,8),&numberformat);
-	print(convert(registers[16]%HALF,16,8),&numberformat);
-	newLine(BLACK);
-	
-	print("rcx  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[15]/HALF,16,8),&numberformat);
-	print(convert(registers[15]%HALF,16,8),&numberformat);
-	newLine(BLACK);
-	
-	print("rdx  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[14]/HALF,16,8),&numberformat);
-	print(convert(registers[14]%HALF,16,8),&numberformat);
-	newLine(BLACK);
-	
-	
-	print("rbp  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[13]/HALF,16,8),&numberformat);
-	print(convert(registers[13]%HALF,16,8),&numberformat);
-	newLine(BLACK);
-	
-	print("rdi  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[12]/HALF,16,8),&numberformat);
-	print(convert(registers[12]%HALF,16,8),&numberformat);
-	newLine(BLACK);
-	
-	print("rsi  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[11]/HALF,16,8),&numberformat);
-	print(convert(registers[11]%HALF,16,8),&numberformat);
-	newLine(BLACK);
-	
-	print("r8  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[10]/HALF,16,8),&numberformat);
-	print(convert(registers[10]%HALF,16,8),&numberformat);
-	newLine(BLACK);
-	
-	print("r9  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[9]/HALF,16,8),&numberformat);
-	print(convert(registers[9]%HALF,16,8),&numberformat);
-	newLine(BLACK);
-	
-	print("r10  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[8]/HALF,16,8),&numberformat);
-	print(convert(registers[8]%HALF,16,8),&numberformat);
-	newLine(BLACK);
-	
-	print("r11  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[7]/HALF,16,8),&numberformat);
-	print(convert(registers[7]%HALF,16,8),&numberformat);
-	newLine(BLACK);
-	
-	print("r12  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[6]/HALF,16,8),&numberformat);
-	print(convert(registers[6]%HALF,16,8),&numberformat);
-	newLine(BLACK);
-	
-	print("r13  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[5]/HALF,16,8),&numberformat);
-	print(convert(registers[5]%HALF,16,8),&numberformat);
-	newLine(BLACK);
-	
-	print("r14  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[4]/HALF,16,8),&numberformat);
-	print(convert(registers[4]%HALF,16,8),&numberformat);
-	newLine(BLACK);
-	
-	print("r15  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[3]/HALF,16,8),&numberformat);
-	print(convert(registers[3]%HALF,16,8),&numberformat);
-	newLine(BLACK);
-	
-	print("rip  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[2]/HALF,16,8),&numberformat);
-	print(convert(registers[2]%HALF,16,8),&numberformat);
-	newLine(BLACK);
+	unsigned char* registerNames[] = {"eflags  ", "rsp  ","rip  ","r15  ","r14  ","r13  ","r12  ","r11  ","r10  ","r9  ","r8  ","rsi  ","rdi  ","rbp  ","rdx  ","rcx  ","rbx  ","rax  "};
 
-	print("rsp  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[1]/HALF,16,8),&numberformat);
-	print(convert(registers[1]%HALF,16,8),&numberformat);
-	newLine(BLACK);
-	
-	print("eflags  ",&registerformat);
-	print("=  0x",&numberformat);
-	print(convert(registers[0]/HALF,16,8), &numberformat);
-	print(convert(registers[0]%HALF,16,8),&numberformat);
-	newLine(BLACK);
+	for(uint8_t i=REGISTER_COUNT; i>=0; i--){
+		printRegAux(registers,i,&registerformat,&numberformat,registerNames);
+	}
 }
 
 
