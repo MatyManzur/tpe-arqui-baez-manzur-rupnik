@@ -89,6 +89,7 @@ SECTION .text
 %endmacro
 
 %macro irqHandlerMaster 1
+	cli
 	pushState
 	
 	mov rdi, %1 ; pasaje de parametro
@@ -99,6 +100,9 @@ SECTION .text
 	out 20h, al
 
 	popState
+	
+	sti
+	
 	iretq
 %endmacro
 
@@ -311,6 +315,9 @@ _syscallHandler:
 	pop rax
 	mov rsp,rbp
 	pop rbp
+	
+	sti
+	
 	iretq
 
 

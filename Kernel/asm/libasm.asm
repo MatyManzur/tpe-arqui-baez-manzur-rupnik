@@ -64,6 +64,8 @@ initializeTask:
 
 	push rax
 	
+	sti
+	
 	; Pusheamos en el stack los registros que lee el iretq
 	mov rax, ss
 	push rax
@@ -81,6 +83,7 @@ initializeTask:
 	pop rax
 	
 	;en rdi y rsi ya tenemos los argumentos de la funcion, iretq va a tomar el rip cs rflags rsp y ss del stack
+	
 	iretq
 	
 ;Desde C nos deberian pasar por argumentos primero la direccion de memoria y despues una direccion a un array para dejar los 32bytes

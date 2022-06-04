@@ -58,7 +58,6 @@ void runner(uint8_t argc, void** argv) //argv[3 ó 6] = {(functionPointer_t*)fir
 	struct kbEvent_t key = {0};	//el runner se queda fijandose si se apreto una tecla
 	while(key.key != VK_ESCAPE || key.action != RELEASED) //si fue un ESCAPE, termina
 	{
-		sys_sleep(1);	//para que le de tiempo a que otras interrupciones interrumpan
 		sys_get_next_key(&key);	//se fija la tecla
 		if(key.key == VK_N && key.action == PRESSED)	//si es una N pausamos o reanudamos la firstTask
 		{

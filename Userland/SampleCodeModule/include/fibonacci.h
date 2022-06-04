@@ -3,7 +3,7 @@
 
 #define FIRST 0
 #define SECOND 1
-#define SLEEP_TICKS 3
+#define SLEEP_TICKS 8
 #define STRING_LENGTH 20
 
 #include <userlib.h>
