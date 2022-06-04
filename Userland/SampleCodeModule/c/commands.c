@@ -2,7 +2,7 @@
 #include <commands.h>
 
 #define HALF 0x100000000
-#define REGISTER_COUNT 17
+#define REGISTER_COUNT 18
 // imprime el valor de los registros al momento de llamarse
 static void printRegAux(uint64_t* registers,uint8_t index, unsigned char * registerNames[]);
 
@@ -18,12 +18,14 @@ static void printRegAux(uint64_t* registers,uint8_t index, unsigned char * regis
 void printRegisters(uint8_t argc, void** argv)
 {
 
-	uint64_t* registers = sys_info_registers();
+	registers_t registers = {0};
+	
+	sys_get_last_registers(&registers);
 
-	unsigned char* registerNames[] = {"rax  ", "rbx  ","rcx  ","rdx  ","rbp  ","rdi  ","rsi  ","r8  ","r9  ","r10  ","r11  ","r12  ","r13  ","r14  ","r15  ","rip  ","rsp  ","eflags  "};
+	unsigned char* registerNames[] = {"rax  ", "rbx  ","rcx  ","rdx  ","rsi  ","rdi  ","r8  ","r9  ","r10  ","r11  ","r12  ","r13  ","r14  ","r15  ","rip  ","rbp  ","rsp  ","flags  "};
 
 	for(uint8_t i=0;i<REGISTER_COUNT;i++){
-		printRegAux(registers,i,registerNames);
+		printRegAux((uint64_t*)&registers, i, registerNames);
 	}	
 
 	sys_exit();

@@ -2,6 +2,7 @@
 #define _KEYBOARD_H_
 
 #include <lib.h>
+#include <registers.h>
 
 #define BUFFER_DIM 128
 

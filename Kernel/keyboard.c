@@ -46,7 +46,10 @@ void keyboard_handler()
 		kbEvent.action = PRESSED;
 	}
 	kbEvent.key = scanCode;	//nos guardamos el scancode ya transformado
-	
+	if(scanCode==VK_F1)	//con F1 nos guardamos una screenshot de los registros
+	{
+		saveRegisters();
+	}
 	buffer[(writingIndex++)%BUFFER_DIM] = kbEvent;	//guardamos el struct en el buffer en la posicion indicada por writingIndex%BUFFER_DIM y lo incrementamos
 }
 

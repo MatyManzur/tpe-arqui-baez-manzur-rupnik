@@ -38,7 +38,7 @@ EXTERN setCursor
 EXTERN scrollUp
 EXTERN moveCursor
 EXTERN memdump
-EXTERN inforegisters
+EXTERN getLastRegisters
 
 EXTERN readPrintables
 EXTERN getNextKey
@@ -124,9 +124,10 @@ SECTION .text
 %endmacro
 
 %macro caseSyscall 2
-cmp rax, %1
-je %2
+	cmp rax, %1
+	je %2
 %endmacro
+
 _hlt:
 	sti
 	hlt
@@ -274,7 +275,7 @@ _syscallHandler:
 	call memdump
 	jmp .end
 .C19:
-	call inforegisters
+	call getLastRegisters
 	jmp .end
 .C20:
 	call readPrintables

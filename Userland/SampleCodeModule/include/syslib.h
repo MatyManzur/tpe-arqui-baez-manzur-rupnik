@@ -9,6 +9,28 @@ typedef enum key_t {VK_ESCAPE = 0x1, VK_1 = 0x2, VK_2 = 0x3, VK_3 = 0x4, VK_4 = 
 
 typedef enum action_t {PRESSED, RELEASED} action_t;
 
+typedef struct registers_t
+{
+	uint64_t rax;
+	uint64_t rbx;
+	uint64_t rcx;
+	uint64_t rdx;
+	uint64_t rsi;
+	uint64_t rdi;
+	uint64_t r8;
+	uint64_t r9;
+	uint64_t r10;
+	uint64_t r11;
+	uint64_t r12;
+	uint64_t r13;
+	uint64_t r14;
+	uint64_t r15;
+	uint64_t rip;
+	uint64_t rbp;
+	uint64_t rsp;
+	uint64_t flags;
+}registers_t;
+
 struct kbEvent_t
 {
 	key_t key;
@@ -59,7 +81,7 @@ void sys_set_cursor(const struct point_t* cursor);
 void sys_scroll_up(uint8_t rows);
 void sys_move_cursor(int rows,int columns);
 int sys_memory_dump(uint64_t address, uint64_t buffer[]);
-uint64_t* sys_info_registers();
+void sys_get_last_registers(struct registers_t* registers);
 void sys_read_printables(unsigned char* bufferString, uint8_t count);
 void sys_get_next_key(struct kbEvent_t* kbEvent);
 void sys_clean_buffer();

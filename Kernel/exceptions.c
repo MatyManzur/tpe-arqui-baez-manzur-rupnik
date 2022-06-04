@@ -1,4 +1,5 @@
 #include <printing.h>
+#include <registers.h>
 #include <scheduler.h>
 
 #define ZERO_EXCEPTION_ID 0

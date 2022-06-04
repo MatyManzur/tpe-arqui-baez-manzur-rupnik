@@ -4,7 +4,7 @@ GLOBAL swapTasks
 GLOBAL initializeTask
 GLOBAL saveStackPointer
 GLOBAL memdumpasm
-GLOBAL inforegisters
+GLOBAL getRegisters
 
 section .text
 
@@ -101,37 +101,52 @@ memdumpasm:
 	pop rdx
 	ret
 	
+%macro copyRegisters 2
+	mov rbx, [rax + %1*8]
+	mov [rdi + %2*8], rbx
+%endmacro	
+
+getRegisters:
+	push rbp
+	mov rbp, rsp
+
+	push rax
+	push rbx
 	
-inforegisters:
-	mov [registers],    rax
-	mov [registers+8],  rbx
-	mov [registers+16], rcx
-	mov [registers+24], rdx
-	mov [registers+32], rsi
-	mov [registers+40], rdi
-	mov [registers+48], r8
-	mov [registers+56], r9
-	mov [registers+64], r10
-	mov [registers+72], r11
-	mov [registers+80], r12
-	mov [registers+88], r13
-	mov [registers+96], r14
-	mov [registers+104], r15
-	mov rax, [rbp+8]
-	mov [registers+112], rax 	;la direccion de retorno es la instruccion de donde se llamo printRegisters()
-	mov [registers+120], rbp
-	mov [registers+128], rsp
-	pushfq
+	mov rax, [rbp]  ; rbp de saveRegisters()
+	mov rax, [rax]	; rbp de keyboard_handler()
+	mov rax, [rax]	; rbp de int_21()
+	mov rax, [rax]	; rbp de irqDispatcher()
+	add rax, 16	; salteamos el rbp de irq01Handler y la direccion de retorno a irq01Handler que pusheo C
+	
+	; estamos apuntando con rax al r15 del pushState
+	copyRegisters 0, 13	;r15
+	copyRegisters 1, 12	;r14
+	copyRegisters 2, 11	;r13
+	copyRegisters 3, 10	;r12
+	copyRegisters 4, 9	;r11
+	copyRegisters 5, 8	;r10
+	copyRegisters 6, 7	;r9
+	copyRegisters 7, 6	;r8
+	copyRegisters 8, 5	;rdi
+	copyRegisters 9, 4	;rsi
+	copyRegisters 10, 15	;rbp
+	copyRegisters 11, 3	;rdx
+	copyRegisters 12, 2	;rcx
+	copyRegisters 13, 1	;rbx
+	copyRegisters 14, 0	;rax
+	copyRegisters 15, 14	;rip
+	copyRegisters 17, 17	;flags
+	copyRegisters 18, 16	;rsp
+	
+	pop rbx
 	pop rax
-	mov [registers+136], rax
-	mov rax, registers
+	
+	mov rsp, rbp
+	pop rbp
+	
 	ret
 
-
-
-SECTION .bss
-
-registers resq 18
 
 
 
