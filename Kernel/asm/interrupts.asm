@@ -58,8 +58,8 @@ SECTION .text
 	push rcx
 	push rdx
 	push rbp
-	push rdi
 	push rsi
+	push rdi
 	push r8
 	push r9
 	push r10
@@ -79,8 +79,8 @@ SECTION .text
 	pop r10
 	pop r9
 	pop r8
-	pop rsi
 	pop rdi
+	pop rsi
 	pop rbp
 	pop rdx
 	pop rcx

@@ -32,7 +32,7 @@ void saveRegisters(); //para que lo llame el keyboard handler
 void printRegisters(); //para que lo llamen las exceptions
 
 //syscalls
-int memdump(uint64_t address, uint64_t buffer[]); //en ASM
+
 void getLastRegisters(struct registers_t* registers);
 
 

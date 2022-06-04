@@ -80,7 +80,7 @@ void sys_get_cursor(struct point_t* cursor);
 void sys_set_cursor(const struct point_t* cursor);
 void sys_scroll_up(uint8_t rows);
 void sys_move_cursor(int rows,int columns);
-int sys_memory_dump(uint64_t address, uint64_t buffer[]);
+int sys_memory_dump(uint64_t address, uint8_t buffer[]);
 void sys_get_last_registers(struct registers_t* registers);
 void sys_read_printables(unsigned char* bufferString, uint8_t count);
 void sys_get_next_key(struct kbEvent_t* kbEvent);

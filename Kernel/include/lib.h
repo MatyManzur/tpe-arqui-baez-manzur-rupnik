@@ -11,5 +11,9 @@ void load_idt();
 uint8_t getScanCode();
 void _hlt();
 
+int memdumpasm(uint64_t address, uint8_t buffer[]); //en libasm.asm
+
+//syscall
+int memdump(uint64_t address, uint8_t buffer[]);
 
 #endif

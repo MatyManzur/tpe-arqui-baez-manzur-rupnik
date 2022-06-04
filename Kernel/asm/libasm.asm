@@ -87,14 +87,15 @@ initializeTask:
 memdumpasm:
 	push rdx
 	mov rdx,0
+	mov rax,0
 .loop:
-	cmp rdx,32
+	cmp rdx, 32
 	je .fin
-	mov rax,[rdi]
-	mov [rsi],rax
-	add rdi, 8
-	add rsi, 8
-	add rdx, 8
+	mov byte al,[rdi]
+	mov byte [rsi],al
+	inc rdi
+	inc rsi
+	inc rdx
 	jmp .loop
 .fin:
 	mov rax,1

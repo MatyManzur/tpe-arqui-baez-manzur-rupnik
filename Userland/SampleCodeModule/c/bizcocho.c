@@ -68,6 +68,8 @@ void bizcocho(uint8_t argc, void** argv)
     printString("                                Bienvenidos! \2");
     newLine();
     printString("                    Presione la tecla espacio para comenzar...");
+    newLine();
+    printString("              ( Luego escriba \"help\" para conocer comandos y teclas )");
         
     while(start!=' '){
         sys_read_printables(&start, 1);

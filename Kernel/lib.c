@@ -1,6 +1,7 @@
-#include <stdint.h>
 
-int memdump(uint64_t address, uint64_t buffer[])
+#include <lib.h>
+
+int memdump(uint64_t address, uint8_t buffer[])
 {
 	if(address > 0x0fffffffe0)
 		return -1;

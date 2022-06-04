@@ -22,7 +22,7 @@ void printRegisters(uint8_t argc, void** argv)
 	
 	sys_get_last_registers(&registers);
 
-	unsigned char* registerNames[] = {"rax  ", "rbx  ","rcx  ","rdx  ","rsi  ","rdi  ","r8  ","r9  ","r10  ","r11  ","r12  ","r13  ","r14  ","r15  ","rip  ","rbp  ","rsp  ","flags  "};
+	unsigned char* registerNames[] = {"rax  ", "rbx  ","rcx  ","rdx  ","rsi  ","rdi  ","r8   ","r9   ","r10  ","r11  ","r12  ","r13  ","r14  ","r15  ","rip  ","rbp  ","rsp  ","flags"};
 
 	for(uint8_t i=0;i<REGISTER_COUNT;i++){
 		printRegAux((uint64_t*)&registers, i, registerNames);
@@ -36,19 +36,24 @@ void help(uint8_t argc, void** argv)
 {
     printStringColor(" \2 \2 \2 \2 \2 Bienvenidos a Bizcocho! \2 \2 \2 \2 \2 ", YELLOW,BLACK);
     sys_new_line(YELLOW);
-	printStringColor("Con ESC se matan los m", YELLOW,BLACK);
-	putCharColor(162, YELLOW,BLACK);
-	printStringColor("dulos en ejecuci", YELLOW,BLACK);
-	putCharColor(162, YELLOW,BLACK);
-	printStringColor("n y se vuelve a la terminal Bizcocho. Con la \'N\' se pausan/reanudan los programas.", YELLOW,BLACK);
-	sys_new_line(YELLOW);
+    printStringColor("-----TECLAS-----  ", YELLOW, BLACK);
+    printStringColor("(en rojo unicamente para \"modo pipe\")", YELLOW, RED);
+    sys_new_line(YELLOW);
+    printStringColor("ESC: mata al programa | N: pausa/reanudar programa principal", YELLOW, BLACK);
+    printStringColor("/izquierdo", YELLOW, RED);
+    sys_new_line(YELLOW);
+    printStringColor("F1: realiza snapshot de registros ", YELLOW, BLACK);
+    printStringColor("| M: pausa/reanudar programa derecho", YELLOW, RED);
+    sys_new_line(YELLOW);
+    printStringColor("J: mata programa izquierdo | K: mata programa derecho", YELLOW, RED);
+    sys_new_line(YELLOW);
     printStringColor("Los comandos disponibles son los siguientes: ", WHITE,MAGENTA);
     sys_new_line(WHITE);
     printString("help: Despliega los comandos y programas accesibles.");
     newLine();
     printString("time: Despliega el dia y la hora.");
     newLine();
-	printString("inforeg: Despliega el valor de los registros. El snapshot es sacado con F1.");
+	printString("inforeg: Despliega el valor de los registros del ultimo snapshot");
     newLine();
 	printString("fibonacci: Imprime la serie de Fibonacci.");
     newLine();
@@ -60,10 +65,9 @@ void help(uint8_t argc, void** argv)
     newLine();
 	printString("invalidOpcode: Intenta realizar un procedimiento no permitido.");
     newLine();
-	printString("\'programa1\' | \'programa2\': Corre ambos programas simult"); 
+	printString("\'programa1\' | \'programa2\': (MODO PIPE) Corre ambos programas simult"); 
 	putChar(160);
-	printString("neamente, usar \'N\' y \'M\' para pausar el de la izquierda y la derecha respectivamente."); 
-	printString(" Para matar los programas individualmente se hace con \'J\' y \'K\'.");
+	printString("neamente."); 
 	newLine();
 	printString("letter \'num\': Cambia el color de las letras de esta terminal.");
     newLine();
@@ -113,7 +117,7 @@ void printmem(uint8_t argc,void** argv)
 		newLine();
 		sys_exit();
 	}
-	uint64_t buffer[4]={0};
+	uint8_t buffer[32]={0};
 	
 	int error = sys_memory_dump(address,buffer);
 	if(error==-1){
@@ -125,9 +129,12 @@ void printmem(uint8_t argc,void** argv)
 	printWithFormat("The memory dump from the following address 0x%8x%8x",address/HALF,address%HALF);
 
 	newLine();
-	for(int i=0; i<4;i++){
-		printWithFormat("0x%8x%8x",buffer[i]/HALF,buffer[i]%HALF);
-		newLine();
+	for(int i=0; i<32;i++)
+	{
+		printWithFormat("0x%2x",buffer[i]);
+		putChar(' ');
+		if((i+1)%8==0)
+			newLine();
 	}
 	
 	sys_exit();
