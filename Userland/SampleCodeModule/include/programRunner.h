@@ -2,6 +2,7 @@
 #define RUNNER_H
 
 #include <syslib.h>
+#include <userlib.h>
 
 typedef struct functionPointer_t
 {

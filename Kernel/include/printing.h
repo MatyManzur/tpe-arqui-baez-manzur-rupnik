@@ -57,9 +57,9 @@ int8_t addScreenState(uint8_t topLeftRow, uint8_t topLeftColumn, uint8_t bottomR
 void deleteScreenState(uint8_t screenId);
 
 //syscalls
-uint8_t printChar(unsigned char character, const struct format_t *format);
+uint8_t printChar(char character, const struct format_t *format);
 
-unsigned char *print(const unsigned char *string, const struct format_t *format);
+char *print(const char *string, const struct format_t *format);
 
 uint8_t newLine(color_t backgroundColor);
 

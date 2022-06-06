@@ -80,7 +80,7 @@ void deleteScreenState(uint8_t screenId)
 }
 
 //printea el caracter indicado en donde se encuentre el cursor de la pantalla actual con el formato indicado
-uint8_t printChar(unsigned char character, const struct format_t *format)
+uint8_t printChar(char character, const struct format_t *format)
 {
     //nos fijamos la screen actual
     int8_t screenIndex = getCurrentScreenIndex();
@@ -100,7 +100,7 @@ uint8_t printChar(unsigned char character, const struct format_t *format)
 
     //escribimos el caracter con los colores indicados en la posicion de la pantalla indicada por el cursor de esta screenState
     uint8_t *cursorPointer = pointToCursor(screenStates[screenIndex].cursor);
-    *cursorPointer = character;
+    *cursorPointer = (uint8_t) character;
     *(cursorPointer + 1) = format->backgroundColor << 4 | format->characterColor;
 
     //movemos el cursor a la siguiente columna para la proxima vez que printee algo
@@ -109,7 +109,7 @@ uint8_t printChar(unsigned char character, const struct format_t *format)
 }
 
 //printea el string indicado con el formato indicado a partir de donde se encuentre el cursor de la pantalla actual. Si se termina la pantalla a mitad de camino, le devuelve un puntero a la parte del string que quedó por printear
-unsigned char *print(const unsigned char *string, const struct format_t *format)
+char *print(const char *string, const struct format_t *format)
 {
     int i;
     for (i = 0; string[i] != 0; i++)

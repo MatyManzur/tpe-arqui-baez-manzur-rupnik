@@ -4,7 +4,7 @@
 
 static struct format_t format = {BLACK, L_GRAY};  // el formato que se utiliza para los colores
 
-int strToNum(const unsigned char *str)
+int strToNum(const char *str)
 { //Pasa un string a decimal
     int i = 0;
     int neg = 0;
@@ -26,7 +26,7 @@ int strToNum(const unsigned char *str)
     return ans;
 }
 
-char strLength(const unsigned char *str)
+char strLength(const char *str)
 {  // strlength
     int i = 0;
     while (str[i])
@@ -38,7 +38,7 @@ char strLength(const unsigned char *str)
 
 // se fija si el primer string está como prefijo del segundo (ignora los espacios al principio del segundo)
 // deja si afterPrefix no es null lo deja apuntando al proximo caracter de str luego de encontrar el prefijo, si no lo encontro lo pone en null
-uint8_t strPrefix(const unsigned char *prefix, const unsigned char *str, unsigned char **afterPrefix)
+uint8_t strPrefix(const char *prefix, const char *str, char **afterPrefix)
 {
     int i = 0, j = 0;
     while (str[i] == ' ')
@@ -57,7 +57,7 @@ uint8_t strPrefix(const unsigned char *prefix, const unsigned char *str, unsigne
     return !prefix[j];  //en el caso de que prefix no haya terminado y str sí, devuelve 0, sino devuelve 1
 }
 
-int strCmp(const unsigned char *str1, const unsigned char *str2)
+int strCmp(const char *str1, const char *str2)
 {    // compara strings, devuelve la diferencia entre el primero en el que difiere
     while (*str1 != 0 && *str1 == *str2)
     {
@@ -80,9 +80,9 @@ void newLine()
 }
 
 void
-printString(unsigned char *str)   //imprime un string, si pisa una zona en la que no puede escribir, hace un scroll up
+printString(char *str)   //imprime un string, si pisa una zona en la que no puede escribir, hace un scroll up
 {                                       // utiliza el color del format
-    unsigned char *overload = NULL;
+    char *overload = NULL;
     overload = sys_print(str, &format);
     if (overload != NULL)
     {
@@ -92,7 +92,7 @@ printString(unsigned char *str)   //imprime un string, si pisa una zona en la qu
     }
 }
 
-void putChar(unsigned char c)   //idem anterior, pero con un char
+void putChar(char c)   //idem anterior, pero con un char
 {
     int overload = 0;
     overload = sys_print_char(c, &format);
@@ -104,11 +104,11 @@ void putChar(unsigned char c)   //idem anterior, pero con un char
     }
 }
 
-void printStringColor(unsigned char *str, color_t backgroundColor,
+void printStringColor(char *str, color_t backgroundColor,
                       color_t characterColor) //idem printString, pero se le pasa el color
 {
     struct format_t format = {.backgroundColor = backgroundColor % 16, .characterColor = characterColor % 16};
-    unsigned char *overload = NULL;
+    char *overload = NULL;
     overload = sys_print(str, &format);
     if (overload != NULL)
     {
@@ -118,7 +118,7 @@ void printStringColor(unsigned char *str, color_t backgroundColor,
     }
 }
 
-void putCharColor(unsigned char c, color_t backgroundColor, color_t characterColor) // idem anterior, pero para chars
+void putCharColor(char c, color_t backgroundColor, color_t characterColor) // idem anterior, pero para chars
 {
     struct format_t format = {.backgroundColor = backgroundColor % 16, .characterColor = characterColor % 16};
     int overload = 0;

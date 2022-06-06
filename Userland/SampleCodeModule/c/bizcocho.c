@@ -20,7 +20,7 @@ void printLogo();
 
 void addMessage(const char *message);
 
-int changeColor(const unsigned char *buffer, const unsigned char *colors[], color_t colorValues[]);
+int changeColor(const char *buffer, const char *colors[], color_t colorValues[]);
 
 static point_t promptCursor = {HEIGHT - 1, 0};
 static point_t printingCursor = {0, 0};
@@ -45,19 +45,19 @@ static command_t commands[COMMAND_COUNT] = {
 };
 
 static color_t colorValues[COLOROPTIONS] = {L_GRAY, BLACK, MAGENTA};
-static const unsigned char *colors[COLOROPTIONS] = {(const unsigned char *) "letter",
-                                                    (const unsigned char *) "background",
-                                                    (const unsigned char *) "user"};
+static const char *colors[COLOROPTIONS] = {"letter",
+                                           "background",
+                                           "user"};
 
 
 void bizcocho(uint8_t argc, void **argv)
 {
 
-    unsigned char promptBuffer[BUFFER_DIM] = {0};
+    char promptBuffer[BUFFER_DIM] = {0};
 
     sys_clear_screen(colorValues[1]);
 
-    unsigned char start = 0;
+    char start = 0;
     setColor(BLACK, L_RED);
     sys_set_cursor(&printingCursor);
     for (int i = 0; i < 5; i++)
@@ -103,14 +103,14 @@ void bizcocho(uint8_t argc, void **argv)
         sys_set_cursor(&promptCursor);
 
         setColor(colorValues[1], colorValues[2]);
-        printString((unsigned char *) "Bizcocho ");
+        printString("Bizcocho ");
         putChar(2);
         putChar(' ');
         putChar(16); //para el chirimbolito
 
         setColor(colorValues[1], colorValues[0]);
 
-        unsigned char key = 0;
+        char key = 0;
         int counter = 0; //cuantas letras van en este mensaje
 
         do
@@ -144,9 +144,9 @@ void bizcocho(uint8_t argc, void **argv)
 
         //en promptBuffer está todo lo que lee del prompt cuando se apreto enter
 
-        unsigned char pipeTokens[2][MAX_LONG_TOKEN_LENGTH] = {0};
+        char pipeTokens[2][MAX_LONG_TOKEN_LENGTH] = {0};
 
-        int pipeTokensCount = parser(promptBuffer, pipeTokens, '|', 2, MAX_LONG_TOKEN_LENGTH);
+        int pipeTokensCount = parser(promptBuffer, &pipeTokens, '|', 2, MAX_LONG_TOKEN_LENGTH);
 
         //en pipeTokens[0] está lo que esté a la izquierda del '|', o todo el string en caso de que no haya '|'
         //en pipeTokens[1] está lo que esté a la derecha del '|' en caso de que haya pipe
@@ -154,13 +154,13 @@ void bizcocho(uint8_t argc, void **argv)
 
         int index1, index2;
         int foundFlag = 0;
-        unsigned char *argString1;
-        unsigned char *argString2;
+        char *argString1;
+        char *argString2;
         int argc1, argc2;
-        unsigned char *argv1[MAX_ARG_COUNT] = {NULL};
-        unsigned char *argv2[MAX_ARG_COUNT] = {NULL};
-        unsigned char firstTokens[MAX_ARG_COUNT][MAX_TOKEN_LENGTH] = {0};
-        unsigned char secondTokens[MAX_ARG_COUNT][MAX_TOKEN_LENGTH] = {0};
+        char *argv1[MAX_ARG_COUNT] = {NULL};
+        char *argv2[MAX_ARG_COUNT] = {NULL};
+        char firstTokens[MAX_ARG_COUNT][MAX_TOKEN_LENGTH] = {0};
+        char secondTokens[MAX_ARG_COUNT][MAX_TOKEN_LENGTH] = {0};
 
         //buscamos comando en pipeTokens[0]
         for (int i = 0; i < COMMAND_COUNT && !foundFlag; i++)
@@ -175,7 +175,7 @@ void bizcocho(uint8_t argc, void **argv)
         //si reconocemos un comando, nos guardamos los argumentos que haya pasado
         if (foundFlag)
         {
-            argc1 = parser(argString1, firstTokens, ' ', MAX_ARG_COUNT, MAX_TOKEN_LENGTH);
+            argc1 = parser(argString1, &firstTokens, ' ', MAX_ARG_COUNT, MAX_TOKEN_LENGTH);
             for (int i = 0; i < argc1; i++)
             {
                 argv1[i] = firstTokens[i];
@@ -196,7 +196,7 @@ void bizcocho(uint8_t argc, void **argv)
 
             if (foundFlag == 2)
             {
-                argc2 = parser(argString2, secondTokens, ' ', MAX_ARG_COUNT, MAX_TOKEN_LENGTH);
+                argc2 = parser(argString2, &secondTokens, ' ', MAX_ARG_COUNT, MAX_TOKEN_LENGTH);
                 for (int i = 0; i < argc2; i++)
                 {
                     argv2[i] = secondTokens[i];
@@ -276,13 +276,13 @@ void addMessage(const char *message)
 }
 
 
-int changeColor(const unsigned char *buffer, const unsigned char *colors[], color_t colorValues[])
+int changeColor(const char *buffer, const char *colors[], color_t colorValues[])
 {
     for (int i = 0; i < COLOROPTIONS; i++)
     {
         if (strPrefix(colors[i], buffer, NULL))
         {
-            unsigned char aux = 0x00;
+            char aux = 0x00;
             if ((aux = strToNum(buffer + strLength(colors[i]) + 1)) <= 15 && aux >= 0)
             {
                 if (i == 1)

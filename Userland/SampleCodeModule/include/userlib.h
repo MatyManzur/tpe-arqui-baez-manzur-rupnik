@@ -5,23 +5,23 @@
 #include <stdarg.h>
 
 
-int strToNum(const unsigned char *str);
+int strToNum(const char *str);
 
-char strLength(const unsigned char *str);
+char strLength(const char *str);
 
-uint8_t strPrefix(const unsigned char *prefix, const unsigned char *str, unsigned char **afterPrefix);
+uint8_t strPrefix(const char *prefix, const char *str, char **afterPrefix);
 
-int strCmp(const unsigned char *str1, const unsigned char *str2);
+int strCmp(const char *str1, const char *str2);
 
 void setColor(color_t backgroundColor, color_t characterColor);
 
-void printString(unsigned char *str);
+void printString(char *str);
 
-void printStringColor(unsigned char *str, color_t backgroundColor, color_t characterColor);
+void printStringColor(char *str, color_t backgroundColor, color_t characterColor);
 
-void putChar(unsigned char c);
+void putChar(char c);
 
-void putCharColor(unsigned char c, color_t backgroundColor, color_t characterColor);
+void putCharColor(char c, color_t backgroundColor, color_t characterColor);
 
 void printWithFormat(char *format, ...);
 
@@ -36,5 +36,7 @@ int parser(char *string, char **buffer, char separator, int maxTokenCount, int m
 int xtou64(const char *str, uint64_t *ans);
 
 void newLine();
+
+int sqrt(int x);
 
 #endif

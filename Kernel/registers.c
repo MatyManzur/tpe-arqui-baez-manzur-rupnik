@@ -6,7 +6,7 @@
 static registers_t registers = {0};
 
 static void printRegAux(uint64_t *registers, uint8_t index, format_t *registerformat, format_t *numberformat,
-                        unsigned char *registerNames[]);
+                        char *registerNames[]);
 
 void saveRegisters()
 {
@@ -37,7 +37,7 @@ void getLastRegisters(struct registers_t *registersCopy)
 }
 
 static void printRegAux(uint64_t *registers, uint8_t index, format_t *registerformat, format_t *numberformat,
-                        unsigned char *registerNames[])
+                        char *registerNames[])
 {
     print(registerNames[index], registerformat);
     print("=  0x", numberformat);
@@ -52,7 +52,7 @@ void printRegisters(uint64_t *registers)
     struct format_t registerformat = {BLACK, YELLOW};
     struct format_t numberformat = {BLACK, WHITE};
 
-    unsigned char *registerNames[] = {"eflags  ", "rsp  ", "rip  ", "r15  ", "r14  ", "r13  ", "r12  ", "r11  ",
+    char *registerNames[] = {"eflags  ", "rsp  ", "rip  ", "r15  ", "r14  ", "r13  ", "r12  ", "r11  ",
                                       "r10  ", "r9  ", "r8  ", "rsi  ", "rdi  ", "rbp  ", "rdx  ", "rcx  ", "rbx  ",
                                       "rax  "};
 

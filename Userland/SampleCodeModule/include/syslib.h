@@ -258,7 +258,7 @@ uint8_t sys_get_task_id();
 
 uint8_t sys_print_char(char character, const struct format_t *format);
 
-unsigned char *sys_print(const char *string, const struct format_t *format);
+char *sys_print(const char *string, const struct format_t *format);
 
 uint8_t sys_new_line(color_t backgroundColor);
 
@@ -276,7 +276,7 @@ int sys_memory_dump(uint64_t address, uint8_t buffer[]);
 
 void sys_get_last_registers(struct registers_t *registers);
 
-void sys_read_printables(unsigned char *bufferString, uint8_t count);
+void sys_read_printables(char *bufferString, uint8_t count);
 
 void sys_get_next_key(struct kbEvent_t *kbEvent);
 

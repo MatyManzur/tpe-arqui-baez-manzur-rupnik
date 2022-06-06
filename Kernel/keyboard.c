@@ -53,7 +53,7 @@ void keyboard_handler()
 }
 
 //lee del buffer "count" caracteres PRINTEABLES (omite teclas no printeables) y los guarda en el buffer pasado por parametro. Empieza a leer del teclado en cuanto se llama a esta funcion y espera a que se hayan leído la cantidad deseada de caracteres, ya transforma las mayúsculas y las pone como un caracter en el buffer pasado por parametro.
-void readPrintables(unsigned char *bufferString, uint8_t count)
+void readPrintables(char *bufferString, uint8_t count)
 {
     cleanBuffer(); //omitimos lo que haya quedado en el buffer de antes
     int i = 0; //contamos caracteres enteros leidos

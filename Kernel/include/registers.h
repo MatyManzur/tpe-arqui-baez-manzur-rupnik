@@ -1,5 +1,5 @@
-#ifndef LIB_H
-#define LIB_H
+#ifndef REGISTERS_H
+#define REGISTERS_H
 
 #include <lib.h>
 #include <printing.h>

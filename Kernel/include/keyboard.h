@@ -195,7 +195,7 @@ static char printableKeys[2][128] =    //mapa de caracteres printeables para cad
 void keyboard_handler();
 
 //syscalls
-void readPrintables(unsigned char *bufferString, uint8_t count);
+void readPrintables(char *bufferString, uint8_t count);
 
 void getNextKey(struct kbEvent_t *kbEvent);
 
