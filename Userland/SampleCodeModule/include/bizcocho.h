@@ -8,6 +8,6 @@
 #include <fibonacci.h>
 #include <prime.h>
 
-void bizcocho(uint8_t argc, void** argv);
+void bizcocho(uint8_t argc, void **argv);
 
 #endif

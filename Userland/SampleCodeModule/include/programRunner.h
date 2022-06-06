@@ -5,10 +5,10 @@
 
 typedef struct functionPointer_t
 {
-	void (*function) (uint8_t argc, void** argv);
-}functionPointer_t;
+    void (*function)(uint8_t argc, void **argv);
+} functionPointer_t;
 
-void runner(uint8_t argc, void** argv);
+void runner(uint8_t argc, void **argv);
 
 
 #endif

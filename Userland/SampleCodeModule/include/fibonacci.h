@@ -9,6 +9,6 @@
 #include <userlib.h>
 #include <syslib.h>
 
-void fibonacci(uint8_t argc, void ** argv);
+void fibonacci(uint8_t argc, void **argv);
 
 #endif

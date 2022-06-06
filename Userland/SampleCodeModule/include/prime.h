@@ -4,9 +4,9 @@
 #include <userlib.h>
 #include <syslib.h>
 
-#define SLEEP_TICKS 4
+#define SLEEP_TICKS 2
 #define STRING_LENGTH 20
 
-void prime(uint8_t argc, void ** argv);
+void prime(uint8_t argc, void **argv);
 
 #endif
