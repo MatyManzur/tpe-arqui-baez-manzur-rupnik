@@ -2,7 +2,7 @@
 
 uint64_t printNewValue(uint64_t value1, uint64_t value2, uint8_t counter, char str[], char *terminations[]);
 
-// imprime la serie de Fibonacci con un sleep de 3 ticks
+// imprime la serie de Fibonacci con un sleep de 4 ticks
 void fibonacci(uint8_t argc, void **argv)
 {
     uint64_t first = FIRST;

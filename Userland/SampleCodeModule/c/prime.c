@@ -1,6 +1,6 @@
 #include <prime.h>
 
-// imprime los números primos, con un sleep de 1 tick
+// imprime los números primos, con un sleep de 4 tick
 void prime(uint8_t argc, void **argv)
 {
     uint64_t counter = 3;
@@ -13,7 +13,7 @@ void prime(uint8_t argc, void **argv)
     {
         isPrime = 1;
         stop = sqrt(counter);
-        for (int i = 3; i < stop; i += 2)
+        for (int i = 3; i < stop && isPrime; i += 2)
         {
             if (counter % i == 0)
             {
