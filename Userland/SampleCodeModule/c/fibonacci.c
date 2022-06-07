@@ -12,8 +12,10 @@ void fibonacci(uint8_t argc, void **argv)
     char str[STRING_LENGTH] = {0};
     printString("0 1st");   // imprime los primeros aparte
     newLine();
+    sys_sleep(SLEEP_TICKS);
     printString("1 2nd");
     newLine();
+    sys_sleep(SLEEP_TICKS);
     uint8_t numSerie = 3;
     while (1)
     {
