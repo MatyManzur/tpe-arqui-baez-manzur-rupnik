@@ -57,6 +57,8 @@ void help(uint8_t argc, void **argv)
     newLine();
     printString("inforeg: Despliega el valor de los registros del ultimo snapshot");
     newLine();
+    printString("prime: Imprime todos los numeros primos uno atras del otro.");
+    newLine();
     printString("fibonacci: Imprime la serie de Fibonacci.");
     newLine();
     printString("clear: Borra todo el contenido de la pantalla.");

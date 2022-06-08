@@ -58,7 +58,7 @@ void bizcocho(uint8_t argc, void **argv)
     sys_clear_screen(colorValues[1]);
 
     char start = 0;
-    setColor(BLACK, L_RED);
+    setColor(BLACK, L_CYAN);
     sys_set_cursor(&printingCursor);
     for (int i = 0; i < 5; i++)
     {
